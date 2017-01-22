@@ -1,4 +1,4 @@
-package se.jalo.wowsim;
+package se.wowsim;
 
 import java.util.ArrayList;
 import java.util.List;

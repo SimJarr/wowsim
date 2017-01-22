@@ -1,7 +1,7 @@
-package se.jalo.wowsim.spells;
+package se.wowsim.spells;
 
-import se.jalo.wowsim.Observer;
-import se.jalo.wowsim.Subject;
+import se.wowsim.Observer;
+import se.wowsim.Subject;
 
 public final class Corruption extends Spell implements Observer {
 

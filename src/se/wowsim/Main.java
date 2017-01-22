@@ -1,6 +1,6 @@
-package se.jalo.wowsim;
+package se.wowsim;
 
-import se.jalo.wowsim.spells.Corruption;
+import se.wowsim.spells.Corruption;
 
 public class Main {
 	public static void main(String[] args) {

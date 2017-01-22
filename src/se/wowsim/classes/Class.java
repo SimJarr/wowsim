@@ -1,8 +1,8 @@
-package se.jalo.wowsim.classes;
+package se.wowsim.classes;
 
 import java.util.List;
 
-import se.jalo.wowsim.spells.Spell;
+import se.wowsim.spells.Spell;
 
 public class Class {
 	

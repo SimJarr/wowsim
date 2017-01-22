@@ -1,4 +1,4 @@
-package se.jalo.wowsim;
+package se.wowsim;
 
 public interface Subject {
 

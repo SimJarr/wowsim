@@ -1,4 +1,4 @@
-package se.jalo.wowsim.classes;
+package se.wowsim.classes;
 
 public final class Warlock extends Class {
 	

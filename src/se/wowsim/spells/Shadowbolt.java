@@ -1,4 +1,4 @@
-package se.jalo.wowsim.spells;
+package se.wowsim.spells;
 
 public class Shadowbolt extends Spell {
 	
