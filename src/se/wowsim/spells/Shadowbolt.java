@@ -8,9 +8,11 @@ public class Shadowbolt extends DirectDamage implements Observer {
     private double totalDamage;
     private double critChance;
     private double critMulti;
+    private Subject s;
 
     public Shadowbolt(Subject s) {
         s.register(this);
+        this.s = s;
         this.critChance = 0.05;
         this.critMulti = 1.5;
         this.totalDamage = calculateDamage(150);
@@ -18,7 +20,8 @@ public class Shadowbolt extends DirectDamage implements Observer {
 
     @Override
     public void update() {
-        System.out.println(getName() + " dealt " + totalDamage + " damage");
+        s.unregister(this);
+        System.out.println(getName() + " dealt " + (int)totalDamage + " damage");
     }
 
     @Override
