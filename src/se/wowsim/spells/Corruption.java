@@ -26,7 +26,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 	public void update() {
 		this.duration --;
 		if((duration % tickInterval == 0) && duration != maxDuration) {
-			System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber);
+			System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
 			tickNumber++;
 		}
 	}
