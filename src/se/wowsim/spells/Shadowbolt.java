@@ -1,5 +1,11 @@
 package se.wowsim.spells;
 
-public class Shadowbolt extends DirectDamage {
-	
+import se.wowsim.Observer;
+
+public class Shadowbolt extends DirectDamage implements Observer{
+
+    @Override
+    public void update() {
+
+    }
 }
