@@ -32,7 +32,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 	}
 	
 	@Override
-	public String toString() {
+	public String getName() {
 		return "Corruption";
 	}
 }

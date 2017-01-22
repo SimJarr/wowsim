@@ -14,7 +14,7 @@ public class Target implements Subject {
 	@Override
 	public void register(Observer o) {
 		observers.add(o);
-		System.out.println(o.toString() + " applied to target");
+		System.out.println(o.getName() + " applied to target");
 	}
 
 	@Override
