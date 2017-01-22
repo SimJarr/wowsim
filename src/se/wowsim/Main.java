@@ -8,8 +8,8 @@ public class Main {
 		Target target = new Target();
 		Corruption corruption = new Corruption(target);
 		
-		for(int i = 0; i <= 180; i ++) {
-			System.out.println("decisecond: " + i);
+		for(int i = 1; i <= 180; i ++) {
+			if(i % 10 == 0) { System.out.println("second: " + i/10); }
 			target.notifyObservers();
 		}
 	}

@@ -4,5 +4,4 @@ public final class Warlock extends Class {
 	
 	
 	
-	
 }

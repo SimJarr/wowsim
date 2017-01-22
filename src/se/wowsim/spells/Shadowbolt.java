@@ -1,5 +1,5 @@
 package se.wowsim.spells;
 
-public class Shadowbolt extends Spell {
+public class Shadowbolt extends DirectDamage {
 	
 }

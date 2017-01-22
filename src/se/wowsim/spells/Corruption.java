@@ -3,7 +3,7 @@ package se.wowsim.spells;
 import se.wowsim.Observer;
 import se.wowsim.Subject;
 
-public final class Corruption extends Spell implements Observer {
+public final class Corruption extends DamageOverTime implements Observer {
 
 	private int duration;
 	private int maxDuration;
@@ -24,11 +24,11 @@ public final class Corruption extends Spell implements Observer {
 	
 	@Override
 	public void update() {
+		this.duration --;
 		if((duration % tickInterval == 0) && duration != maxDuration) {
 			System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber);
 			tickNumber++;
 		}
-		this.duration --;
 	}
 	
 	@Override

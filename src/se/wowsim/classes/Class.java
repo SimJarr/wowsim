@@ -4,7 +4,7 @@ import java.util.List;
 
 import se.wowsim.spells.Spell;
 
-public class Class {
+public abstract class Class {
 	
 	protected List<Spell> spells;
 	
