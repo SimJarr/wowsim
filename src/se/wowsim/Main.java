@@ -1,8 +1,6 @@
 package se.wowsim;
 
 import se.wowsim.classes.Warlock;
-import se.wowsim.spells.Corruption;
-import se.wowsim.spells.Shadowbolt;
 
 public class Main {
 	public static void main(String[] args) {
