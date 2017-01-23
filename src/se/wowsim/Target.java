@@ -24,6 +24,8 @@ public class Target implements Subject {
     public void unregister(Observer o) {
         int index = observers.indexOf(o);
         observers.remove(index);
+        if(o instanceof DamageOverTime)
+        	System.out.println(o.getName() + " faded");
     }
 
     @Override
@@ -32,4 +34,8 @@ public class Target implements Subject {
             o.update();
         }
     }
+    
+    public List<Observer> getObservers() {
+		return observers;
+	}
 }

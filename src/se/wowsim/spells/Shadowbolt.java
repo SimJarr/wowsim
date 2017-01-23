@@ -3,9 +3,8 @@ package se.wowsim.spells;
 import se.wowsim.Observer;
 import se.wowsim.Subject;
 
-public class Shadowbolt extends DirectDamage implements Observer {
+public final class Shadowbolt extends DirectDamage implements Observer {
 
-    private double totalDamage;
     private double critChance;
     private double critMulti;
     private Subject subject;
@@ -32,15 +31,16 @@ public class Shadowbolt extends DirectDamage implements Observer {
     }
     
     private void init(int rank) {
-        this.critChance = 0.05;
-        this.critMulti = 1.5; 
         switch(rank) {
 		case 5:
 			this.totalDamage = calculateDamage(152.5);
+			this.castTime = 30;
 			break;
 		default:
 			break;
 		}
+        this.critChance = 0.05;
+        this.critMulti = 1.5; 
     }
 
     private double calculateDamage(double avgDamage) {

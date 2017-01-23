@@ -5,18 +5,16 @@ import se.wowsim.Subject;
 
 public final class Corruption extends DamageOverTime implements Observer {
 
-	private int duration;
-	private int maxDuration;
-	private int tickInterval;
-	private int totalDamage;
 	private int tickNumber;
 	private int totalTickNumber;
+	private Subject subject;
 	
 	public Corruption(int rank) {
 		init(rank);
 	}
 	
 	public Corruption(Subject s, int rank) {
+		this.subject = s;
 		s.register(this);
 		init(rank);
 	}
@@ -28,6 +26,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 			System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
 			tickNumber++;
 		}
+		if(duration == 0) { subject.unregister(this); }
 	}
 	
 	@Override
@@ -40,7 +39,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 		case 3:
 			this.duration = 180;
 			this.maxDuration = 180;
-			this.totalDamage = 222;			
+			this.totalDamage = 222;		
 			break;
 		default:
 			break;
@@ -48,5 +47,6 @@ public final class Corruption extends DamageOverTime implements Observer {
 		this.tickInterval = 30;
 		this.tickNumber = 1;
 		this.totalTickNumber = duration/tickInterval;
+		this.castTime = 2;
 	}
 }
