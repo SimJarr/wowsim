@@ -15,8 +15,12 @@ public final class Shadowbolt extends DirectDamage implements Observer {
     
     public Shadowbolt(Subject s, int rank) {
     	this.subject = s;
-        s.register(this);
         init(rank);
+    }
+    
+    @Override
+    public void applySpell() {
+    	subject.register(this);
     }
 
     @Override

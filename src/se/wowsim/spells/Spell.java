@@ -4,7 +4,9 @@ public class Spell {
 	
 	protected int castTime;
 	
-	public double getCastTime() {
+	public int getCastTime() {
 		return castTime;
 	}
+	
+	public void applySpell() {}
 }

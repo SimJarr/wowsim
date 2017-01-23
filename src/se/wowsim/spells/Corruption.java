@@ -15,8 +15,12 @@ public final class Corruption extends DamageOverTime implements Observer {
 	
 	public Corruption(Subject s, int rank) {
 		this.subject = s;
-		s.register(this);
 		init(rank);
+	}
+	
+	@Override
+	public void applySpell() {
+		subject.register(this);
 	}
 	
 	@Override
@@ -47,6 +51,6 @@ public final class Corruption extends DamageOverTime implements Observer {
 		this.tickInterval = 30;
 		this.tickNumber = 1;
 		this.totalTickNumber = duration/tickInterval;
-		this.castTime = 2;
+		this.castTime = 20;
 	}
 }
