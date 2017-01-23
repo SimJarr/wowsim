@@ -14,7 +14,5 @@ public class Main {
 			warlock.determineSpell(target, simDuration-i);
 			target.notifyObservers();
 		}
-		
-		
 	}
 }
