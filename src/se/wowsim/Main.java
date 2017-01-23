@@ -7,17 +7,16 @@ import se.wowsim.spells.Shadowbolt;
 public class Main {
 	public static void main(String[] args) {
 		
-		Warlock warlock = new Warlock();
-		
-		
-		
+		Warlock warlock = new Warlock(28);
 		Target target = new Target();
-		new Corruption(target, 3);
-		new Shadowbolt(target, 5);
-		
-		for(int i = 1; i <= 180; i ++) {
+
+		int simDuration = 510;
+		for(int i = 1; i <= simDuration; i ++) {
 			if(i % 10 == 0) { System.out.println("second: " + i/10); }
+			warlock.determineSpell(target, simDuration-i);
 			target.notifyObservers();
 		}
+		
+		
 	}
 }

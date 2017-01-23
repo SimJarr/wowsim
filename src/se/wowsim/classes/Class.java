@@ -1,14 +1,21 @@
 package se.wowsim.classes;
 
-import java.util.List;
+import java.util.Map;
 
+import se.wowsim.Target;
 import se.wowsim.spells.Spell;
 
 public abstract class Class {
 	
-	protected List<Spell> spells;
+	protected Map<String, Spell> spells;
 	
-	protected void addSpell(Spell spell) {
-		spells.add(spell);
+	protected void addSpell(String name, Spell spell) {
+		spells.put(name, spell);
 	}
+	
+	public Map<String, Spell> getSpells() {
+		return spells;
+	}
+	
+	public abstract void determineSpell(Target target, double timeLeft);
 }
