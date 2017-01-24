@@ -42,19 +42,46 @@ public final class Shadowbolt extends DirectDamage implements Observer {
     }
 
     private void init(int rank) {
+        this.castTime = 30;
         switch(rank) {
-		case 5:
-			this.totalDamage = calculateDamage(152.5);
-			this.castTime = 30;
-			break;
-		default:
+            case 1:
+                this.totalDamage = calculateDamage(12, 17);
+                this.castTime = 17;
+                break;
+            case 2:
+                this.totalDamage = calculateDamage(23, 30);
+                this.castTime = 22;
+                break;
+            case 3:
+                this.totalDamage = calculateDamage(48, 57);
+                this.castTime = 28;
+                break;
+            case 4:
+                this.totalDamage = calculateDamage(86, 99);
+                break;
+            case 5:
+                this.totalDamage = calculateDamage(142, 163);
+                break;
+            case 6:
+                this.totalDamage = calculateDamage(204, 231);
+                break;
+            case 7:
+                this.totalDamage = calculateDamage(281, 316);
+                break;
+            case 8:
+                this.totalDamage = calculateDamage(360, 403);
+                break;
+            case 9:
+                this.totalDamage = calculateDamage(455, 508);
+                break;
+            default:
             throw new IllegalArgumentException("Given rank does not exist");
 		}
         this.critChance = 0.05;
         this.critMulti = 1.5;
     }
 
-    private double calculateDamage(double avgDamage) {
-        return ((avgDamage * (1 - critChance)) + ((avgDamage * critMulti) * critChance));
+    private double calculateDamage(double minDamage, double maxDamage) {
+        return ((((minDamage + maxDamage)/2) * (1 - critChance)) + ((((minDamage + maxDamage)/2) * critMulti) * critChance));
     }
 }
