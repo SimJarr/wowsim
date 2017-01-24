@@ -17,5 +17,5 @@ public abstract class Class {
 		return spells;
 	}
 	
-	public abstract void determineSpell(Target target, double timeLeft);
+	public abstract void currentActivity(Target target, int timeLeft);
 }

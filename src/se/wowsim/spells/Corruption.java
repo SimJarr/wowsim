@@ -1,28 +1,33 @@
 package se.wowsim.spells;
 
 import se.wowsim.Observer;
-import se.wowsim.Subject;
+import se.wowsim.Target;
 
 public final class Corruption extends DamageOverTime implements Observer {
 
 	private int tickNumber;
 	private int totalTickNumber;
-	private Subject subject;
+	private Target target;
 	
 	public Corruption(int rank) {
 		init(rank);
 	}
 	
-	public Corruption(Subject s, int rank) {
-		this.subject = s;
+	public Corruption(Target t, int rank) {
+		this.target = t;
 		init(rank);
 	}
 	
 	@Override
 	public void applySpell() {
-		subject.register(this);
+		target.register(this);
 	}
-	
+
+	@Override
+	public void setTarget(Target target) {
+		this.target = target;
+	}
+
 	@Override
 	public void update() {
 		this.duration --;
@@ -30,7 +35,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 			System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
 			tickNumber++;
 		}
-		if(duration == 0) { subject.unregister(this); }
+		if(duration == 0) { target.unregister(this); }
 	}
 	
 	@Override
@@ -43,7 +48,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 		case 3:
 			this.duration = 180;
 			this.maxDuration = 180;
-			this.totalDamage = 222;		
+			this.totalDamage = 222;
 			break;
 		default:
 			break;

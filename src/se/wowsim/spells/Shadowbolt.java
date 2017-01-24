@@ -1,31 +1,36 @@
 package se.wowsim.spells;
 
 import se.wowsim.Observer;
-import se.wowsim.Subject;
+import se.wowsim.Target;
 
 public final class Shadowbolt extends DirectDamage implements Observer {
 
     private double critChance;
     private double critMulti;
-    private Subject subject;
+    private Target target;
 
     public Shadowbolt(int rank) {
     	init(rank);
     }
-    
-    public Shadowbolt(Subject s, int rank) {
-    	this.subject = s;
+
+    public Shadowbolt(Target t, int rank) {
+    	this.target = t;
         init(rank);
     }
-    
+
     @Override
     public void applySpell() {
-    	subject.register(this);
+        target.register(this);
+    }
+
+    @Override
+    public void setTarget(Target target) {
+        this.target = target;
     }
 
     @Override
     public void update() {
-        subject.unregister(this);
+        target.unregister(this);
         System.out.println(getName() + " dealt " + (int)totalDamage + " damage");
     }
 
@@ -33,7 +38,7 @@ public final class Shadowbolt extends DirectDamage implements Observer {
     public String getName() {
         return "Shadowbolt";
     }
-    
+
     private void init(int rank) {
         switch(rank) {
 		case 5:
@@ -44,7 +49,7 @@ public final class Shadowbolt extends DirectDamage implements Observer {
 			break;
 		}
         this.critChance = 0.05;
-        this.critMulti = 1.5; 
+        this.critMulti = 1.5;
     }
 
     private double calculateDamage(double avgDamage) {
