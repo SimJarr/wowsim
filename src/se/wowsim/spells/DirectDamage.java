@@ -1,5 +1,9 @@
 package se.wowsim.spells;
 
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public abstract class DirectDamage extends Spell {
 
     protected double totalDamage;
@@ -15,7 +19,8 @@ public abstract class DirectDamage extends Spell {
 	}
 
 	public void setCritChance(double critChance) {
-		this.critChance = critChance;
+        NumberFormat nf = new DecimalFormat("#0.000");
+		this.critChance = Double.parseDouble(nf.format(critChance).replaceAll(",", "."));
 	}
 
     public abstract void init();
