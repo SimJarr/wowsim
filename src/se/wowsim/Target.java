@@ -35,6 +35,15 @@ public class Target implements Subject {
         }
     }
     
+    public boolean notAffected(DamageOverTime dot) {
+        for (Observer o : getObservers()) {
+            if (o.getClass().equals(dot.getClass())) {
+            	return(((DamageOverTime)o).getDuration() < dot.getCastTime());
+            }
+        }
+        return true;
+    }
+    
     public List<Observer> getObservers() {
 		return observers;
 	}

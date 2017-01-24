@@ -15,8 +15,5 @@ public class Main {
 
         System.out.println("Total Damage Done: " + Simulator.getTotalDamageDone());
         System.out.println("Dps: " + Simulator.getDps());
-
-
-
 	}
 }

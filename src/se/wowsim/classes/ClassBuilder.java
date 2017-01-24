@@ -22,7 +22,6 @@ public class ClassBuilder {
 		importSpells();
 	}
 	
-	
 	public ClassTemplate getClassInstance() {
 		switch (myClass) {
 		case WARLOCK:
