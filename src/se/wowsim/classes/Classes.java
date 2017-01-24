@@ -16,14 +16,6 @@ public enum Classes {
         this.intPerOneCrit = intPerOneCrit;
     }
 
-    public double getCritConst() {
-        return critConst;
-    }
-
-    public double getIntPerOneCrit() {
-        return intPerOneCrit;
-    }
-
     public double calculateCritChance(int intellect, int level) {
         return (intellect / (((this.intPerOneCrit)/60)*level) + this.critConst)/100;
     }
