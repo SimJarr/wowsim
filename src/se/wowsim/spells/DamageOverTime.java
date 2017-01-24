@@ -30,9 +30,11 @@ public abstract class DamageOverTime extends Spell {
 	public abstract void init();
 
 	public double calculateDotDamage(int timeLeft) {
-		int timeAfterCast = (this.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - this.getCastTime();
+
         double damage = 0;
-		for (int i = 1; i < timeAfterCast; i++) {
+		int timeAfterCast = (this.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - this.getCastTime();
+        int stopLoop = timeAfterCast > this.getMaxDuration() ? this.getMaxDuration() : timeAfterCast;
+		for (int i = 1; i <= stopLoop; i++) {
 			if (i % this.getTickInterval() == 0) {
 				damage += this.getTotalDamage() / (this.getMaxDuration() / this.getTickInterval());
 			}
