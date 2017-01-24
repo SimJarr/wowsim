@@ -5,7 +5,7 @@ import java.util.Map;
 import se.wowsim.Target;
 import se.wowsim.spells.Spell;
 
-public abstract class Class {
+public abstract class ClassTemplate {
 	
 	protected Map<String, Spell> spells;
 	

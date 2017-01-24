@@ -1,26 +1,28 @@
 package se.wowsim.spells;
 
+import java.util.Arrays;
+import java.util.List;
+
 import se.wowsim.Observer;
-import se.wowsim.Subject;
 import se.wowsim.Target;
+import se.wowsim.classes.Classes;
 
 public final class CurseOfAgony extends DamageOverTime implements Observer {
 
     private int tickNumber;
     private int totalTickNumber;
     private Target target;
+    public static List<Integer> levelUps = Arrays.asList(8, 18, 28, 38, 48, 58);
 
     public CurseOfAgony(int rank) {
+        super(rank);
         init(rank);
-    }
-
-    public CurseOfAgony(Target t, int rank) {
-        this.target = t;
-        init(rank);
+        this.spellClass = Classes.WARLOCK;
     }
 
     @Override
     public void applySpell() {
+    	init(rank);
         target.register(this);
     }
 

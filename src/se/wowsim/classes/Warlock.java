@@ -7,7 +7,7 @@ import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.spells.*;
 
-public final class Warlock extends Class {
+public final class Warlock extends ClassTemplate {
 
     private boolean busyCasting;
     private int castProgress;
@@ -20,12 +20,7 @@ public final class Warlock extends Class {
         this.globalCooldown = 15;
         this.nextSpell = null;
         this.spells = new HashMap<>();
-
-        addSpell("Corruption", new Corruption(3));
-        addSpell("Shadowbolt", new Shadowbolt(5));
-        addSpell("CurseOfAgony", new CurseOfAgony(3));
     }
-
 
     @Override
     public void currentActivity(Target target, int timeLeft) {
@@ -42,7 +37,6 @@ public final class Warlock extends Class {
         if (busyCasting) {
             return;
         }
-
 
         nextSpell = determineSpell(target, timeLeft);
 
@@ -64,14 +58,11 @@ public final class Warlock extends Class {
                 nextSpell = null;
             }
         }
-
-
     }
 
     private Spell determineSpell(Target target, int timeLeft) {
 
         Map<Spell, Double> result = new HashMap<>();
-
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
@@ -89,7 +80,6 @@ public final class Warlock extends Class {
                 } else {
                     result.put(currentSpell, (((DirectDamage) currentSpell).getTotalDamage()) / globalCooldown);
                 }
-
             }
         }
 
@@ -107,47 +97,23 @@ public final class Warlock extends Class {
                     highestSoFar = entry.getValue();
                 }
             }
-
         }
 
         if (determinedSpell != null && determinedSpell.getCastTime() > timeLeft) {
             determinedSpell = null;
         }
-
         return determinedSpell;
     }
-
-    /*private double getDotDamage(int timeLeft, DamageOverTime dot) {
-
-        int timeAfterCast = (dot.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - dot.getCastTime();
-        double damage = 0;
-        for (int i = 0; i < timeAfterCast; i++) {
-            if (i % dot.getTickInterval() == 0) {
-                damage += dot.getTotalDamage() / (dot.getMaxDuration() / dot.getTickInterval());
-            }
-        }
-        System.out.println("this is dot dmg: " + damage);
-        return damage;
-    }*/
 
     private boolean alreadyAffected(Target target, DamageOverTime dot) {
         for (Observer o : target.getObservers()) {
             if (o.getClass().equals(dot.getClass())) {
+            	if(((DamageOverTime)o).getDuration() < dot.getCastTime())
+            		return false;
+            	
                 return true;
             }
         }
         return false;
-    }
-
-    private Shadowbolt getShadowbolt() {
-        return ((Shadowbolt) spells.get("Shadowbolt"));
-    }
-
-    private Corruption getCorruption() {
-        return ((Corruption) spells.get("Corruption"));
-    }
-
-    private CurseOfAgony getCurseOfAgony() {
-        return ((CurseOfAgony) spells.get("CurseOfAgony"));
     }
 }

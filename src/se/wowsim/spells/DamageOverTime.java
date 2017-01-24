@@ -2,6 +2,10 @@ package se.wowsim.spells;
 
 public class DamageOverTime extends Spell {
 	
+	public DamageOverTime(int rank) {
+		super(rank);
+	}
+
 	protected int duration;
 	protected int maxDuration;
 	protected int totalDamage;

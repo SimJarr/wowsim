@@ -1,25 +1,28 @@
 package se.wowsim.spells;
 
+import java.util.Arrays;
+import java.util.List;
+
 import se.wowsim.Observer;
 import se.wowsim.Target;
+import se.wowsim.classes.Classes;
 
 public final class Corruption extends DamageOverTime implements Observer {
 
 	private int tickNumber;
 	private int totalTickNumber;
 	private Target target;
+	public static List<Integer> levelUps = Arrays.asList(4, 14, 24, 34, 44, 54);
 	
 	public Corruption(int rank) {
+		super(rank);
 		init(rank);
-	}
-	
-	public Corruption(Target t, int rank) {
-		this.target = t;
-		init(rank);
+		this.spellClass = Classes.WARLOCK;
 	}
 	
 	@Override
 	public void applySpell() {
+		init(rank);
 		target.register(this);
 	}
 
@@ -51,7 +54,7 @@ public final class Corruption extends DamageOverTime implements Observer {
 			this.totalDamage = 222;
 			break;
 		default:
-			break;
+			throw new IllegalArgumentException("Given rank does not exist");
 		}
 		this.tickInterval = 30;
 		this.tickNumber = 1;
