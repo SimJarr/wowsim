@@ -8,15 +8,12 @@ public class Main {
 	public static void main(String[] args) {
 		
 		
-		Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 28).getClassInstance();
+		Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 30).getClassInstance();
 		Target target = new Target();
 
-		int simDuration = 500;
-		for(int i = 0; i <= simDuration; i ++) {
-            System.out.println("decisecond: " + i);
-			warlock.currentActivity(target, simDuration-i);
-			target.notifyObservers();
+		Simulator.simulate(warlock, target, 200);
 
-		}
+
+
 	}
 }
