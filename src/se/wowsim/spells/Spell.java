@@ -3,7 +3,7 @@ package se.wowsim.spells;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
 
-public class Spell {
+public abstract class Spell {
 	
 	protected int castTime;
 	protected Classes spellClass;
@@ -17,13 +17,15 @@ public class Spell {
 		return castTime;
 	}
 	
-	public void applySpell() {}
+	public abstract void applySpell();
 
-	public void setTarget(Target target) {}
+	public abstract void setTarget(Target target);
+
+	public abstract void init();
 
 	public Classes getSpellClass() {
 		return spellClass;
 	}
 
-    public String getName() {return "";}
+    public abstract String getName();
 }

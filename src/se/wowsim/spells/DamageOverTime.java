@@ -1,15 +1,15 @@
 package se.wowsim.spells;
 
-public class DamageOverTime extends Spell {
+public abstract class DamageOverTime extends Spell {
+
+    protected int duration;
+    protected int maxDuration;
+    protected int totalDamage;
+    protected int tickInterval;
 	
 	public DamageOverTime(int rank) {
 		super(rank);
 	}
-
-	protected int duration;
-	protected int maxDuration;
-	protected int totalDamage;
-	protected int tickInterval;
 	
 	public int getDuration() {
 		return duration;
@@ -27,7 +27,9 @@ public class DamageOverTime extends Spell {
 		return tickInterval;
 	}
 
-	public double getDotDamage(int timeLeft) {
+	public abstract void init();
+
+	public double calculateDotDamage(int timeLeft) {
 		int timeAfterCast = (this.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - this.getCastTime();
         double damage = 0;
 		for (int i = 1; i < timeAfterCast; i++) {

@@ -16,13 +16,12 @@ public final class Corruption extends DamageOverTime implements Observer {
 
     public Corruption(int rank) {
         super(rank);
-        init(rank);
         this.spellClass = Classes.WARLOCK;
     }
 
     @Override
     public void applySpell() {
-        init(rank);
+        this.duration = this.maxDuration;
         target.register(this);
     }
 
@@ -48,7 +47,8 @@ public final class Corruption extends DamageOverTime implements Observer {
         return "Corruption";
     }
 
-    private void init(int rank) {
+    @Override
+    public void init() {
         this.maxDuration = 180;
         switch (rank) {
             case 1:

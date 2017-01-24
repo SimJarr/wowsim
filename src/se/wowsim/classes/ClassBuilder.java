@@ -4,20 +4,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import se.wowsim.spells.Corruption;
-import se.wowsim.spells.CurseOfAgony;
-import se.wowsim.spells.Shadowbolt;
-import se.wowsim.spells.Spell;
+import se.wowsim.spells.*;
 
 public class ClassBuilder {
 	
 	private Classes myClass;
 	private int level;
+	private int intellect;
 	private Set<Spell> allSpells;
 	
-	public ClassBuilder(Classes myClass, int level) {
+	public ClassBuilder(Classes myClass, int level, int intellect) {
 		this.myClass = myClass;
 		this.level = level;
+        this.intellect = intellect;
 		allSpells = new HashSet<>();
 		importSpells();
 	}
@@ -25,10 +24,14 @@ public class ClassBuilder {
 	public ClassTemplate getClassInstance() {
 		switch (myClass) {
 		case WARLOCK:
-			Warlock warlock = new Warlock();
+			Warlock warlock = new Warlock(intellect);
 			for(Spell s : allSpells) {
 				if(s.getSpellClass().equals(Classes.WARLOCK)) {
 					warlock.addSpell(s.getName(), s);
+                    if (s instanceof DirectDamage){
+                        ((DirectDamage) s).setCritChance(myClass.calculateCritChance(intellect, level));
+                    }
+                    s.init();
 				}
 			}
 			return warlock;

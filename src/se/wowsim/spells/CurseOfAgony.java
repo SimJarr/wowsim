@@ -16,13 +16,12 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
 
     public CurseOfAgony(int rank) {
         super(rank);
-        init(rank);
         this.spellClass = Classes.WARLOCK;
     }
 
     @Override
     public void applySpell() {
-    	init(rank);
+        this.duration = this.maxDuration;
         target.register(this);
     }
 
@@ -32,7 +31,7 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
     }
 
     @Override
-    public double getDotDamage(int timeLeft) {
+    public double calculateDotDamage(int timeLeft) {
 
         int timeAfterCast = (castTime <= 15) ? timeLeft - 15 : timeLeft - castTime;
         double damage = 0;
@@ -75,7 +74,8 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
         return "CurseOfAgony";
     }
 
-    private void init(int rank) {
+    @Override
+    public void init() {
         switch (rank) {
             case 1:
                 this.totalDamage = 84;

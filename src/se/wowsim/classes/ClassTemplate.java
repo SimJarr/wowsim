@@ -11,13 +11,18 @@ import se.wowsim.spells.Spell;
 public abstract class ClassTemplate {
 
 	double totalDamageDone;
+	double intellect;
+	double stamina;
+	double spirit;
 
 	protected Map<String, Spell> spells;
     protected boolean busyCasting;
     protected int castProgress;
     protected int globalCooldown;
     protected int downTime;
+    protected double critMulti;
     protected Spell nextSpell;
+    protected Classes myClass;
     
 	protected ClassTemplate() {
         this.busyCasting = false;
@@ -25,6 +30,7 @@ public abstract class ClassTemplate {
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
+        this.critMulti = 1.5;
 	}
 
 	public double getTotalDamageDone() { return totalDamageDone; }
@@ -87,9 +93,9 @@ public abstract class ClassTemplate {
 
             if (currentSpell instanceof DamageOverTime) {
                 if (target.notAffected((DamageOverTime) currentSpell) && currentSpell.getCastTime() >= globalCooldown) {
-                    result.put(currentSpell, (((DamageOverTime) currentSpell).getDotDamage(timeLeft) / currentSpell.getCastTime()));
+                    result.put(currentSpell, (((DamageOverTime) currentSpell).calculateDotDamage(timeLeft) / currentSpell.getCastTime()));
                 } else if (target.notAffected((DamageOverTime) currentSpell)) {
-                    result.put(currentSpell, (((DamageOverTime) currentSpell).getDotDamage(timeLeft) / globalCooldown));
+                    result.put(currentSpell, (((DamageOverTime) currentSpell).calculateDotDamage(timeLeft) / globalCooldown));
                 }
             } else if (currentSpell instanceof DirectDamage) {
                 if (currentSpell.getCastTime() >= globalCooldown){

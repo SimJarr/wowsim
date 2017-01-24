@@ -9,14 +9,11 @@ import se.wowsim.classes.Classes;
 
 public final class Shadowbolt extends DirectDamage implements Observer {
 
-    private double critChance;
-    private double critMulti;
     private Target target;
     public static List<Integer> levelUps = Arrays.asList(1, 6, 12, 20, 28, 36, 44, 52, 60);
 
     public Shadowbolt(int rank) {
     	super(rank);
-    	init(rank);
     	this.spellClass = Classes.WARLOCK;
     }
 
@@ -41,7 +38,8 @@ public final class Shadowbolt extends DirectDamage implements Observer {
         return "Shadowbolt";
     }
 
-    private void init(int rank) {
+    @Override
+    public void init() {
         this.castTime = 30;
         switch(rank) {
             case 1:
@@ -77,8 +75,7 @@ public final class Shadowbolt extends DirectDamage implements Observer {
             default:
             throw new IllegalArgumentException("Given rank does not exist");
 		}
-        this.critChance = 0.05;
-        this.critMulti = 1.5;
+
     }
 
     private double calculateDamage(double minDamage, double maxDamage) {
