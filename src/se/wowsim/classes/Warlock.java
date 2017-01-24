@@ -18,6 +18,7 @@ public final class Warlock extends ClassTemplate {
     public Warlock() {
         this.busyCasting = false;
         this.globalCooldown = 15;
+        this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
     }
@@ -102,6 +103,16 @@ public final class Warlock extends ClassTemplate {
         if (determinedSpell != null && determinedSpell.getCastTime() > timeLeft) {
             determinedSpell = null;
         }
+
+        if (determinedSpell != null){
+
+            if (determinedSpell.getCastTime() < globalCooldown) {
+                totalDamageDone += highestSoFar * globalCooldown;
+            } else {
+                totalDamageDone += highestSoFar * determinedSpell.getCastTime();
+            }
+        }
+
         return determinedSpell;
     }
 

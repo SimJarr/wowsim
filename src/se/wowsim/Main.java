@@ -11,7 +11,10 @@ public class Main {
 		Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 30).getClassInstance();
 		Target target = new Target();
 
-		Simulator.simulate(warlock, target, 200);
+        Simulator.simulate(warlock, target, 400);
+
+        System.out.println("Total Damage Done: " + Simulator.getTotalDamageDone());
+        System.out.println("Dps: " + Simulator.getDps());
 
 
 
