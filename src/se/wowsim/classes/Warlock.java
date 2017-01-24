@@ -15,7 +15,7 @@ public final class Warlock extends ClassTemplate {
     private int downTime;
     private Spell nextSpell;
 
-    public Warlock(int level) {
+    public Warlock() {
         this.busyCasting = false;
         this.globalCooldown = 15;
         this.nextSpell = null;

@@ -26,7 +26,7 @@ public class ClassBuilder {
 	public ClassTemplate getClassInstance() {
 		switch (myClass) {
 		case WARLOCK:
-			Warlock warlock = new Warlock(level);
+			Warlock warlock = new Warlock();
 			for(Spell s : allSpells) {
 				if(s.getSpellClass().equals(Classes.WARLOCK)) {
 					warlock.addSpell(s.getName(), s);
