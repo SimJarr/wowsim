@@ -48,7 +48,7 @@ public final class Shadowbolt extends DirectDamage implements Observer {
 			this.castTime = 30;
 			break;
 		default:
-			break;
+            throw new IllegalArgumentException("Given rank does not exist");
 		}
         this.critChance = 0.05;
         this.critMulti = 1.5;

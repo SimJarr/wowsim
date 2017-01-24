@@ -83,7 +83,7 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
                 this.totalDamage = 324;
                 break;
             default:
-                break;
+                throw new IllegalArgumentException("Given rank does not exist");
         }
         this.tickInterval = 20;
         this.tickNumber = 1;
