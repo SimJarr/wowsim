@@ -22,6 +22,7 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
     @Override
     public void applySpell() {
         this.duration = this.maxDuration;
+        this.tickNumber = 1;
         target.register(this);
     }
 
