@@ -69,9 +69,9 @@ public final class Warlock extends ClassTemplate {
             Spell currentSpell = entry.getValue();
 
             if (currentSpell instanceof DamageOverTime) {
-                if (!alreadyAffected(target, (DamageOverTime) currentSpell) && currentSpell.getCastTime() >= globalCooldown) {
+                if (notAffected(target, (DamageOverTime) currentSpell) && currentSpell.getCastTime() >= globalCooldown) {
                     result.put(currentSpell, (((DamageOverTime) currentSpell).getDotDamage(timeLeft) / currentSpell.getCastTime()));
-                } else if (!alreadyAffected(target, (DamageOverTime) currentSpell)) {
+                } else if (notAffected(target, (DamageOverTime) currentSpell)) {
                     result.put(currentSpell, (((DamageOverTime) currentSpell).getDotDamage(timeLeft) / globalCooldown));
                 }
             } else if (currentSpell instanceof DirectDamage) {
@@ -105,15 +105,12 @@ public final class Warlock extends ClassTemplate {
         return determinedSpell;
     }
 
-    private boolean alreadyAffected(Target target, DamageOverTime dot) {
+    private boolean notAffected(Target target, DamageOverTime dot) {
         for (Observer o : target.getObservers()) {
             if (o.getClass().equals(dot.getClass())) {
-            	if(((DamageOverTime)o).getDuration() < dot.getCastTime())
-            		return false;
-            	
-                return true;
+            	return(((DamageOverTime)o).getDuration() < dot.getCastTime());
             }
         }
-        return false;
+        return true;
     }
 }
