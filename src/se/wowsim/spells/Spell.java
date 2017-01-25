@@ -17,6 +17,10 @@ public abstract class Spell {
 		return castTime;
 	}
 	
+	public int getRank() {
+		return rank;
+	}
+	
 	public abstract void applySpell();
 
 	public abstract void setTarget(Target target);
