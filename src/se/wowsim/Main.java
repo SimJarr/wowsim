@@ -10,7 +10,7 @@ public class Main {
 		
 
 		Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 32, 89).getClassInstance();
-        //Priest snarre = (Priest) new ClassBuilder(Classes.PRIEST, 31, 1000).getClassInstance();
+        //Priest snarre = (Priest) new ClassBuilder(Classes.PRIEST, 31, 10000).getClassInstance();
 		Target target = new Target();
 
         Simulator.simulate(warlock, target, 400);

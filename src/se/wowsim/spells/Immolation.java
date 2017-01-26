@@ -74,15 +74,23 @@ public final class Immolation extends DirectDamage implements Observer {
 	            default:
 	            throw new IllegalArgumentException("Given rank does not exist");
 			}
-
 	}
 	
     private double calculateDamage(double damage) {
         return damage * (1 - critChance) + (damage * critMulti) * critChance;
     }
     
-    // private pls
-	public final class ImmolationDot extends DamageOverTime implements Observer {
+    @Override
+    public double calculateDamageDealt(Target target, int timeleft) {
+    	double damageDealt = 0;
+    	if(target.notAffected(this.getImmolationDot())) {
+    		damageDealt += this.getTotalDamage();
+    		damageDealt += this.getImmolationDot().calculateDotDamage(timeleft);
+    	}
+    	return damageDealt/this.getCastTime();
+    }
+    
+	private final class ImmolationDot extends DamageOverTime implements Observer {
 		
 		private int tickNumber;
 		private int totalTickNumber;
@@ -90,6 +98,7 @@ public final class Immolation extends DirectDamage implements Observer {
 
 		public ImmolationDot(int rank) {
 			super(rank);
+			init();
 		}
 
 		@Override

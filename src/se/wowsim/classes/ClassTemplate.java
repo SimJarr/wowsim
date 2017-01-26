@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.wowsim.Target;
-import se.wowsim.spells.DamageOverTime;
-import se.wowsim.spells.DirectDamage;
-import se.wowsim.spells.Immolation;
 import se.wowsim.spells.Spell;
 
 public abstract class ClassTemplate {
@@ -93,30 +90,7 @@ public abstract class ClassTemplate {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
             Spell currentSpell = entry.getValue();
-            
-            // FULING_OF_DOOM
-            if(currentSpell instanceof Immolation) {
-            	double damageDealt = 0;
-            	if(target.notAffected((((Immolation) currentSpell).getImmolationDot()))) {
-            		damageDealt += ((Immolation) currentSpell).getTotalDamage();
-            		damageDealt += ((Immolation) currentSpell).getImmolationDot().calculateDotDamage(timeLeft);
-            	}
-            	result.put(currentSpell, damageDealt/currentSpell.getCastTime());
-            } else {
-            	if (currentSpell instanceof DamageOverTime) {
-            		if (target.notAffected((DamageOverTime) currentSpell) && currentSpell.getCastTime() >= globalCooldown) {
-            			result.put(currentSpell, (((DamageOverTime) currentSpell).calculateDotDamage(timeLeft) / currentSpell.getCastTime()));
-            		} else if (target.notAffected((DamageOverTime) currentSpell)) {
-            			result.put(currentSpell, (((DamageOverTime) currentSpell).calculateDotDamage(timeLeft) / globalCooldown));
-            		}
-            	} else if (currentSpell instanceof DirectDamage) {
-            		if (currentSpell.getCastTime() >= globalCooldown){
-            			result.put(currentSpell, (((DirectDamage) currentSpell).getTotalDamage()) / currentSpell.getCastTime());
-            		} else {
-            			result.put(currentSpell, (((DirectDamage) currentSpell).getTotalDamage()) / globalCooldown);
-            		}
-            	}
-            }
+            result.put(currentSpell, currentSpell.calculateDamageDealt(target, timeLeft));
         }
 
         Spell determinedSpell = null;
