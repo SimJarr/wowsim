@@ -7,37 +7,37 @@ import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
 
-public final class Immolation extends DirectDamage implements Observer {
+public final class Immolate extends DirectDamage implements Observer {
 
-    private ImmolationDot immolationDot;
+    private ImmolateDot immolateDot;
     private Target target;
     public static List<Integer> levelUps = Arrays.asList(1, 10, 20, 30, 40, 50, 60);
 
-    public Immolation(int rank) {
+    public Immolate(int rank) {
         super(rank);
-        this.immolationDot = new ImmolationDot(rank);
+        this.immolateDot = new ImmolateDot(rank);
         this.spellClass = Classes.WARLOCK;
     }
 
-    public ImmolationDot getImmolationDot() {
-        return immolationDot;
+    public ImmolateDot getImmolateDot() {
+        return immolateDot;
     }
 
     @Override
     public void applySpell() {
         target.register(this);
-        this.immolationDot.applySpell();
+        this.immolateDot.applySpell();
     }
 
     @Override
     public void setTarget(Target target) {
         this.target = target;
-        this.immolationDot.setTarget(target);
+        this.immolateDot.setTarget(target);
     }
 
     @Override
     public String getName() {
-        return "Immolation";
+        return "Immolate";
     }
 
     @Override
@@ -83,20 +83,20 @@ public final class Immolation extends DirectDamage implements Observer {
     @Override
     public double calculateDamageDealt(Target target, int timeleft) {
         double damageDealt = 0;
-        if (target.notAffected(this.getImmolationDot())) {
+        if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
-            damageDealt += this.getImmolationDot().calculateDotDamage(timeleft);
+            damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
         }
         return damageDealt / this.getCastTime();
     }
 
-    private final class ImmolationDot extends DamageOverTime implements Observer {
+    private final class ImmolateDot extends DamageOverTime implements Observer {
 
         private int tickNumber;
         private int totalTickNumber;
         private Target target;
 
-        public ImmolationDot(int rank) {
+        public ImmolateDot(int rank) {
             super(rank);
             init();
         }
@@ -116,14 +116,14 @@ public final class Immolation extends DirectDamage implements Observer {
 
         @Override
         public String getName() {
-            return "ImmolationDot";
+            return "ImmolateDot";
         }
 
         @Override
         public void update() {
             this.duration--;
             if ((duration % tickInterval == 0) && duration != maxDuration) {
-                System.out.println("Immolation tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
+                System.out.println("Immolate tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
                 tickNumber++;
             }
             if (duration == 0) {
