@@ -53,6 +53,7 @@ public class ClassBuilder {
         allSpells.add(new CurseOfAgony(determineSpellLevel(CurseOfAgony.levelUps)));
         allSpells.add(new Shadowbolt(determineSpellLevel(Shadowbolt.levelUps)));
         allSpells.add(new Immolate(determineSpellLevel(Immolate.levelUps)));
+        allSpells.add(new SearingPain(determineSpellLevel(SearingPain.levelUps)));
     }
 
     private int determineSpellLevel(List<Integer> levelups) {
