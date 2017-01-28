@@ -8,12 +8,12 @@ import se.wowsim.spells.Spell;
 
 public abstract class ClassTemplate {
 
-	double totalDamageDone;
-	double intellect;
-	double stamina;
-	double spirit;
+    double totalDamageDone;
+    double intellect;
+    double stamina;
+    double spirit;
 
-	protected Map<String, Spell> spells;
+    protected Map<String, Spell> spells;
     protected boolean busyCasting;
     protected int castProgress;
     protected int globalCooldown;
@@ -21,32 +21,34 @@ public abstract class ClassTemplate {
     protected double critMulti;
     protected Spell nextSpell;
     protected Classes myClass;
-    
-	protected ClassTemplate() {
+
+    protected ClassTemplate() {
         this.busyCasting = false;
         this.globalCooldown = 15;
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
         this.critMulti = 1.5;
-	}
+    }
 
-	public double getTotalDamageDone() { return totalDamageDone; }
+    public double getTotalDamageDone() {
+        return totalDamageDone;
+    }
 
-	public double resetTotalDamageDone(){
-		this.totalDamageDone = 0.0;
-		return 0.0;
-	}
+    public double resetTotalDamageDone() {
+        this.totalDamageDone = 0.0;
+        return 0.0;
+    }
 
-	public Map<String, Spell> getSpells() {
-		return spells;
-	}
-	
-	protected void addSpell(String name, Spell spell) {	
-		spells.put(name, spell); 
-	}
-	
-	public void currentActivity(Target target, int timeLeft) {
+    public Map<String, Spell> getSpells() {
+        return spells;
+    }
+
+    protected void addSpell(String name, Spell spell) {
+        spells.put(name, spell);
+    }
+
+    public void currentActivity(Target target, int timeLeft) {
         castProgress--;
         downTime--;
 
@@ -82,8 +84,8 @@ public abstract class ClassTemplate {
             }
         }
     }
-	
-	private Spell determineSpell(Target target, int timeLeft) {
+
+    private Spell determineSpell(Target target, int timeLeft) {
 
         Map<Spell, Double> result = new HashMap<>();
 
@@ -113,7 +115,7 @@ public abstract class ClassTemplate {
             determinedSpell = null;
         }
 
-        if (determinedSpell != null){
+        if (determinedSpell != null) {
 
             if (determinedSpell.getCastTime() < globalCooldown) {
                 totalDamageDone += highestSoFar * globalCooldown;

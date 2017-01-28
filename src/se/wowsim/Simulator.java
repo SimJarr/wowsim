@@ -7,14 +7,14 @@ public abstract class Simulator {
     public static double totalDamageDone = 0.0;
     public static double dps = 0.0;
 
-    public static void simulate(ClassTemplate classTemplate, Target target, int simDuration){
+    public static void simulate(ClassTemplate classTemplate, Target target, int simDuration) {
 
         totalDamageDone = classTemplate.resetTotalDamageDone();
         dps = 0.0;
 
-        for(int i = 0; i <= simDuration; i ++) {
+        for (int i = 0; i <= simDuration; i++) {
             System.out.println("decisecond: " + i);
-            classTemplate.currentActivity(target, simDuration-i);
+            classTemplate.currentActivity(target, simDuration - i);
             target.notifyObservers();
 
         }

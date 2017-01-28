@@ -16,7 +16,7 @@ public class Target implements Subject {
     @Override
     public void register(Observer o) {
         observers.add(o);
-        if(o instanceof DamageOverTime)
+        if (o instanceof DamageOverTime)
             System.out.println(o.getName() + " applied to target");
     }
 
@@ -24,8 +24,8 @@ public class Target implements Subject {
     public void unregister(Observer o) {
         int index = observers.indexOf(o);
         observers.remove(index);
-        if(o instanceof DamageOverTime)
-        	System.out.println(o.getName() + " faded");
+        if (o instanceof DamageOverTime)
+            System.out.println(o.getName() + " faded");
     }
 
     @Override
@@ -34,17 +34,17 @@ public class Target implements Subject {
             o.update();
         }
     }
-    
+
     public boolean notAffected(DamageOverTime dot) {
         for (Observer o : getObservers()) {
             if (o.getClass().equals(dot.getClass())) {
-            	return(((DamageOverTime)o).getDuration() < dot.getCastTime());
+                return (((DamageOverTime) o).getDuration() < dot.getCastTime());
             }
         }
         return true;
     }
-    
+
     public List<Observer> getObservers() {
-		return observers;
-	}
+        return observers;
+    }
 }

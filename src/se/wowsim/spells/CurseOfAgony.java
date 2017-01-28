@@ -39,9 +39,13 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
         int tickNumber = 1;
         for (int i = 1; i < timeAfterCast; i++) {
             if (i % tickInterval == 0) {
-                if (tickNumber <= 4) { damage += (totalDamage / totalTickNumber) * 0.5; }
-                else if (tickNumber > 4 && tickNumber <= 8) { damage += (totalDamage / totalTickNumber); }
-                else if (tickNumber > 8 && tickNumber <= 12)  { damage += (totalDamage / totalTickNumber) * 1.5; }
+                if (tickNumber <= 4) {
+                    damage += (totalDamage / totalTickNumber) * 0.5;
+                } else if (tickNumber > 4 && tickNumber <= 8) {
+                    damage += (totalDamage / totalTickNumber);
+                } else if (tickNumber > 8 && tickNumber <= 12) {
+                    damage += (totalDamage / totalTickNumber) * 1.5;
+                }
                 tickNumber++;
             }
         }
@@ -58,9 +62,13 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
 
             double tickDamage = 0.0;
 
-            if (tickNumber <= 4) { tickDamage = (totalDamage / totalTickNumber) * 0.5; }
-            else if (tickNumber > 4 && tickNumber <= 8) { tickDamage = (totalDamage / totalTickNumber); }
-            else if (tickNumber > 8 && tickNumber <= 12)  { tickDamage = (totalDamage / totalTickNumber) * 1.5; }
+            if (tickNumber <= 4) {
+                tickDamage = (totalDamage / totalTickNumber) * 0.5;
+            } else if (tickNumber > 4 && tickNumber <= 8) {
+                tickDamage = (totalDamage / totalTickNumber);
+            } else if (tickNumber > 8 && tickNumber <= 12) {
+                tickDamage = (totalDamage / totalTickNumber) * 1.5;
+            }
 
             System.out.println("CurseOfAgony tick(" + tickNumber + "/" + totalTickNumber + "): " + tickDamage + " damage");
             tickNumber++;
