@@ -165,7 +165,7 @@ public final class Immolate extends DirectDamage implements Observer {
             this.tickInterval = 30;
             this.tickNumber = 1;
             this.totalTickNumber = duration / tickInterval;
-            this.castTime = 0;
+            this.castTime = 20;
         }
     }
 }
