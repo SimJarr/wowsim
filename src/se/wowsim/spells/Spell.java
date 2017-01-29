@@ -35,6 +35,9 @@ public abstract class Spell {
 
     public double calculateDamageDealt(Target target, int timeLeft) {
         int globalCooldown = 15;
+        if(this.getCastTime() > timeLeft) {
+        	return 0.0;
+        }
         if (this instanceof DamageOverTime) {
             if (target.notAffected((DamageOverTime) this) && this.getCastTime() >= globalCooldown) {
                 return ((DamageOverTime) this).calculateDotDamage(timeLeft) / this.getCastTime();

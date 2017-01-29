@@ -83,6 +83,9 @@ public final class Immolate extends DirectDamage implements Observer {
     @Override
     public double calculateDamageDealt(Target target, int timeleft) {
         double damageDealt = 0;
+        if(this.getCastTime() > timeleft) {
+        	return 0.0;
+        } 
         if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
