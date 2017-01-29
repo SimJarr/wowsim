@@ -95,6 +95,8 @@ public abstract class ClassTemplate {
 
     private Spell determineSpell(Target target, int timeLeft) {
 
+        //TODO future-sight, understand what order of spells yields the greatest ePeen
+
         Map<Spell, Double> result = new HashMap<>();
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
