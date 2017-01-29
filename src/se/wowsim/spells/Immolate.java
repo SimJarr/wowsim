@@ -49,6 +49,7 @@ public final class Immolate extends DirectDamage implements Observer {
     @Override
     public void init() {
         this.castTime = 20;
+        immolateDot.setCastTime(this.castTime);
         switch (rank) {
             case 1:
                 this.totalDamage = calculateDamage(8);
@@ -133,6 +134,10 @@ public final class Immolate extends DirectDamage implements Observer {
                 target.unregister(this);
             }
         }
+        
+        private void setCastTime(int castTime) {
+        	this.castTime = castTime;
+        }
 
         @Override
         public void init() {
@@ -165,8 +170,6 @@ public final class Immolate extends DirectDamage implements Observer {
             this.tickInterval = 30;
             this.tickNumber = 1;
             this.totalTickNumber = duration / tickInterval;
-            //TODO would like to get the castTime by calling parent class.getCastTime()
-            this.castTime = 20;
         }
     }
 }
