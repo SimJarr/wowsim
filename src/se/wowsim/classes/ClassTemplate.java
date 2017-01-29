@@ -1,6 +1,8 @@
 package se.wowsim.classes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import se.wowsim.Target;
@@ -8,11 +10,11 @@ import se.wowsim.spells.Spell;
 
 public abstract class ClassTemplate {
 
-    double totalDamageDone;
-    double intellect;
-    double stamina;
-    double spirit;
-
+    private double totalDamageDone;
+    private double intellect;
+    private double stamina;
+    private double spirit;
+    private List<String> usedSpells = new ArrayList<>();
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
     protected int castProgress;
@@ -22,17 +24,22 @@ public abstract class ClassTemplate {
     protected Spell nextSpell;
     protected Classes myClass;
 
-    protected ClassTemplate() {
+    protected ClassTemplate(double intellect) {
         this.busyCasting = false;
         this.globalCooldown = 15;
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
         this.critMulti = 1.5;
+        this.intellect = intellect;
     }
 
     public double getTotalDamageDone() {
         return totalDamageDone;
+    }
+
+    public List<String> getUsedSpells() {
+        return usedSpells;
     }
 
     public double resetTotalDamageDone() {
@@ -78,6 +85,7 @@ public abstract class ClassTemplate {
 
             busyCasting = true;
             System.out.println("Casting " + nextSpell.getName());
+            usedSpells.add(nextSpell.getName());
             if (castProgress == 0) {
                 nextSpell.applySpell();
                 nextSpell = null;
@@ -123,6 +131,8 @@ public abstract class ClassTemplate {
                 totalDamageDone += highestSoFar * determinedSpell.getCastTime();
             }
         }
+
+        //adda en utskrift av alla gjorda spells
 
         return determinedSpell;
     }

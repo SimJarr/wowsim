@@ -40,9 +40,11 @@ public class ClassBuilder {
         for (Spell s : allSpells) {
             if (s.getSpellClass().equals(myClass)) {
                 classTemplate.addSpell(s.getName(), s);
+                //TODO have critChance be set on a class instead of each spell
                 if (s instanceof DirectDamage) {
                     ((DirectDamage) s).setCritChance(myClass.calculateCritChance(intellect, level));
                 }
+                //TODO end
                 s.init();
             }
         }

@@ -134,7 +134,7 @@ public final class Immolate extends DirectDamage implements Observer {
                 target.unregister(this);
             }
         }
-        
+
         private void setCastTime(int castTime) {
         	this.castTime = castTime;
         }
@@ -162,6 +162,7 @@ public final class Immolate extends DirectDamage implements Observer {
                     break;
                 case 7:
                     this.totalDamage = 485;
+                    break;
                 default:
                     throw new IllegalArgumentException("Given rank does not exist");
             }
