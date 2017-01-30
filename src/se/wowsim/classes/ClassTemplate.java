@@ -109,6 +109,7 @@ public abstract class ClassTemplate {
 
             Spell currentSpell = entry.getValue();
             result.put(currentSpell, currentSpell.calculateDamageDealt(target, timeLeft));
+            //TODO calculateDamageDealt is not doing what it says (dividing with castTime seems wrong).
             System.out.println(currentSpell.getName() + " would do: " + currentSpell.calculateDamageDealt(target, timeLeft));
         }
 
