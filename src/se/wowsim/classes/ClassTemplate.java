@@ -130,6 +130,8 @@ public abstract class ClassTemplate {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
 
+        //TODO when simulating with 240 deciseconds it want to use corruption first and make agony miss one tick
+
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
         Map<Spell, Double> result = new HashMap<>();

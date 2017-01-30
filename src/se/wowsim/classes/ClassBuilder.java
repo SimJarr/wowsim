@@ -1,5 +1,6 @@
 package se.wowsim.classes;
 
+import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,11 +52,24 @@ public class ClassBuilder {
     }
 
     private void importSpells() {
-        allSpells.add(new Corruption(determineSpellLevel(Corruption.levelUps)));
-        allSpells.add(new CurseOfAgony(determineSpellLevel(CurseOfAgony.levelUps)));
-        allSpells.add(new Shadowbolt(determineSpellLevel(Shadowbolt.levelUps)));
-        allSpells.add(new Immolate(determineSpellLevel(Immolate.levelUps)));
-        allSpells.add(new SearingPain(determineSpellLevel(SearingPain.levelUps)));
+        importSpellsHelper("Corruption", Corruption.levelUps);
+        importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
+        importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
+        importSpellsHelper("Immolate", Immolate.levelUps);
+        importSpellsHelper("SearingPain", SearingPain.levelUps);
+    }
+
+    private void importSpellsHelper(String spell, List<Integer> integerList) {
+
+        try {
+            int rank = determineSpellLevel(integerList);
+            if (rank > 0) {
+                Constructor mySpell = Class.forName("se.wowsim.spells." + spell).getConstructor(int.class);
+                allSpells.add((Spell) mySpell.newInstance(rank));
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);        }
+
     }
 
     private int determineSpellLevel(List<Integer> levelups) {
