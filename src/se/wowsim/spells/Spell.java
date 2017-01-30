@@ -48,7 +48,7 @@ public abstract class Spell {
             }
         } else if (this instanceof DirectDamage) {
 
-            return ((DirectDamage) this).getTotalDamage();
+            return this.getTotalDamage();
         }
         return 0.0;
     }
