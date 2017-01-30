@@ -204,7 +204,7 @@ public abstract class ClassTemplate {
     		double nextSpellValue = (nextCalculatedSpell.getTotalDamage() / nextCalculatedSpell.getCastTime()) * potentialAfkTime;
     		
     		if(waitValueThreshold > nextSpellValue) {
-    			System.out.println("HELLO LOOK AT ME!!!" + waitValueThreshold + " : " + nextSpellValue + "::::::::::: damage: " + nextCalculatedSpell.getTotalDamage() + ", casttime: " + nextCalculatedSpell.getCastTime() + ", afktime: " + potentialAfkTime + ", downs: " + downtime);
+                System.out.println("=== WAITING FOR " + dot.getName() + ", dmg dot would do during downtime: " + waitValueThreshold + ", damage next calculated spell would do during potential afk time: " + nextSpellValue + ", total damage from: " + nextCalculatedSpell.getName() + " : " + nextCalculatedSpell.getTotalDamage() + ", casttime: " + nextCalculatedSpell.getCastTime() + ", afktime: " + potentialAfkTime + ", dot downtime: " + downtime);
     			return true;
     		}
     	}
