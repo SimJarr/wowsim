@@ -11,7 +11,7 @@ import se.wowsim.spells.DirectDamage;
 import se.wowsim.spells.Spell;
 
 public abstract class ClassTemplate {
-
+	
     private double totalDamageDone;
     private int level;
     private double intellect;
@@ -174,7 +174,77 @@ public abstract class ClassTemplate {
                 totalDamageDone += highestSoFar * determinedSpell.getCastTime();
             }
         }
-
+        
+        // only useful in extreme cases
+        if(worthDoingNothing(target, determinedSpell)) {
+        	determinedSpell = null;
+        }
+        
         return determinedSpell;
     }
+
+    private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell) {
+    	DamageOverTime dot = getNextDotTimeOut(target);
+    	if(dot != null && nextCalculatedSpell != null) {
+    		
+    		// time(in deciseconds) that dot would be down if next calculated spell is cast
+    		int downtime = Math.abs((dot.getDuration() - dot.getCastTime() - nextCalculatedSpell.getCastTime()));
+    		// dps dot would do during its downtime
+    		double waitValueThreshold = getWaitValueThreshold(dot, downtime);
+    		// time to afk before starting to cast dot
+    		int potentialAfkTime = Math.abs(dot.getDuration() - dot.getCastTime());
+    		if(potentialAfkTime >= nextCalculatedSpell.getCastTime()) { return false; }
+    		// damage next calculated spell would do during potential afk time
+    		double nextSpellValue = (nextCalculatedSpell.getTotalDamage() / nextCalculatedSpell.getCastTime()) * potentialAfkTime;
+    		
+    		if(waitValueThreshold > nextSpellValue) {
+    			System.out.println("HELLO LOOK AT ME!!!" + waitValueThreshold + " : " + nextSpellValue + "::::::::::: damage: " + nextCalculatedSpell.getTotalDamage() + ", casttime: " + nextCalculatedSpell.getCastTime() + ", afktime: " + potentialAfkTime + ", downs: " + downtime);
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    private double getWaitValueThreshold(DamageOverTime dot, int downtime) {
+    	return ((dot.getTotalDamage()/(dot.getMaxDuration() + dot.getCastTime())) * downtime) / 10;
+    }
+    
+    private DamageOverTime getNextDotTimeOut(Target target) {
+    	DamageOverTime nextDot = null;
+    	for(Object dot : target.getObservers()) {
+    		if(dot instanceof DamageOverTime) {
+    			if(nextDot == null) {
+    				nextDot = (DamageOverTime) dot;
+    			} else {
+    				if(nextDot.getDuration() > ((DamageOverTime)dot).getDuration()) {
+    					nextDot = (DamageOverTime) dot;
+    				}
+    			}
+    		}
+    	}
+    	return nextDot;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
