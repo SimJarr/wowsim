@@ -14,9 +14,9 @@ public abstract class ClassTemplate {
 	
     private double totalDamageDone;
     private int level;
-    private double intellect;
-    private double stamina;
-    private double spirit;
+    private int intellect;
+    private int stamina;
+    private int spirit;
     private List<String> usedSpells = new ArrayList<>();
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
@@ -130,7 +130,7 @@ public abstract class ClassTemplate {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
 
-        //TODO when simulating with 240 deciseconds it want to use corruption first and make agony miss one tick
+        //TODO future-sight milestone when simulating with 240 deciseconds it want to use corruption first and make agony miss one tick
 
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
@@ -139,6 +139,10 @@ public abstract class ClassTemplate {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
             Spell currentSpell = entry.getValue();
+
+            if (currentSpell instanceof DirectDamage){
+                ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
+            }
 
             if (currentSpell instanceof DirectDamage || currentSpell == highestDamageDot) {
                 int timeTakenFromCaster = (currentSpell.getCastTime() <= 15) ? 15 : currentSpell.getCastTime();
@@ -210,7 +214,8 @@ public abstract class ClassTemplate {
     private double getWaitValueThreshold(DamageOverTime dot, int downtime) {
     	return ((dot.getTotalDamage()/(dot.getMaxDuration() + dot.getCastTime())) * downtime) / 10;
     }
-    
+
+    //TODO move getNextDotTimeOut to Target.java
     private DamageOverTime getNextDotTimeOut(Target target) {
     	DamageOverTime nextDot = null;
     	for(Object dot : target.getObservers()) {
