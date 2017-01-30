@@ -81,6 +81,8 @@ public final class Immolate extends DirectDamage implements Observer {
         return damage * (1 - critChance) + (damage * critMulti) * critChance;
     }
 
+
+    //TODO needs to be able to cast a immolate for the directdmg, not get pwnd from the dot being up.
     @Override
     public double calculateDamageDealt(Target target, int timeleft) {
         double damageDealt = 0;
