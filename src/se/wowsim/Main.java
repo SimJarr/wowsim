@@ -9,11 +9,11 @@ public class Main {
     public static void main(String[] args) {
 
 
-        Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 60, 200).getClassInstance();
+        Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 35, 100).getClassInstance();
         //Priest snarre = (Priest) new ClassBuilder(Classes.PRIEST, 31, 10000).getClassInstance();
         Target target = new Target();
 
-        Simulator.simulate(warlock, target, 210);
+        Simulator.simulate(warlock, target, 400);
 
         System.out.println("Total Damage Done: " + Simulator.getTotalDamageDone());
         System.out.println("Dps: " + Simulator.getDps());

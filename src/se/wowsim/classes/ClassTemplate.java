@@ -134,8 +134,6 @@ public abstract class ClassTemplate {
             }
         }
 
-        //adda en utskrift av alla gjorda spells
-
         return determinedSpell;
     }
 }
