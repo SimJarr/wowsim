@@ -6,7 +6,6 @@ public final class Warlock extends ClassTemplate {
         super(level, intellect);
         this.myClass = Classes.WARLOCK;
         this.critChance = myClass.calculateCritChance(level, intellect);
-        System.out.println("mr wherlocks crit: " + this.critChance);
     }
 
 }

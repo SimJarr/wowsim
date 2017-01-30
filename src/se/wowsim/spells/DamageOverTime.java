@@ -4,7 +4,6 @@ public abstract class DamageOverTime extends Spell {
 
     protected int duration;
     protected int maxDuration;
-    protected int totalDamage;
     protected int tickInterval;
 
     public DamageOverTime(int rank) {
@@ -17,10 +16,6 @@ public abstract class DamageOverTime extends Spell {
 
     public int getMaxDuration() {
         return maxDuration;
-    }
-
-    public int getTotalDamage() {
-        return totalDamage;
     }
 
     public int getTickInterval() {

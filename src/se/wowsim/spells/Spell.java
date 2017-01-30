@@ -8,6 +8,7 @@ public abstract class Spell {
     protected int castTime;
     protected Classes spellClass;
     protected int rank;
+    protected double totalDamage;
 
     public Spell(int rank) {
         this.rank = rank;
@@ -15,6 +16,10 @@ public abstract class Spell {
 
     public int getCastTime() {
         return castTime;
+    }
+
+    public double getTotalDamage() {
+        return totalDamage;
     }
 
     public int getRank() {
@@ -34,22 +39,16 @@ public abstract class Spell {
     public abstract String getName();
 
     public double calculateDamageDealt(Target target, int timeLeft) {
-        int globalCooldown = 15;
-        if(this.getCastTime() > timeLeft) {
-        	return 0.0;
+        if (this.getCastTime() > timeLeft) {
+            return 0.0;
         }
         if (this instanceof DamageOverTime) {
-            if (target.notAffected((DamageOverTime) this) && this.getCastTime() >= globalCooldown) {
-                return ((DamageOverTime) this).calculateDotDamage(timeLeft) / this.getCastTime();
-            } else if (target.notAffected((DamageOverTime) this)) {
-                return ((DamageOverTime) this).calculateDotDamage(timeLeft) / globalCooldown;
+            if (target.notAffected((DamageOverTime) this)) {
+                return ((DamageOverTime) this).calculateDotDamage(timeLeft);
             }
         } else if (this instanceof DirectDamage) {
-            if (this.getCastTime() >= globalCooldown) {
-                return ((DirectDamage) this).getTotalDamage() / this.getCastTime();
-            } else {
-                return ((DirectDamage) this).getTotalDamage() / globalCooldown;
-            }
+
+            return ((DirectDamage) this).getTotalDamage();
         }
         return 0.0;
     }

@@ -91,7 +91,7 @@ public final class Immolate extends DirectDamage implements Observer {
             damageDealt += this.getTotalDamage();
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
         }
-        return damageDealt / this.getCastTime();
+        return damageDealt;
     }
 
     private final class ImmolateDot extends DamageOverTime implements Observer {

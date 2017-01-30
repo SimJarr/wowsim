@@ -34,10 +34,9 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
     @Override
     public double calculateDotDamage(int timeLeft) {
 
-        int timeAfterCast = (castTime <= 15) ? timeLeft - 15 : timeLeft - castTime;
         double damage = 0;
         int tickNumber = 1;
-        for (int i = 1; i < timeAfterCast; i++) {
+        for (int i = 1; i <= timeLeft; i++) {
             if (i % tickInterval == 0) {
                 if (tickNumber <= 4) {
                     damage += (totalDamage / totalTickNumber) * 0.5;

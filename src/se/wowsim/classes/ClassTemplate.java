@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import se.wowsim.Target;
+import se.wowsim.spells.DamageOverTime;
+import se.wowsim.spells.DirectDamage;
 import se.wowsim.spells.Spell;
 
 public abstract class ClassTemplate {
@@ -99,18 +101,49 @@ public abstract class ClassTemplate {
         }
     }
 
+    private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
+
+        DamageOverTime highestDamageDot = null;
+        double highestDamageDotDps = 0.0;
+
+        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
+
+            Spell currentSpell = entry.getValue();
+
+            if (currentSpell instanceof DamageOverTime) {
+                if (highestDamageDot == null && (currentSpell.calculateDamageDealt(target, timeLeft) != 0.0)) {
+                    highestDamageDot = (DamageOverTime) currentSpell;
+                    highestDamageDotDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
+                } else {
+                    double currentSpellDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
+                    if (currentSpellDps > highestDamageDotDps) {
+                        highestDamageDot = (DamageOverTime) currentSpell;
+                        highestDamageDotDps = currentSpellDps;
+                    }
+                }
+            }
+        }
+        return highestDamageDot;
+    }
+
     private Spell determineSpell(Target target, int timeLeft) {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
+
+        DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
         Map<Spell, Double> result = new HashMap<>();
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
             Spell currentSpell = entry.getValue();
-            result.put(currentSpell, currentSpell.calculateDamageDealt(target, timeLeft));
-            //TODO calculateDamageDealt is not doing what it says (dividing with castTime seems wrong).
-            System.out.println(currentSpell.getName() + " would do: " + currentSpell.calculateDamageDealt(target, timeLeft));
+
+            if (currentSpell instanceof DirectDamage || currentSpell == highestDamageDot) {
+                int timeTakenFromCaster = (currentSpell.getCastTime() <= 15) ? 15 : currentSpell.getCastTime();
+
+                result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
+            }
+
         }
 
         Spell determinedSpell = null;
