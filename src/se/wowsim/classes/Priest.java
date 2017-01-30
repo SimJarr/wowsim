@@ -2,8 +2,8 @@ package se.wowsim.classes;
 
 public final class Priest extends ClassTemplate {
 
-    public Priest(double intellect) {
-        super(intellect);
+    public Priest(int intellect, int level) {
+        super(intellect, level);
         this.myClass = Classes.PRIEST;
     }
 

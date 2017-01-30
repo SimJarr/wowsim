@@ -24,11 +24,11 @@ public class ClassBuilder {
     public ClassTemplate getClassInstance() {
         switch (myClass) {
             case PRIEST:
-                Priest priest = new Priest(intellect);
+                Priest priest = new Priest(level, intellect);
                 addSpellsToMyClass(priest);
                 return priest;
             case WARLOCK:
-                Warlock warlock = new Warlock(intellect);
+                Warlock warlock = new Warlock(level, intellect);
                 addSpellsToMyClass(warlock);
                 return warlock;
             default:
@@ -42,7 +42,7 @@ public class ClassBuilder {
                 classTemplate.addSpell(s.getName(), s);
                 //TODO have critChance be set on a class instead of each spell
                 if (s instanceof DirectDamage) {
-                    ((DirectDamage) s).setCritChance(myClass.calculateCritChance(intellect, level));
+                    ((DirectDamage) s).setCritChance(myClass.calculateCritChance(level, intellect));
                 }
                 //TODO end
                 s.init();
@@ -55,7 +55,7 @@ public class ClassBuilder {
         allSpells.add(new CurseOfAgony(determineSpellLevel(CurseOfAgony.levelUps)));
         allSpells.add(new Shadowbolt(determineSpellLevel(Shadowbolt.levelUps)));
         allSpells.add(new Immolate(determineSpellLevel(Immolate.levelUps)));
-        //allSpells.add(new SearingPain(determineSpellLevel(SearingPain.levelUps)));
+        allSpells.add(new SearingPain(determineSpellLevel(SearingPain.levelUps)));
     }
 
     private int determineSpellLevel(List<Integer> levelups) {

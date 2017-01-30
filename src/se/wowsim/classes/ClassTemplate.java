@@ -11,6 +11,7 @@ import se.wowsim.spells.Spell;
 public abstract class ClassTemplate {
 
     private double totalDamageDone;
+    private int level;
     private double intellect;
     private double stamina;
     private double spirit;
@@ -20,11 +21,12 @@ public abstract class ClassTemplate {
     protected int castProgress;
     protected int globalCooldown;
     protected int downTime;
+    protected double critChance;
     protected double critMulti;
     protected Spell nextSpell;
     protected Classes myClass;
 
-    protected ClassTemplate(double intellect) {
+    protected ClassTemplate(int level, int intellect) {
         this.busyCasting = false;
         this.globalCooldown = 15;
         this.totalDamageDone = 0.0;
@@ -32,6 +34,7 @@ public abstract class ClassTemplate {
         this.spells = new HashMap<>();
         this.critMulti = 1.5;
         this.intellect = intellect;
+        this.level = level;
     }
 
     public double getTotalDamageDone() {
@@ -56,6 +59,9 @@ public abstract class ClassTemplate {
     }
 
     public void currentActivity(Target target, int timeLeft) {
+
+        //TODO pre-casta en spell innan decisekund 0
+
         castProgress--;
         downTime--;
 
@@ -103,6 +109,7 @@ public abstract class ClassTemplate {
 
             Spell currentSpell = entry.getValue();
             result.put(currentSpell, currentSpell.calculateDamageDealt(target, timeLeft));
+            System.out.println(currentSpell.getName() + " would do: " + currentSpell.calculateDamageDealt(target, timeLeft));
         }
 
         Spell determinedSpell = null;

@@ -29,6 +29,9 @@ public abstract class Simulator {
 
         dps = (totalDamageDone / simDuration) * 10;
 
+        System.out.println("Total Damage Done: " + getTotalDamageDone());
+        System.out.println("Dps: " + getDps());
+
         System.out.println(formatSpellList(classTemplate.getUsedSpells()));
 
     }
