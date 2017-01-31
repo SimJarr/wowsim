@@ -22,8 +22,6 @@ public abstract class DamageOverTime extends Spell {
         return tickInterval;
     }
 
-    public abstract void init();
-
     public double calculateDotDamage(int timeLeft) {
 
         double damage = 0;
