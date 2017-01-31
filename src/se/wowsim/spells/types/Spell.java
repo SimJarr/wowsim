@@ -1,7 +1,9 @@
-package se.wowsim.spells;
+package se.wowsim.spells.types;
 
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
+import se.wowsim.spells.types.DamageOverTime;
+import se.wowsim.spells.types.DirectDamage;
 
 public abstract class Spell {
 

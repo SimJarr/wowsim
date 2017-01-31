@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import se.wowsim.Target;
-import se.wowsim.spells.DamageOverTime;
-import se.wowsim.spells.DirectDamage;
-import se.wowsim.spells.Spell;
+import se.wowsim.spells.types.DamageOverTime;
+import se.wowsim.spells.types.DirectDamage;
+import se.wowsim.spells.types.Spell;
 
 public abstract class ClassTemplate {
 	

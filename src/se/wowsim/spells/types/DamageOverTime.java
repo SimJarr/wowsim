@@ -1,4 +1,4 @@
-package se.wowsim.spells;
+package se.wowsim.spells.types;
 
 public abstract class DamageOverTime extends Spell {
 

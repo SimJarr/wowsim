@@ -1,4 +1,4 @@
-package se.wowsim.spells;
+package se.wowsim.spells.types;
 
 
 import java.text.DecimalFormat;

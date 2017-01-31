@@ -6,6 +6,8 @@ import java.util.List;
 import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
+import se.wowsim.spells.types.DamageOverTime;
+import se.wowsim.spells.types.DirectDamage;
 
 public final class Immolate extends DirectDamage implements Observer {
 

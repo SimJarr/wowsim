@@ -6,6 +6,7 @@ import java.util.List;
 import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
+import se.wowsim.spells.types.DamageOverTime;
 
 public final class Corruption extends DamageOverTime implements Observer {
 

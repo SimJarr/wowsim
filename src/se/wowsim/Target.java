@@ -1,6 +1,6 @@
 package se.wowsim;
 
-import se.wowsim.spells.DamageOverTime;
+import se.wowsim.spells.types.DamageOverTime;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
