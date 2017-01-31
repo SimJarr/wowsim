@@ -3,15 +3,18 @@ package se.wowsim;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Target implements Subject {
 
-    private List<Observer> observers;
+    private Set<Observer> observers;
 
     public Target() {
-        this.observers = new CopyOnWriteArrayList<>();
+        this.observers = new CopyOnWriteArraySet<>();
     }
 
     @Override
@@ -23,8 +26,7 @@ public class Target implements Subject {
 
     @Override
     public void unregister(Observer o) {
-        int index = observers.indexOf(o);
-        observers.remove(index);
+        observers.remove(o);
         if (o instanceof DamageOverTime)
             System.out.println(o.getName() + " faded");
     }
@@ -39,13 +41,13 @@ public class Target implements Subject {
     public boolean notAffected(DamageOverTime dot) {
         for (Observer o : getObservers()) {
             if (o.getClass().equals(dot.getClass())) {
-                return (((DamageOverTime) o).getDuration() < dot.getCastTime());
+                return (((DamageOverTime) o).getDuration() <= dot.getCastTime() + 1 );
             }
         }
         return true;
     }
 
-    public List<Observer> getObservers() {
+    public Set<Observer> getObservers() {
         return observers;
     }
 }

@@ -31,10 +31,6 @@ public abstract class Spell {
         return rank;
     }
 
-    public int getCooldown() {
-        return cooldown;
-    }
-
     public abstract void applySpell();
 
     public void setTarget(Target target) {

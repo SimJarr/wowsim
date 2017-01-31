@@ -69,11 +69,11 @@ public abstract class ClassTemplate {
         downTime--;
         decrementEverySpellsCooldown();
 
-        if (nextSpell != null && castProgress <= 0 && nextSpell.getCooldown() == 0) {
+        if (nextSpell != null && castProgress <= 0) {
             nextSpell.applySpell();
             nextSpell = null;
         }
-        if (downTime == 0 && castProgress <= 0) {
+        if (downTime == 0) {
             busyCasting = false;
         }
         if (busyCasting) {

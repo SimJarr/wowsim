@@ -59,7 +59,7 @@ public class ClassBuilder {
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
         importSpellsHelper("MindFlay", MindFlay.levelUps);
-        importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
+        //importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
     }
 
     private void importSpellsHelper(String spell, List<Integer> integerList) {

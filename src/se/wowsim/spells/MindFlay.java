@@ -14,31 +14,11 @@ public final class MindFlay extends Channeling implements Observer {
     public MindFlay(int rank) {
         super(rank);
         this.spellClass = Classes.PRIEST;
-    }
-
-    @Override
-    public void applySpell() {
-        this.duration = this.maxDuration;
-        this.tickNumber = 1;
-        target.register(this);
-    }
-
-    @Override
-    public void update() {
-        this.duration--;
-        if ((duration % tickInterval == 0) && duration != maxDuration) {
-            System.out.println("MindFlay tick(" + tickNumber + "/" + totalTickNumber + "): "
-                    + totalDamage / totalTickNumber + " damage");
-            tickNumber++;
-        }
-        if (duration == 0) {
-            target.unregister(this);
-        }
+        this.oneMoreTick = false;
     }
 
     @Override
     public void init() {
-        this.maxDuration = 30;
         switch (rank) {
             case 1:
                 this.totalDamage = 75;
@@ -58,6 +38,7 @@ public final class MindFlay extends Channeling implements Observer {
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.maxDuration = 30;
         this.duration = this.maxDuration;
         this.tickInterval = 10;
         this.tickNumber = 1;

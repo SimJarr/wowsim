@@ -1,12 +1,15 @@
 package se.wowsim.spells.types;
 
-public abstract class DamageOverTime extends Spell {
+import se.wowsim.Observer;
+
+public abstract class DamageOverTime extends Spell implements Observer {
 
     protected int duration;
     protected int maxDuration;
     protected int tickInterval;
     protected int tickNumber;
     protected int totalTickNumber;
+    protected boolean oneMoreTick;
 
     public DamageOverTime(int rank) {
         super(rank);
@@ -37,5 +40,35 @@ public abstract class DamageOverTime extends Spell {
             }
         }
         return damage;
+    }
+
+    public void applySpell() {
+        if (duration == 0 && target.getObservers().contains(this)) {
+            oneMoreTick = true;
+        }
+        this.duration = this.maxDuration;
+        this.tickNumber = 1;
+        target.register(this);
+    }
+
+    public void update() {
+        if ((duration % tickInterval == 0) && duration != maxDuration) {
+            System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): "
+                    + totalDamage / totalTickNumber + " damage");
+            tickNumber++;
+        }
+
+        if (oneMoreTick) {
+            oneMoreTick = false;
+            System.out.println(getName() + " tick(" + totalTickNumber + "/" + totalTickNumber + "): "
+                    + totalDamage / totalTickNumber + " damage");
+        }
+
+        if (duration == 0) {
+            oneMoreTick = false;
+            target.unregister(this);
+            return;
+        }
+        this.duration--;
     }
 }
