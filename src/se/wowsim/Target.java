@@ -1,12 +1,8 @@
 package se.wowsim;
 
-import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Target implements Subject {
@@ -41,7 +37,7 @@ public class Target implements Subject {
     public boolean notAffected(DamageOverTime dot) {
         for (Observer o : getObservers()) {
             if (o.getClass().equals(dot.getClass())) {
-                return (((DamageOverTime) o).getDuration() <= dot.getCastTime() + 1 );
+                return (((DamageOverTime) o).getDuration() <= dot.getCastTime());
             }
         }
         return true;
