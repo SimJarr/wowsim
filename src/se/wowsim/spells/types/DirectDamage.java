@@ -17,4 +17,8 @@ public abstract class DirectDamage extends Spell {
         NumberFormat nf = new DecimalFormat("#0.000");
         this.critChance = Double.parseDouble(nf.format(critChance).replaceAll(",", "."));
     }
+
+    protected double calculateDamage(double minDamage, double maxDamage) {
+        return ((((minDamage + maxDamage) / 2) * (1 - critChance)) + ((((minDamage + maxDamage) / 2) * critMulti) * critChance));
+    }
 }

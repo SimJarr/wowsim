@@ -9,6 +9,8 @@ public abstract class Spell {
 
     protected int castTime;
     protected int rank;
+    protected int cooldown;
+    protected int maxCooldown;
     protected Classes spellClass;
     protected double totalDamage;
     protected Target target;
@@ -29,10 +31,14 @@ public abstract class Spell {
         return rank;
     }
 
+    public int getCooldown() {
+        return cooldown;
+    }
+
     public abstract void applySpell();
 
     public void setTarget(Target target) {
-    	this.target = target;
+        this.target = target;
     }
 
     public abstract void init();
@@ -43,7 +49,14 @@ public abstract class Spell {
 
     public abstract String getName();
 
+    public void decrementCooldown() {
+        if (cooldown > 0) { cooldown--; }
+    }
+
     public double calculateDamageDealt(Target target, int timeLeft) {
+        if (cooldown > 0) {
+            return 0.0;
+        }
         if (this.getCastTime() > timeLeft) {
             return 0.0;
         }

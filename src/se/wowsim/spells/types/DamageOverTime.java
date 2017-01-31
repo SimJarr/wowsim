@@ -26,6 +26,8 @@ public abstract class DamageOverTime extends Spell {
 
     public double calculateDotDamage(int timeLeft) {
 
+        if (cooldown > 0) return 0.0;
+
         double damage = 0;
         int timeAfterCast = (this.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - this.getCastTime();
         int stopLoop = timeAfterCast > this.getMaxDuration() ? this.getMaxDuration() : timeAfterCast;

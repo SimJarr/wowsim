@@ -61,8 +61,4 @@ public final class SearingPain extends DirectDamage implements Observer {
 
     }
 
-    private double calculateDamage(double minDamage, double maxDamage) {
-        return ((((minDamage + maxDamage) / 2) * (1 - critChance)) + ((((minDamage + maxDamage) / 2) * critMulti) * critChance));
-    }
-
 }

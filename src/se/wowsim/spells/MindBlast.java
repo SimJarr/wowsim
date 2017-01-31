@@ -7,17 +7,18 @@ import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
 
-public final class Shadowbolt extends DirectDamage implements Observer {
+public final class MindBlast extends DirectDamage implements Observer {
 
-    public static List<Integer> levelUps = Arrays.asList(1, 6, 12, 20, 28, 36, 44, 52, 60);
+    public static List<Integer> levelUps = Arrays.asList(10, 16, 22, 28, 34, 40, 46, 52, 58);
 
-    public Shadowbolt(int rank) {
+    public MindBlast(int rank) {
         super(rank);
-        this.spellClass = Classes.WARLOCK;
+        this.spellClass = Classes.PRIEST;
     }
 
     @Override
     public void applySpell() {
+        this.cooldown = this.maxCooldown;
         target.register(this);
     }
 
@@ -29,46 +30,45 @@ public final class Shadowbolt extends DirectDamage implements Observer {
 
     @Override
     public String getName() {
-        return "Shadowbolt";
+        return "Mind Blast";
     }
 
     @Override
     public void init() {
-        this.castTime = 30;
         switch (rank) {
             case 1:
-                this.totalDamage = calculateDamage(12, 17);
-                this.castTime = 17;
+                this.totalDamage = calculateDamage(39, 44);
                 break;
             case 2:
-                this.totalDamage = calculateDamage(23, 30);
-                this.castTime = 22;
+                this.totalDamage = calculateDamage(72, 79);
                 break;
             case 3:
-                this.totalDamage = calculateDamage(48, 57);
-                this.castTime = 28;
+                this.totalDamage = calculateDamage(112, 121);
                 break;
             case 4:
-                this.totalDamage = calculateDamage(86, 99);
+                this.totalDamage = calculateDamage(167, 178);
                 break;
             case 5:
-                this.totalDamage = calculateDamage(142, 163);
+                this.totalDamage = calculateDamage(217, 232);
                 break;
             case 6:
-                this.totalDamage = calculateDamage(204, 231);
+                this.totalDamage = calculateDamage(279, 298);
                 break;
             case 7:
-                this.totalDamage = calculateDamage(281, 316);
+                this.totalDamage = calculateDamage(346, 367);
                 break;
             case 8:
-                this.totalDamage = calculateDamage(360, 403);
+                this.totalDamage = calculateDamage(425, 450);
                 break;
             case 9:
-                this.totalDamage = calculateDamage(455, 508);
+                this.totalDamage = calculateDamage(503, 532);
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.castTime = 15;
+        this.maxCooldown = 80;
+        this.cooldown = 0;
 
     }
 
