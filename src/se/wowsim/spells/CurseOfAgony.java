@@ -17,13 +17,6 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
     }
 
     @Override
-    public void applySpell() {
-        this.duration = this.maxDuration;
-        this.tickNumber = 1;
-        target.register(this);
-    }
-
-    @Override
     public double calculateDotDamage(int timeLeft) {
 
         double damage = 0;
@@ -61,9 +54,15 @@ public final class CurseOfAgony extends DamageOverTime implements Observer {
                 tickDamage = (totalDamage / totalTickNumber) * 1.5;
             }
 
-            System.out.println("CurseOfAgony tick(" + tickNumber + "/" + totalTickNumber + "): " + tickDamage + " damage");
+            System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): " + tickDamage + " damage");
             tickNumber++;
         }
+
+        if (oneMoreTick) {
+            oneMoreTick = false;
+            System.out.println(getName() + " tick(" + totalTickNumber + "/" + totalTickNumber + "): " + (totalDamage / totalTickNumber) * 1.5 + " damage");
+        }
+
         if (duration == 0) {
             target.unregister(this);
         }

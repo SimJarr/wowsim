@@ -106,6 +106,9 @@ public final class Immolate extends DirectDamage implements Observer {
 
         @Override
         public void applySpell() {
+            if (duration == 0 && target.getObservers().contains(this)) {
+                oneMoreTick = true;
+            }
             this.duration = this.maxDuration;
             this.tickNumber = 1;
             init();
@@ -119,6 +122,7 @@ public final class Immolate extends DirectDamage implements Observer {
 
         @Override
         public void update() {
+            //TODO jarre måste fixa update
             this.duration--;
             if ((duration % tickInterval == 0) && duration != maxDuration) {
                 System.out.println("Immolate tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");

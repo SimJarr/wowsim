@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import se.wowsim.spells.*;
-import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
 
 public class ClassBuilder {
@@ -59,7 +58,7 @@ public class ClassBuilder {
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
         importSpellsHelper("MindFlay", MindFlay.levelUps);
-        //importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
+        importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
     }
 
     private void importSpellsHelper(String spell, List<Integer> integerList) {

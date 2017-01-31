@@ -16,25 +16,6 @@ public final class ShadowWordPain extends DamageOverTime implements Observer {
 		this.spellClass = Classes.PRIEST;
 	}
 
-    @Override
-    public void applySpell() {
-        this.duration = this.maxDuration;
-        this.tickNumber = 1;
-        target.register(this);
-    }
-    
-	@Override
-	public void update() {
-        this.duration--;
-        if ((duration % tickInterval == 0) && duration != maxDuration) {
-            System.out.println("Corruption tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
-            tickNumber++;
-        }
-        if (duration == 0) {
-            target.unregister(this);
-        }
-	}
-
 	@Override
 	public String getName() {
 		return "Shadow Word: Pain";
