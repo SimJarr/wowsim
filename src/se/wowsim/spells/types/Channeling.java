@@ -1,17 +1,18 @@
 package se.wowsim.spells.types;
 
-public abstract class DamageOverTime extends Spell {
+public abstract class Channeling extends Spell {
 
     protected int duration;
     protected int maxDuration;
     protected int tickInterval;
     protected int tickNumber;
     protected int totalTickNumber;
-
-    public DamageOverTime(int rank) {
-        super(rank);
-    }
-
+	
+	public Channeling(int rank) {
+		super(rank);
+		castTime = 0;
+	}
+	
     public int getDuration() {
         return duration;
     }
@@ -23,9 +24,7 @@ public abstract class DamageOverTime extends Spell {
     public int getTickInterval() {
         return tickInterval;
     }
-
-    public abstract void init();
-
+	
     public double calculateDotDamage(int timeLeft) {
 
         double damage = 0;

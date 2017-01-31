@@ -12,7 +12,6 @@ import se.wowsim.spells.types.DirectDamage;
 public final class Immolate extends DirectDamage implements Observer {
 
     private ImmolateDot immolateDot;
-    private Target target;
     public static List<Integer> levelUps = Arrays.asList(1, 10, 20, 30, 40, 50, 60);
 
     public Immolate(int rank) {
@@ -100,10 +99,6 @@ public final class Immolate extends DirectDamage implements Observer {
 
     private final class ImmolateDot extends DamageOverTime implements Observer {
 
-        private int tickNumber;
-        private int totalTickNumber;
-        private Target target;
-
         public ImmolateDot(int rank) {
             super(rank);
             init();
@@ -115,11 +110,6 @@ public final class Immolate extends DirectDamage implements Observer {
             this.tickNumber = 1;
             init();
             target.register(this);
-        }
-
-        @Override
-        public void setTarget(Target target) {
-            this.target = target;
         }
 
         @Override

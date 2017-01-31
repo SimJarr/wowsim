@@ -8,9 +8,10 @@ import se.wowsim.spells.types.DirectDamage;
 public abstract class Spell {
 
     protected int castTime;
-    protected Classes spellClass;
     protected int rank;
+    protected Classes spellClass;
     protected double totalDamage;
+    protected Target target;
 
     public Spell(int rank) {
         this.rank = rank;
@@ -30,7 +31,9 @@ public abstract class Spell {
 
     public abstract void applySpell();
 
-    public abstract void setTarget(Target target);
+    public void setTarget(Target target) {
+    	this.target = target;
+    }
 
     public abstract void init();
 
@@ -49,7 +52,6 @@ public abstract class Spell {
                 return ((DamageOverTime) this).calculateDotDamage(timeLeft);
             }
         } else if (this instanceof DirectDamage) {
-
             return this.getTotalDamage();
         }
         return 0.0;
