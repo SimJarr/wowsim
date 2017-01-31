@@ -7,24 +7,13 @@ import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
 
-public final class Shadowbolt extends DirectDamage implements Observer {
+public final class Shadowbolt extends DirectDamage {
 
     public static List<Integer> levelUps = Arrays.asList(1, 6, 12, 20, 28, 36, 44, 52, 60);
 
     public Shadowbolt(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
-    }
-
-    @Override
-    public void applySpell() {
-        target.register(this);
-    }
-
-    @Override
-    public void update() {
-        target.unregister(this);
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
     }
 
     @Override

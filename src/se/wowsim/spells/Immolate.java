@@ -9,7 +9,7 @@ import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 
-public final class Immolate extends DirectDamage implements Observer {
+public final class Immolate extends DirectDamage {
 
     private ImmolateDot immolateDot;
     public static List<Integer> levelUps = Arrays.asList(1, 10, 20, 30, 40, 50, 60);
@@ -31,6 +31,12 @@ public final class Immolate extends DirectDamage implements Observer {
     }
 
     @Override
+    public void update() {
+        target.unregister(this);
+        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
+    }
+
+    @Override
     public void setTarget(Target target) {
         this.target = target;
         this.immolateDot.setTarget(target);
@@ -39,12 +45,6 @@ public final class Immolate extends DirectDamage implements Observer {
     @Override
     public String getName() {
         return "Immolate";
-    }
-
-    @Override
-    public void update() {
-        target.unregister(this);
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
     }
 
     @Override
@@ -87,9 +87,9 @@ public final class Immolate extends DirectDamage implements Observer {
     @Override
     public double calculateDamageDealt(Target target, int timeleft) {
         double damageDealt = 0;
-        if(this.getCastTime() > timeleft) {
-        	return 0.0;
-        } 
+        if (this.getCastTime() > timeleft) {
+            return 0.0;
+        }
         if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
@@ -121,7 +121,7 @@ public final class Immolate extends DirectDamage implements Observer {
         }
 
         private void setCastTime(int castTime) {
-        	this.castTime = castTime;
+            this.castTime = castTime;
         }
 
         @Override

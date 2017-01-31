@@ -7,25 +7,13 @@ import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
 
-public final class MindBlast extends DirectDamage implements Observer {
+public final class MindBlast extends DirectDamage {
 
     public static List<Integer> levelUps = Arrays.asList(10, 16, 22, 28, 34, 40, 46, 52, 58);
 
     public MindBlast(int rank) {
         super(rank);
         this.spellClass = Classes.PRIEST;
-    }
-
-    @Override
-    public void applySpell() {
-        this.cooldown = this.maxCooldown;
-        target.register(this);
-    }
-
-    @Override
-    public void update() {
-        target.unregister(this);
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
     }
 
     @Override

@@ -39,7 +39,6 @@ public final class CurseOfAgony extends DamageOverTime {
 
     @Override
     public void update() {
-        this.duration--;
 
         if ((duration % tickInterval == 0) && duration != maxDuration) {
 
@@ -65,6 +64,8 @@ public final class CurseOfAgony extends DamageOverTime {
         if (duration == 0) {
             target.unregister(this);
         }
+
+        this.duration--;
     }
 
     @Override

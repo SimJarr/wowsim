@@ -8,19 +8,19 @@ import se.wowsim.spells.types.DamageOverTime;
 
 public final class ShadowWordPain extends DamageOverTime {
 
-	public static List<Integer> levelUps = Arrays.asList(4, 10, 18, 26, 34, 42, 50, 58);
-	
-	public ShadowWordPain(int rank) {
-		super(rank);
-		this.spellClass = Classes.PRIEST;
-	}
+    public static List<Integer> levelUps = Arrays.asList(4, 10, 18, 26, 34, 42, 50, 58);
 
-	@Override
-	public String getName() {
-		return "Shadow Word: Pain";
-	}
-	
-	@Override
+    public ShadowWordPain(int rank) {
+        super(rank);
+        this.spellClass = Classes.PRIEST;
+    }
+
+    @Override
+    public String getName() {
+        return "Shadow Word: Pain";
+    }
+
+    @Override
     public void init() {
         this.maxDuration = 180;
         switch (rank) {

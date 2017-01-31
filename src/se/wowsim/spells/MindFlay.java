@@ -17,6 +17,11 @@ public final class MindFlay extends Channeling {
     }
 
     @Override
+    public String getName() {
+        return "Mind Flay";
+    }
+
+    @Override
     public void init() {
         switch (rank) {
             case 1:
@@ -45,8 +50,4 @@ public final class MindFlay extends Channeling {
         this.castTime = 0;
     }
 
-    @Override
-    public String getName() {
-        return "Mind Flay";
-    }
 }

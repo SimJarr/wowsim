@@ -8,24 +8,13 @@ import se.wowsim.spells.types.DirectDamage;
 import java.util.Arrays;
 import java.util.List;
 
-public final class SearingPain extends DirectDamage implements Observer {
+public final class SearingPain extends DirectDamage {
 
     public static List<Integer> levelUps = Arrays.asList(18, 26, 34, 42, 50, 58);
 
     public SearingPain(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
-    }
-
-    @Override
-    public void applySpell() {
-        target.register(this);
-    }
-    
-    @Override
-    public void update() {
-        target.unregister(this);
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
     }
 
     @Override
