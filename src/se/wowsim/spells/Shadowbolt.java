@@ -4,13 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import se.wowsim.Observer;
-import se.wowsim.Target;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
 
 public final class Shadowbolt extends DirectDamage implements Observer {
 
-    private Target target;
     public static List<Integer> levelUps = Arrays.asList(1, 6, 12, 20, 28, 36, 44, 52, 60);
 
     public Shadowbolt(int rank) {
@@ -21,11 +19,6 @@ public final class Shadowbolt extends DirectDamage implements Observer {
     @Override
     public void applySpell() {
         target.register(this);
-    }
-
-    @Override
-    public void setTarget(Target target) {
-        this.target = target;
     }
 
     @Override
