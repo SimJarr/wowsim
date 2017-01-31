@@ -8,7 +8,7 @@ import se.wowsim.spells.types.DirectDamage;
 import java.util.Arrays;
 import java.util.List;
 
-public class SearingPain extends DirectDamage implements Observer {
+public final class SearingPain extends DirectDamage implements Observer {
 
     public static List<Integer> levelUps = Arrays.asList(18, 26, 34, 42, 50, 58);
 
