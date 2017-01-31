@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import se.wowsim.Target;
+import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
@@ -85,7 +86,8 @@ public abstract class ClassTemplate {
             nextSpell.setTarget(target);
 
             castProgress = nextSpell.getCastTime();
-            downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown;
+            if(nextSpell instanceof Channeling) { downTime = ((Channeling) nextSpell).getMaxDuration(); }
+            else { downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown; }
 
             busyCasting = true;
             System.out.println("Casting " + nextSpell.getName());
@@ -113,7 +115,7 @@ public abstract class ClassTemplate {
 
             Spell currentSpell = entry.getValue();
 
-            if (currentSpell instanceof DamageOverTime) {
+            if (currentSpell instanceof DamageOverTime && !(currentSpell instanceof Channeling)) {
                 if (highestDamageDot == null && (currentSpell.calculateDamageDealt(target, timeLeft) != 0.0)) {
                     highestDamageDot = (DamageOverTime) currentSpell;
                     highestDamageDotDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
@@ -147,7 +149,7 @@ public abstract class ClassTemplate {
                 ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
             }
 
-            if (currentSpell instanceof DirectDamage || currentSpell == highestDamageDot) {
+            if (currentSpell instanceof DirectDamage || currentSpell instanceof Channeling || currentSpell == highestDamageDot) {
                 int timeTakenFromCaster = (currentSpell.getCastTime() <= 15) ? 15 : currentSpell.getCastTime();
 
                 result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
@@ -225,7 +227,7 @@ public abstract class ClassTemplate {
     private DamageOverTime getNextDotTimeOut(Target target) {
         DamageOverTime nextDot = null;
         for (Object dot : target.getObservers()) {
-            if (dot instanceof DamageOverTime) {
+            if (dot instanceof DamageOverTime && !(dot instanceof Channeling)) {
                 if (nextDot == null) {
                     nextDot = (DamageOverTime) dot;
                 } else {

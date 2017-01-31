@@ -49,13 +49,17 @@ public class ClassBuilder {
     }
 
     private void importSpells() {
+    	// WARLOCK
         importSpellsHelper("Corruption", Corruption.levelUps);
         importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
         importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
         importSpellsHelper("Immolate", Immolate.levelUps);
         importSpellsHelper("SearingPain", SearingPain.levelUps);
+        
+        // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
         importSpellsHelper("MindFlay", MindFlay.levelUps);
+        importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
     }
 
     private void importSpellsHelper(String spell, List<Integer> integerList) {

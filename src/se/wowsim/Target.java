@@ -1,5 +1,6 @@
 package se.wowsim;
 
+import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 
 import java.util.List;
