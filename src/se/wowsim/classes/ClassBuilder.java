@@ -59,6 +59,7 @@ public class ClassBuilder {
         importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
         importSpellsHelper("Immolate", Immolate.levelUps);
         importSpellsHelper("SearingPain", SearingPain.levelUps);
+        importSpellsHelper("MindFlay", MindFlay.levelUps);
     }
 
     private void importSpellsHelper(String spell, List<Integer> integerList) {
