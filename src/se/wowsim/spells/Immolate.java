@@ -31,12 +31,6 @@ public final class Immolate extends DirectDamage {
     }
 
     @Override
-    public void update() {
-        target.unregister(this);
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
-    }
-
-    @Override
     public void setTarget(Target target) {
         this.target = target;
         this.immolateDot.setTarget(target);
@@ -82,8 +76,6 @@ public final class Immolate extends DirectDamage {
         return damage * (1 - critChance) + (damage * critMulti) * critChance;
     }
 
-
-    //TODO needs to be able to cast a immolate for the directdmg, not get pwnd from the dot being up.
     @Override
     public double calculateDamageDealt(Target target, int timeleft) {
         double damageDealt = 0;
@@ -93,6 +85,24 @@ public final class Immolate extends DirectDamage {
         if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
+        } else {
+
+            int dotUptime = (this.getImmolateDot().getMaxDuration() - this.getImmolateDot().getDuration());
+            int maxDuration = (this.getImmolateDot().getMaxDuration() < timeleft) ? this.getImmolateDot().getMaxDuration() : timeleft;
+            int tickInterval = this.getImmolateDot().getTickInterval();
+            int ticksLeft = 0;
+            for (int i = dotUptime + 1; i <= maxDuration; i++){
+                if (i % tickInterval == 0){
+                    ticksLeft++;
+                }
+            }
+            double tickDamage = (this.getImmolateDot().getTotalDamage() / this.getImmolateDot().getTotalTickNumber());
+            double totalDamageLeft = tickDamage * ticksLeft;
+
+            damageDealt += this.getTotalDamage();
+            damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
+            damageDealt -= totalDamageLeft;
+
         }
         return damageDealt;
     }
@@ -105,23 +115,16 @@ public final class Immolate extends DirectDamage {
         }
 
         @Override
-        public void applySpell() {
-            if (duration == 0 && target.getObservers().contains(this)) {
-                oneMoreTick = true;
-            }
-            this.duration = this.maxDuration;
-            this.tickNumber = 1;
-            init();
-            target.register(this);
-        }
-
-        @Override
         public String getName() {
             return "ImmolateDot";
         }
 
         private void setCastTime(int castTime) {
             this.castTime = castTime;
+        }
+
+        public int getTotalTickNumber(){
+            return this.totalTickNumber;
         }
 
         @Override
