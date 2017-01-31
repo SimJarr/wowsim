@@ -3,11 +3,10 @@ package se.wowsim.spells;
 import java.util.Arrays;
 import java.util.List;
 
-import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.Channeling;
 
-public final class MindFlay extends Channeling implements Observer {
+public final class MindFlay extends Channeling {
 
     public static List<Integer> levelUps = Arrays.asList(20, 28, 36, 44, 52, 60);
 

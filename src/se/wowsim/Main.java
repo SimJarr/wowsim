@@ -13,7 +13,7 @@ public class Main {
         Priest snarre = (Priest) new ClassBuilder(Classes.PRIEST, 31, 100).getClassInstance();
         Target target = new Target();
 
-        Simulator.simulate(snarre, target, 240);
-        //Simulator.simulate(warlock, target, 240);
+        //Simulator.simulate(snarre, target, 240);
+        Simulator.simulate(warlock, target, 240);
     }
 }

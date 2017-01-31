@@ -97,7 +97,7 @@ public final class Immolate extends DirectDamage implements Observer {
         return damageDealt;
     }
 
-    private final class ImmolateDot extends DamageOverTime implements Observer {
+    private final class ImmolateDot extends DamageOverTime {
 
         public ImmolateDot(int rank) {
             super(rank);
@@ -118,19 +118,6 @@ public final class Immolate extends DirectDamage implements Observer {
         @Override
         public String getName() {
             return "ImmolateDot";
-        }
-
-        @Override
-        public void update() {
-            //TODO jarre måste fixa update
-            this.duration--;
-            if ((duration % tickInterval == 0) && duration != maxDuration) {
-                System.out.println("Immolate tick(" + tickNumber + "/" + totalTickNumber + "): " + totalDamage / totalTickNumber + " damage");
-                tickNumber++;
-            }
-            if (duration == 0) {
-                target.unregister(this);
-            }
         }
 
         private void setCastTime(int castTime) {

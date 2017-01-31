@@ -3,11 +3,10 @@ package se.wowsim.spells;
 import java.util.Arrays;
 import java.util.List;
 
-import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DamageOverTime;
 
-public final class CurseOfAgony extends DamageOverTime implements Observer {
+public final class CurseOfAgony extends DamageOverTime {
 
     public static List<Integer> levelUps = Arrays.asList(8, 18, 28, 38, 48, 58);
 

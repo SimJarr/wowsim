@@ -3,11 +3,10 @@ package se.wowsim.spells;
 import java.util.Arrays;
 import java.util.List;
 
-import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DamageOverTime;
 
-public final class ShadowWordPain extends DamageOverTime implements Observer {
+public final class ShadowWordPain extends DamageOverTime {
 
 	public static List<Integer> levelUps = Arrays.asList(4, 10, 18, 26, 34, 42, 50, 58);
 	
