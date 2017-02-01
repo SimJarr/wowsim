@@ -1,16 +1,15 @@
 package se.wowsim.classes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import se.wowsim.Target;
-import se.wowsim.spells.Corruption;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ClassTemplate {
 
@@ -204,37 +203,34 @@ public abstract class ClassTemplate {
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
 
-            boolean testPrint = false;
 
-            if (testPrint) System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
 
             int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();
-
             int dotDurationIfWeCastNext = dot.getDuration() - timeSpentOnNextSpell;
-            if (testPrint)
-                System.out.println("om vi castar: " + nextCalculatedSpell.getName() + " så har vi bara: " + dotDurationIfWeCastNext + " decisec");
 
             if (dotDurationIfWeCastNext < dot.getCastTime()) {
                 int timeTheDotWouldBeGone = dot.getCastTime() - dotDurationIfWeCastNext;
-                if (testPrint)
-                    System.out.println("då skulle " + dot.getName() + " vara nere i: " + timeTheDotWouldBeGone + " decisec");
 
                 int timeTheDotCouldBeUp = (dot.getMaxDuration() < timeLeft) ? dot.getMaxDuration() : timeLeft;
                 double damageDotWouldHaveDone = (dot.calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * timeTheDotWouldBeGone;
                 damageDotWouldHaveDone = (damageDotWouldHaveDone < 0) ? 0 : damageDotWouldHaveDone;
-                if (testPrint)
-                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
 
                 int timeTheNextSpellWouldMiss = (dot.getDuration() - dot.getCastTime());
                 double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheNextSpellWouldMiss;
                 damageNextSpellWouldHaveDone = (damageNextSpellWouldHaveDone < 0) ? 0 : damageNextSpellWouldHaveDone;
-                if (testPrint)
-                    System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
-
 
                 if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
-                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
                     return true;
+                }
+
+                if (false) {
+                    System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
+                    System.out.println("om vi castar: " + nextCalculatedSpell.getName() + " så har vi bara: " + dotDurationIfWeCastNext + " decisec");
+                    System.out.println("då skulle " + dot.getName() + " vara nere i: " + timeTheDotWouldBeGone + " decisec");
+                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
+                    System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
+                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
+
                 }
 
             }
