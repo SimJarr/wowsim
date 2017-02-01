@@ -1,5 +1,6 @@
 package se.wowsim;
 
+import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 
 import java.util.Set;
@@ -32,6 +33,22 @@ public class Target implements Subject {
         for (Observer o : observers) {
             o.update();
         }
+    }
+
+    public DamageOverTime getNextDotTimeOut() {
+        DamageOverTime nextDot = null;
+        for (Object dot : this.getObservers()) {
+            if (dot instanceof DamageOverTime && !(dot instanceof Channeling)) {
+                if (nextDot == null) {
+                    nextDot = (DamageOverTime) dot;
+                } else {
+                    if (nextDot.getDuration() > ((DamageOverTime) dot).getDuration()) {
+                        nextDot = (DamageOverTime) dot;
+                    }
+                }
+            }
+        }
+        return nextDot;
     }
 
     public boolean notAffected(DamageOverTime dot) {

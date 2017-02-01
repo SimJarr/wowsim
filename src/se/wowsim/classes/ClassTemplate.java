@@ -191,11 +191,6 @@ public abstract class ClassTemplate {
             }
         }
 
-        // only useful in extreme cases
-        /*if (worthDoingNothing_old(target, determinedSpell, timeLeft)) {
-            determinedSpell = null;
-        }*/
-
         if (worthDoingNothing(target, determinedSpell, timeLeft)) {
             determinedSpell = null;
         }
@@ -205,7 +200,7 @@ public abstract class ClassTemplate {
 
     private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
 
-        DamageOverTime dot = getNextDotTimeOut(target);
+        DamageOverTime dot = target.getNextDotTimeOut();
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
 
@@ -246,55 +241,6 @@ public abstract class ClassTemplate {
 
         }
         return false;
-    }
-
-
-    private boolean worthDoingNothing_old(Target target, Spell nextCalculatedSpell, int timeLeft) {
-        DamageOverTime dot = getNextDotTimeOut(target);
-        if (dot != null && nextCalculatedSpell != null) {
-
-            // time(in deciseconds) that dot would be down if next calculated spell is cast
-            int downtime = Math.abs((dot.getDuration() - dot.getCastTime() - nextCalculatedSpell.getCastTime()));
-            // damage dot would do during its downtime
-            double waitValueThreshold = getWaitValueThreshold(dot, downtime, timeLeft);
-            // time to afk before starting to cast dot
-            int potentialAfkTime = dot.getDuration() - dot.getCastTime();
-
-            potentialAfkTime = Math.abs(potentialAfkTime);
-
-            if (potentialAfkTime >= nextCalculatedSpell.getCastTime()) {
-                return false;
-            }
-            // damage next calculated spell would do during potential afk time
-            double nextSpellValue = (nextCalculatedSpell.getTotalDamage() / nextCalculatedSpell.getCastTime()) * potentialAfkTime;
-
-            if (waitValueThreshold > nextSpellValue) {
-                System.out.println("=== WAITING FOR " + dot.getName() + ", dmg dot would do during downtime: " + waitValueThreshold + ", damage next calculated spell would do during potential afk time: " + nextSpellValue + ", total damage from: " + nextCalculatedSpell.getName() + " : " + nextCalculatedSpell.getTotalDamage() + ", casttime: " + nextCalculatedSpell.getCastTime() + ", afktime: " + potentialAfkTime + ", dot downtime: " + downtime);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private double getWaitValueThreshold(DamageOverTime dot, int downtime, int timeLeft) {
-        return ((dot.calculateDotDamage(timeLeft) / timeLeft)) * downtime;
-    }
-
-    //TODO move getNextDotTimeOut to Target.java
-    private DamageOverTime getNextDotTimeOut(Target target) {
-        DamageOverTime nextDot = null;
-        for (Object dot : target.getObservers()) {
-            if (dot instanceof DamageOverTime && !(dot instanceof Channeling)) {
-                if (nextDot == null) {
-                    nextDot = (DamageOverTime) dot;
-                } else {
-                    if (nextDot.getDuration() > ((DamageOverTime) dot).getDuration()) {
-                        nextDot = (DamageOverTime) dot;
-                    }
-                }
-            }
-        }
-        return nextDot;
     }
 }
 
