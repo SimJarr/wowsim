@@ -1,10 +1,13 @@
 package se.wowsim.classes;
 
 import se.wowsim.Target;
+import se.wowsim.spells.CurseOfAgony;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
+
+import static se.wowsim.classes.GeneralRules.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +33,7 @@ public abstract class ClassTemplate {
 
     protected ClassTemplate(int level, int intellect) {
         this.busyCasting = false;
-        this.globalCooldown = 15;
+        this.globalCooldown = GLOBAL_COOLDOWN;
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
@@ -112,57 +115,9 @@ public abstract class ClassTemplate {
 
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
-        Map<Spell, Double> result = new HashMap<>();
+        Map<Spell, Double> spellCandidates = insertSpellsWithValues(target, timeLeft, highestDamageDot);
 
-        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
-
-            Spell currentSpell = entry.getValue();
-
-            if (currentSpell instanceof DirectDamage) {
-                ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
-            }
-
-            if (currentSpell instanceof DirectDamage || currentSpell instanceof Channeling || currentSpell == highestDamageDot) {
-                int timeTakenFromCaster = (currentSpell.getCastTime() <= 15) ? 15 : currentSpell.getCastTime();
-
-                result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
-                //System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
-            }
-
-        }
-
-        Spell determinedSpell = null;
-        double highestSoFar = 0.0;
-
-        for (Map.Entry<Spell, Double> entry : result.entrySet()) {
-
-            if (determinedSpell == null) {
-                determinedSpell = entry.getKey();
-                highestSoFar = entry.getValue();
-            } else {
-                if (entry.getValue() > highestSoFar) {
-                    determinedSpell = entry.getKey();
-                    highestSoFar = entry.getValue();
-                }
-            }
-        }
-
-        if (determinedSpell != null && highestSoFar == 0.0 || (worthDoingNothing(target, determinedSpell, timeLeft))) {
-            determinedSpell = null;
-        }
-
-        if (determinedSpell != null) {
-
-            if (determinedSpell.getCastTime() < globalCooldown) {
-                totalDamageDone += highestSoFar * globalCooldown;
-                usedSpells.add(determinedSpell.getName() + " " + (int)(highestSoFar * globalCooldown));
-            } else {
-                totalDamageDone += highestSoFar * determinedSpell.getCastTime();
-                usedSpells.add(determinedSpell.getName() + " " + (int)(highestSoFar * determinedSpell.getCastTime()));
-            }
-        }
-
-        return determinedSpell;
+        return selectSpell(target, timeLeft, spellCandidates);
     }
 
     private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
@@ -199,6 +154,59 @@ public abstract class ClassTemplate {
         }
 
         return highestDamageDot;
+    }
+
+    private Map<Spell, Double> insertSpellsWithValues(Target target, int timeLeft, DamageOverTime highestDamageDot){
+
+        Map<Spell, Double> result = new HashMap<>();
+
+        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
+
+            Spell currentSpell = entry.getValue();
+
+            if (currentSpell instanceof DirectDamage) {
+                ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
+            }
+
+            if (currentSpell instanceof DirectDamage || currentSpell instanceof Channeling || currentSpell == highestDamageDot) {
+
+                result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
+                //System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
+            }
+
+        }
+
+        return result;
+    }
+
+    private Spell selectSpell(Target target, int timeLeft, Map<Spell, Double> candidates){
+
+        Spell selectedSpell = null;
+        double highestSoFar = 0.0;
+
+        for (Map.Entry<Spell, Double> entry : candidates.entrySet()) {
+
+            if (selectedSpell == null) {
+                selectedSpell = entry.getKey();
+                highestSoFar = entry.getValue();
+            } else {
+                if (entry.getValue() > highestSoFar) {
+                    selectedSpell = entry.getKey();
+                    highestSoFar = entry.getValue();
+                }
+            }
+        }
+
+        if (selectedSpell != null && highestSoFar == 0.0 || (worthDoingNothing(target, selectedSpell, timeLeft))) {
+            selectedSpell = null;
+        }
+
+        if (selectedSpell != null) {
+            totalDamageDone += highestSoFar * selectedSpell.getTimeTakenFromCaster();
+            usedSpells.add(selectedSpell.getName() + " " + (int) (highestSoFar * selectedSpell.getTimeTakenFromCaster()));
+        }
+
+        return selectedSpell;
     }
 
     private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
