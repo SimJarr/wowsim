@@ -229,9 +229,10 @@ public abstract class ClassTemplate {
                 if (testPrint)
                     System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
 
-                double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheDotWouldBeGone;
+                int timeTheNextSpellWouldMiss = (dot.getDuration() - dot.getCastTime());
+                double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheNextSpellWouldMiss;
                 if (testPrint)
-                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
+                    System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
 
                 if (damageDotWouldHaveDone > damageNextSpellWouldHaveDone) {
                     System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
