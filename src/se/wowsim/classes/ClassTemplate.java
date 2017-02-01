@@ -209,9 +209,10 @@ public abstract class ClassTemplate {
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
 
-            boolean testPrint = true;
+            boolean testPrint = false;
 
-            if (testPrint) System.out.println(dot.getName() + " har låg tid: " + dot.getDuration() + " decisec");
+            if (testPrint)
+                System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
 
             int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();
 
@@ -226,15 +227,18 @@ public abstract class ClassTemplate {
 
                 int timeTheDotCouldBeUp = (dot.getMaxDuration() < timeLeft) ? dot.getMaxDuration() : timeLeft;
                 double damageDotWouldHaveDone = (dot.calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * timeTheDotWouldBeGone;
+                damageDotWouldHaveDone = (damageDotWouldHaveDone < 0) ? 0 : damageDotWouldHaveDone;
                 if (testPrint)
                     System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
 
                 int timeTheNextSpellWouldMiss = (dot.getDuration() - dot.getCastTime());
                 double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheNextSpellWouldMiss;
+                damageNextSpellWouldHaveDone = (damageNextSpellWouldHaveDone < 0) ? 0 : damageNextSpellWouldHaveDone;
                 if (testPrint)
                     System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
 
-                if (damageDotWouldHaveDone > damageNextSpellWouldHaveDone) {
+
+                if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
                     System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
                     return true;
                 }
