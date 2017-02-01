@@ -42,8 +42,6 @@ public final class Shadowbolt extends DirectDamage {
                 break;
             case 5:
                 this.totalDamage = calculateDamage(142, 163);
-                //TODO this is for testing
-                this.castTime = 22;
                 break;
             case 6:
                 this.totalDamage = calculateDamage(204, 231);
