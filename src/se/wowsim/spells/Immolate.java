@@ -85,7 +85,11 @@ public final class Immolate extends DirectDamage {
         if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
-        } else {
+        }
+
+        // Here we tried to implement being able to overwrite immolate.
+        // Conclusion: it is hard to compare this value with direct damage and/or anything else really.
+        /*else {
 
             int dotUptime = (this.getImmolateDot().getMaxDuration() - this.getImmolateDot().getDuration());
             int maxDuration = (this.getImmolateDot().getMaxDuration() < timeleft) ? this.getImmolateDot().getMaxDuration() : timeleft;
@@ -103,7 +107,7 @@ public final class Immolate extends DirectDamage {
             damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
             damageDealt -= totalDamageLeft;
 
-        }
+        }*/
         return damageDealt;
     }
 
