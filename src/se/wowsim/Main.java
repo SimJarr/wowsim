@@ -14,6 +14,6 @@ public class Main {
         Target target = new Target();
 
         //Simulator.simulate(snarre, target, 240);
-        Simulator.simulate(warlock, target, 500);
+        Simulator.simulate(warlock, target, 215);
     }
 }

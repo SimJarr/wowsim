@@ -21,11 +21,10 @@ public abstract class ClassTemplate {
     private List<String> usedSpells = new ArrayList<>();
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
+    protected double critChance;
     protected int castProgress;
     protected int globalCooldown;
     protected int downTime;
-    protected double critChance;
-    protected double critMulti;
     protected Spell nextSpell;
     protected Classes myClass;
 
@@ -35,7 +34,6 @@ public abstract class ClassTemplate {
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.spells = new HashMap<>();
-        this.critMulti = 1.5;
         this.intellect = intellect;
         this.level = level;
     }
@@ -113,6 +111,7 @@ public abstract class ClassTemplate {
 
         DamageOverTime highestDamageDot = null;
         double highestDamageDotDps = 0.0;
+        DamageOverTime secondHighestDamageDot = null;
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
@@ -125,20 +124,30 @@ public abstract class ClassTemplate {
                 } else {
                     double currentSpellDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
                     if (currentSpellDps > highestDamageDotDps) {
+                        secondHighestDamageDot = highestDamageDot;
                         highestDamageDot = (DamageOverTime) currentSpell;
                         highestDamageDotDps = currentSpellDps;
                     }
                 }
             }
         }
+
+        if (highestDamageDot != null && secondHighestDamageDot != null) {
+            if (highestDamageDot.getTimeTakenFromCaster() + secondHighestDamageDot.getCastTime() + secondHighestDamageDot.getMaxDuration() > timeLeft) {
+                if (secondHighestDamageDot.getTimeTakenFromCaster() + highestDamageDot.getCastTime() + highestDamageDot.getMaxDuration() <= timeLeft) {
+                    System.out.println("JEJ SWAPAR: " + highestDamageDot.getName() + " med " + secondHighestDamageDot.getName());
+                    return secondHighestDamageDot;
+                }
+            }
+        }
+
+
         return highestDamageDot;
     }
 
     private Spell determineSpell(Target target, int timeLeft) {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
-
-        //TODO future-sight milestone when simulating with 240 deciseconds it want to use corruption first and make agony miss one tick
 
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
@@ -202,7 +211,6 @@ public abstract class ClassTemplate {
         DamageOverTime dot = target.getNextDotTimeOut();
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
-
 
 
             int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();

@@ -2,8 +2,8 @@ package se.wowsim.spells.types;
 
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
-import se.wowsim.spells.types.DamageOverTime;
-import se.wowsim.spells.types.DirectDamage;
+
+import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class Spell {
 
@@ -29,6 +29,10 @@ public abstract class Spell {
 
     public int getRank() {
         return rank;
+    }
+
+    public int getTimeTakenFromCaster() {
+        return (this.getCastTime() < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : this.getCastTime();
     }
 
     public abstract void applySpell();
