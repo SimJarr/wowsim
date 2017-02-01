@@ -211,8 +211,7 @@ public abstract class ClassTemplate {
 
             boolean testPrint = false;
 
-            if (testPrint)
-                System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
+            if (testPrint) System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
 
             int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();
 
