@@ -92,7 +92,6 @@ public abstract class ClassTemplate {
 
             busyCasting = true;
             System.out.println("Casting " + nextSpell.getName());
-            usedSpells.add(nextSpell.getName());
             if (castProgress == 0) {
                 nextSpell.applySpell();
                 nextSpell = null;
@@ -105,43 +104,6 @@ public abstract class ClassTemplate {
             Spell currentSpell = entry.getValue();
             currentSpell.decrementCooldown();
         }
-    }
-
-    private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
-
-        DamageOverTime highestDamageDot = null;
-        double highestDamageDotDps = 0.0;
-        DamageOverTime secondHighestDamageDot = null;
-
-        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
-
-            Spell currentSpell = entry.getValue();
-
-            if (currentSpell instanceof DamageOverTime && !(currentSpell instanceof Channeling)) {
-                if (highestDamageDot == null && (currentSpell.calculateDamageDealt(target, timeLeft) != 0.0)) {
-                    highestDamageDot = (DamageOverTime) currentSpell;
-                    highestDamageDotDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
-                } else {
-                    double currentSpellDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
-                    if (currentSpellDps > highestDamageDotDps) {
-                        secondHighestDamageDot = highestDamageDot;
-                        highestDamageDot = (DamageOverTime) currentSpell;
-                        highestDamageDotDps = currentSpellDps;
-                    }
-                }
-            }
-        }
-
-        if (highestDamageDot != null && secondHighestDamageDot != null) {
-            if (highestDamageDot.getTimeTakenFromCaster() + secondHighestDamageDot.getCastTime() + secondHighestDamageDot.getMaxDuration() > timeLeft) {
-                if (secondHighestDamageDot.getTimeTakenFromCaster() + highestDamageDot.getCastTime() + highestDamageDot.getMaxDuration() <= timeLeft) {
-                    return secondHighestDamageDot;
-                }
-            }
-        }
-
-
-        return highestDamageDot;
     }
 
     private Spell determineSpell(Target target, int timeLeft) {
@@ -189,20 +151,58 @@ public abstract class ClassTemplate {
             determinedSpell = null;
         }
 
-        if (determinedSpell != null) {
-
-            if (determinedSpell.getCastTime() < globalCooldown) {
-                totalDamageDone += highestSoFar * globalCooldown;
-            } else {
-                totalDamageDone += highestSoFar * determinedSpell.getCastTime();
-            }
-        }
-
         if (worthDoingNothing(target, determinedSpell, timeLeft)) {
             determinedSpell = null;
         }
 
+        if (determinedSpell != null) {
+
+            if (determinedSpell.getCastTime() < globalCooldown) {
+                totalDamageDone += highestSoFar * globalCooldown;
+                usedSpells.add(determinedSpell.getName() + " " + (int)(highestSoFar * globalCooldown));
+            } else {
+                totalDamageDone += highestSoFar * determinedSpell.getCastTime();
+                usedSpells.add(determinedSpell.getName() + " " + (int)(highestSoFar * determinedSpell.getCastTime()));
+            }
+        }
+
         return determinedSpell;
+    }
+
+    private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
+
+        DamageOverTime highestDamageDot = null;
+        double highestDamageDotDps = 0.0;
+        DamageOverTime secondHighestDamageDot = null;
+
+        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
+
+            Spell currentSpell = entry.getValue();
+
+            if (currentSpell instanceof DamageOverTime && !(currentSpell instanceof Channeling)) {
+                if (highestDamageDot == null && (currentSpell.calculateDamageDealt(target, timeLeft) != 0.0)) {
+                    highestDamageDot = (DamageOverTime) currentSpell;
+                    highestDamageDotDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
+                } else {
+                    double currentSpellDps = ((currentSpell.calculateDamageDealt(target, timeLeft)) / (((DamageOverTime) currentSpell).getDuration() + currentSpell.getCastTime())) * 10;
+                    if (currentSpellDps > highestDamageDotDps) {
+                        secondHighestDamageDot = highestDamageDot;
+                        highestDamageDot = (DamageOverTime) currentSpell;
+                        highestDamageDotDps = currentSpellDps;
+                    }
+                }
+            }
+        }
+
+        if (highestDamageDot != null && secondHighestDamageDot != null) {
+            if (highestDamageDot.getTimeTakenFromCaster() + secondHighestDamageDot.getCastTime() + secondHighestDamageDot.getMaxDuration() > timeLeft) {
+                if (secondHighestDamageDot.getTimeTakenFromCaster() + highestDamageDot.getCastTime() + highestDamageDot.getMaxDuration() <= timeLeft) {
+                    return secondHighestDamageDot;
+                }
+            }
+        }
+
+        return highestDamageDot;
     }
 
     private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
@@ -226,18 +226,17 @@ public abstract class ClassTemplate {
                 double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheNextSpellWouldMiss;
                 damageNextSpellWouldHaveDone = (damageNextSpellWouldHaveDone < 0) ? 0 : damageNextSpellWouldHaveDone;
 
-                if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
-                    return true;
-                }
-
                 if (false) {
                     System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName() + " så har vi bara: " + dotDurationIfWeCastNext + " decisec");
                     System.out.println("då skulle " + dot.getName() + " vara nere i: " + timeTheDotWouldBeGone + " decisec");
                     System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
                     System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
-                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
+                }
 
+                if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
+                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
+                    return true;
                 }
 
             }
