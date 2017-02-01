@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import se.wowsim.Target;
+import se.wowsim.spells.Corruption;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
@@ -86,8 +87,11 @@ public abstract class ClassTemplate {
             nextSpell.setTarget(target);
 
             castProgress = nextSpell.getCastTime();
-            if(nextSpell instanceof Channeling) { downTime = ((Channeling) nextSpell).getMaxDuration(); }
-            else { downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown; }
+            if (nextSpell instanceof Channeling) {
+                downTime = ((Channeling) nextSpell).getMaxDuration();
+            } else {
+                downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown;
+            }
 
             busyCasting = true;
             System.out.println("Casting " + nextSpell.getName());
@@ -153,7 +157,7 @@ public abstract class ClassTemplate {
                 int timeTakenFromCaster = (currentSpell.getCastTime() <= 15) ? 15 : currentSpell.getCastTime();
 
                 result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
-                //System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
+                System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / timeTakenFromCaster);
             }
 
         }
@@ -188,23 +192,72 @@ public abstract class ClassTemplate {
         }
 
         // only useful in extreme cases
-        if (worthDoingNothing(target, determinedSpell)) {
+        /*if (worthDoingNothing_old(target, determinedSpell, timeLeft)) {
+            determinedSpell = null;
+        }*/
+
+        if (worthDoingNothing(target, determinedSpell, timeLeft)) {
             determinedSpell = null;
         }
 
         return determinedSpell;
     }
 
-    private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell) {
+    private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
+
+        DamageOverTime dot = getNextDotTimeOut(target);
+
+        if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
+
+            boolean testPrint = true;
+
+            if (testPrint) System.out.println(dot.getName() + " har låg tid: " + dot.getDuration() + " decisec");
+
+            int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();
+
+            int dotDurationIfWeCastNext = dot.getDuration() - timeSpentOnNextSpell;
+            if (testPrint)
+                System.out.println("om vi castar: " + nextCalculatedSpell.getName() + " så har vi bara: " + dotDurationIfWeCastNext + " decisec");
+
+            if (dotDurationIfWeCastNext < dot.getCastTime()) {
+                int timeTheDotWouldBeGone = dot.getCastTime() - dotDurationIfWeCastNext;
+                if (testPrint)
+                    System.out.println("då skulle " + dot.getName() + " vara nere i: " + timeTheDotWouldBeGone + " decisec");
+
+                int timeTheDotCouldBeUp = (dot.getMaxDuration() < timeLeft) ? dot.getMaxDuration() : timeLeft;
+                double damageDotWouldHaveDone = (dot.calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * timeTheDotWouldBeGone;
+                if (testPrint)
+                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
+
+                double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheDotWouldBeGone;
+                if (testPrint)
+                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
+
+                if (damageDotWouldHaveDone > damageNextSpellWouldHaveDone) {
+                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
+                    return true;
+                }
+
+            }
+
+        }
+        return false;
+    }
+
+
+    private boolean worthDoingNothing_old(Target target, Spell nextCalculatedSpell, int timeLeft) {
         DamageOverTime dot = getNextDotTimeOut(target);
         if (dot != null && nextCalculatedSpell != null) {
 
             // time(in deciseconds) that dot would be down if next calculated spell is cast
             int downtime = Math.abs((dot.getDuration() - dot.getCastTime() - nextCalculatedSpell.getCastTime()));
-            // dps dot would do during its downtime
-            double waitValueThreshold = getWaitValueThreshold(dot, downtime);
+            // damage dot would do during its downtime
+            double waitValueThreshold = getWaitValueThreshold(dot, downtime, timeLeft);
             // time to afk before starting to cast dot
-            int potentialAfkTime = Math.abs(dot.getDuration() - dot.getCastTime());
+            int potentialAfkTime = dot.getDuration() - dot.getCastTime();
+
+            potentialAfkTime = Math.abs(potentialAfkTime);
+
             if (potentialAfkTime >= nextCalculatedSpell.getCastTime()) {
                 return false;
             }
@@ -219,8 +272,8 @@ public abstract class ClassTemplate {
         return false;
     }
 
-    private double getWaitValueThreshold(DamageOverTime dot, int downtime) {
-        return ((dot.getTotalDamage() / (dot.getMaxDuration() + dot.getCastTime())) * downtime) / 10;
+    private double getWaitValueThreshold(DamageOverTime dot, int downtime, int timeLeft) {
+        return ((dot.calculateDotDamage(timeLeft) / timeLeft)) * downtime;
     }
 
     //TODO move getNextDotTimeOut to Target.java
