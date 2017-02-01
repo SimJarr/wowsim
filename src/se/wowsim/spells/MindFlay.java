@@ -34,9 +34,12 @@ public final class MindFlay extends Channeling {
                 this.totalDamage = 186;
                 break;
             case 4:
-                this.totalDamage = 330;
+                this.totalDamage = 261;
                 break;
             case 5:
+                this.totalDamage = 330;
+                break;
+            case 6:
                 this.totalDamage = 426;
                 break;
             default:
