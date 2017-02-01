@@ -135,7 +135,6 @@ public abstract class ClassTemplate {
         if (highestDamageDot != null && secondHighestDamageDot != null) {
             if (highestDamageDot.getTimeTakenFromCaster() + secondHighestDamageDot.getCastTime() + secondHighestDamageDot.getMaxDuration() > timeLeft) {
                 if (secondHighestDamageDot.getTimeTakenFromCaster() + highestDamageDot.getCastTime() + highestDamageDot.getMaxDuration() <= timeLeft) {
-                    System.out.println("JEJ SWAPAR: " + highestDamageDot.getName() + " med " + secondHighestDamageDot.getName());
                     return secondHighestDamageDot;
                 }
             }
