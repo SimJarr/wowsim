@@ -147,11 +147,7 @@ public abstract class ClassTemplate {
             }
         }
 
-        if (determinedSpell != null && highestSoFar == 0.0) {
-            determinedSpell = null;
-        }
-
-        if (worthDoingNothing(target, determinedSpell, timeLeft)) {
+        if (determinedSpell != null && highestSoFar == 0.0 || (worthDoingNothing(target, determinedSpell, timeLeft))) {
             determinedSpell = null;
         }
 
