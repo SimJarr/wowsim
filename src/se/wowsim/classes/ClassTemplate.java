@@ -1,18 +1,17 @@
 package se.wowsim.classes;
 
 import se.wowsim.Target;
-import se.wowsim.spells.CurseOfAgony;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
 
-import static se.wowsim.classes.GeneralRules.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class ClassTemplate {
 
@@ -239,7 +238,7 @@ public abstract class ClassTemplate {
                 }
 
                 if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
-                    System.out.println("HAAAAAAAAAAAAAAALTAR i: " + (dot.getDuration() - dot.getCastTime()) + " decisec");
+                    System.out.println("HAAAAAAAAAAAAAAALTAR for: " + (dot.getDuration() - dot.getCastTime()) + " decisec, so we can put up: " + dot.getName());
                     return true;
                 }
 
