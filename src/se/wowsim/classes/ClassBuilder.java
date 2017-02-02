@@ -54,7 +54,8 @@ public class ClassBuilder {
         importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
         importSpellsHelper("Immolate", Immolate.levelUps);
         importSpellsHelper("SearingPain", SearingPain.levelUps);
-        
+        importSpellsHelper("SiphonLife", SiphonLife.levelUps);
+
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
         importSpellsHelper("MindFlay", MindFlay.levelUps);
