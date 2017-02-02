@@ -6,45 +6,45 @@ import java.util.List;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.Channeling;
 
-public final class MindFlay extends Channeling {
+public final class DrainLife extends Channeling {
 
-    public static List<Integer> levelUps = Arrays.asList(20, 28, 36, 44, 52, 60);
+    public static List<Integer> levelUps = Arrays.asList(14, 22, 30, 38, 46, 54);
 
-    public MindFlay(int rank) {
+    public DrainLife(int rank) {
         super(rank);
-        this.spellClass = Classes.PRIEST;
+        this.spellClass = Classes.WARLOCK;
     }
 
     @Override
     public String getName() {
-        return "Mind Flay";
+        return "Drain Life";
     }
 
     @Override
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 75;
+                this.totalDamage = 50;
                 break;
             case 2:
-                this.totalDamage = 126;
+                this.totalDamage = 85;
                 break;
             case 3:
-                this.totalDamage = 186;
+                this.totalDamage = 145;
                 break;
             case 4:
-                this.totalDamage = 261;
+                this.totalDamage = 205;
                 break;
             case 5:
-                this.totalDamage = 330;
+                this.totalDamage = 275;
                 break;
             case 6:
-                this.totalDamage = 426;
+                this.totalDamage = 355;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
-        this.maxDuration = 30;
+        this.maxDuration = 50;
         this.duration = this.maxDuration;
         this.tickInterval = 10;
         this.tickNumber = 1;
