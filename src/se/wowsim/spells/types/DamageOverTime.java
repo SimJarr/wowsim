@@ -32,7 +32,7 @@ public abstract class DamageOverTime extends Spell implements Observer {
         if (cooldown > 0) return 0.0;
 
         double damage = 0;
-        int timeAfterCast = (this.getCastTime() <= 15) ? timeLeft - 15 : timeLeft - this.getCastTime();
+        int timeAfterCast = timeLeft - this.getCastTime();
         int stopLoop = timeAfterCast > this.getMaxDuration() ? this.getMaxDuration() : timeAfterCast;
         for (int i = 1; i <= stopLoop; i++) {
             if (i % this.getTickInterval() == 0) {
