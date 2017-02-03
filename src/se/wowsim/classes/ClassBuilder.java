@@ -8,6 +8,7 @@ import java.util.Set;
 import se.wowsim.spells.*;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.Spell;
+import se.wowsim.talents.Shadow;
 
 public class ClassBuilder {
 
@@ -29,12 +30,12 @@ public class ClassBuilder {
             case PRIEST:
                 Priest priest = new Priest(level, intellect);
                 addSpellsToMyClass(priest);
-                applyTalentsToMyClass(priest);
+                priest = (Priest) applyTalentsToPriest(priest);
                 return priest;
             case WARLOCK:
                 Warlock warlock = new Warlock(level, intellect);
                 addSpellsToMyClass(warlock);
-                applyTalentsToMyClass(warlock);
+                warlock = (Warlock) applyTalentsToWarlock(warlock);
                 return warlock;
             default:
                 return null;
@@ -50,10 +51,20 @@ public class ClassBuilder {
         }
     }
 
-    private void applyTalentsToMyClass(ClassTemplate classTemplate){
+    private ClassTemplate applyTalentsToPriest(ClassTemplate classTemplate) {
+
+        return new Shadow(classTemplate, "shadow").getMyClass();
 
         //TODO figure out a way to add a spell
         //classTemplate.getSpells().get("Mind Flay").activateTalent();
+    }
+
+    private ClassTemplate applyTalentsToWarlock(ClassTemplate classTemplate) {
+
+        //TODO
+        //Shadow shadow = new Shadow(classTemplate, "shadow");
+        //return shadow.getMyClass();
+        return classTemplate;
     }
 
     private void importSpells() {
