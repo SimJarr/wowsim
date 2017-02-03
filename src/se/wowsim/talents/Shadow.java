@@ -1,6 +1,7 @@
 package se.wowsim.talents;
 
 import se.wowsim.classes.ClassBuilder;
+import se.wowsim.classes.ClassTemplate;
 import se.wowsim.classes.Classes;
 import se.wowsim.classes.Priest;
 import se.wowsim.spells.types.DamageOverTime;
@@ -12,27 +13,23 @@ public class Shadow extends TalentTreeSpecialization {
 
     private int[][] talentTree;
     private Map<String, Spell> spells;
+    private ClassTemplate classTemplate;
 
-    public Shadow(String name, String filePath) {
-        super(name, filePath);
-        this.spells = getSpellsFromCaster();
+    public Shadow(ClassTemplate classTemplate, String talentFile) {
+        this.classTemplate = classTemplate;
+        this.spells = classTemplate.getSpells();
         this.spellClass = Classes.PRIEST;
-
-        // test values, column then row
-        talentTree = new int[7][4];
-        talentTree[1][1] = 2;
-        talentTree[2][1] = 5;
-        talentTree[2][2] = 1;
-        talentTree[3][3] = 5;
-        talentTree[5][2] = 5;
-        talentTree[6][1] = 1;
-
+        this.talentTree = new TalentParser("talents", talentFile).getTalents();
         runMethods();
     }
 
     //for testing
     public Map<String, Spell> getSpells() {
         return spells;
+    }
+
+    public ClassTemplate getMyClass(){
+        return classTemplate;
     }
 
     private void improvedMindBlast(int pointsSpent) {
@@ -42,7 +39,7 @@ public class Shadow extends TalentTreeSpecialization {
 
     private void improvedShadowWordPain(int pointsSpent) {
         Spell affectedSpell = spells.get("Shadow Word: Pain");
-        increaseDuration((DamageOverTime) affectedSpell, pointsSpent * 3);
+        increaseDuration((DamageOverTime) affectedSpell, pointsSpent * 30);
     }
 
     private void mindFlay(int pointsSpent) {
