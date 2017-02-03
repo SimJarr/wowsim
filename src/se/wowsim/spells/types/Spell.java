@@ -18,6 +18,14 @@ public abstract class Spell {
     public Spell(int rank) {
         this.rank = rank;
     }
+    
+    public int getMaxCooldown() {
+		return maxCooldown;
+	}
+    
+    public void setMaxCooldown(int maxCooldown) {
+		this.maxCooldown = maxCooldown;
+	}
 
     public int getCastTime() {
         return castTime;
