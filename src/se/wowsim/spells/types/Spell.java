@@ -27,12 +27,20 @@ public abstract class Spell {
 		this.maxCooldown = maxCooldown;
 	}
 
+    public int getCooldown() {
+        return cooldown;
+    }
+
     public int getCastTime() {
         return castTime;
     }
 
     public double getTotalDamage() {
         return totalDamage;
+    }
+
+    public void setTotalDamage(double totalDamage) {
+        this.totalDamage = totalDamage;
     }
 
     public int getRank() {
