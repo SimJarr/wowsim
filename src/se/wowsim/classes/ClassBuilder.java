@@ -50,12 +50,13 @@ public class ClassBuilder {
     private void importSpells() {
         // WARLOCK
         importSpellsHelper("Corruption", Corruption.levelUps);
-        //importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
-        //importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
-        //importSpellsHelper("Immolate", Immolate.levelUps);
-        //importSpellsHelper("SearingPain", SearingPain.levelUps);
-        //importSpellsHelper("SiphonLife", SiphonLife.levelUps);
+        importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
+        importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
+        importSpellsHelper("Immolate", Immolate.levelUps);
+        importSpellsHelper("SearingPain", SearingPain.levelUps);
+        importSpellsHelper("SiphonLife", SiphonLife.levelUps);
         importSpellsHelper("DrainLife", DrainLife.levelUps);
+        importSpellsHelper("DrainSoul", DrainSoul.levelUps);
 
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
