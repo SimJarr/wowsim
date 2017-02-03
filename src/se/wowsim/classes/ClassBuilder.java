@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import se.wowsim.spells.*;
+import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.Spell;
 
 public class ClassBuilder {
@@ -28,10 +29,12 @@ public class ClassBuilder {
             case PRIEST:
                 Priest priest = new Priest(level, intellect);
                 addSpellsToMyClass(priest);
+                applyTalentsToMyClass(priest);
                 return priest;
             case WARLOCK:
                 Warlock warlock = new Warlock(level, intellect);
                 addSpellsToMyClass(warlock);
+                applyTalentsToMyClass(warlock);
                 return warlock;
             default:
                 return null;
@@ -47,20 +50,29 @@ public class ClassBuilder {
         }
     }
 
+    private void applyTalentsToMyClass(ClassTemplate classTemplate){
+
+        //TODO figure out a way to add a spell
+        //classTemplate.getSpells().get("Mind Flay").activateTalent();
+    }
+
     private void importSpells() {
         // WARLOCK
         importSpellsHelper("Corruption", Corruption.levelUps);
-        //importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
-        //importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
-        //importSpellsHelper("Immolate", Immolate.levelUps);
-        //importSpellsHelper("SearingPain", SearingPain.levelUps);
-        //importSpellsHelper("SiphonLife", SiphonLife.levelUps);
+        importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
+        importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
+        importSpellsHelper("Immolate", Immolate.levelUps);
+        importSpellsHelper("SearingPain", SearingPain.levelUps);
+        importSpellsHelper("SiphonLife", SiphonLife.levelUps);
         importSpellsHelper("DrainLife", DrainLife.levelUps);
+        importSpellsHelper("DrainSoul", DrainSoul.levelUps);
 
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
-        importSpellsHelper("MindFlay", MindFlay.levelUps);
         importSpellsHelper("ShadowWordPain", ShadowWordPain.levelUps);
+        // PRIEST TALENTS
+        importSpellsHelper("MindFlay", MindFlay.levelUps);
+
     }
 
     private void importSpellsHelper(String spell, List<Integer> integerList) {

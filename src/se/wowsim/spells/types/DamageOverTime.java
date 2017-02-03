@@ -9,7 +9,6 @@ public abstract class DamageOverTime extends Spell implements Observer {
     protected int tickInterval;
     protected int tickNumber;
     protected int totalTickNumber;
-    protected int temporaryChannelTime;
     protected boolean oneMoreTick;
 
     public DamageOverTime(int rank) {
@@ -30,6 +29,10 @@ public abstract class DamageOverTime extends Spell implements Observer {
 
     public int getTotalTickNumber() {
         return totalTickNumber;
+    }
+
+    public void setMaxDuration(int maxDuration) {
+        this.maxDuration = maxDuration;
     }
 
     public double calculateDotDamage(int timeLeft) {
@@ -59,14 +62,14 @@ public abstract class DamageOverTime extends Spell implements Observer {
     public void update() {
         if ((duration % tickInterval == 0) && duration != maxDuration) {
             System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): "
-                    + totalDamage / totalTickNumber + " damage");
+                    + (int)(totalDamage / totalTickNumber) + " damage");
             tickNumber++;
         }
 
         if (oneMoreTick) {
             oneMoreTick = false;
             System.out.println(getName() + " tick(" + totalTickNumber + "/" + totalTickNumber + "): "
-                    + totalDamage / totalTickNumber + " damage");
+                    + (int)(totalDamage / totalTickNumber) + " damage");
         }
 
         if (duration == 0) {
