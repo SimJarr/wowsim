@@ -8,7 +8,7 @@ public class TalentTreeSpecialization {
 
     protected Classes spellClass;
 
-    public TalentTreeSpecialization(String name, String filePath) {
+    public TalentTreeSpecialization() {
 
     }
 
@@ -17,7 +17,9 @@ public class TalentTreeSpecialization {
     }
 
     void increaseDuration(DamageOverTime dot, int amount){
+        double newTotalDamage = dot.getTotalDamage() + ((dot.getTotalDamage() / dot.getTotalTickNumber()) * (amount / dot.getTickInterval()));
         dot.setMaxDuration(dot.getMaxDuration() + amount);
+        dot.setTotalDamage(newTotalDamage);
     }
 
     void addSpell(Spell spell){
