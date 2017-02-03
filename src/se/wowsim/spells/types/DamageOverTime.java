@@ -59,14 +59,14 @@ public abstract class DamageOverTime extends Spell implements Observer {
     public void update() {
         if ((duration % tickInterval == 0) && duration != maxDuration) {
             System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): "
-                    + totalDamage / totalTickNumber + " damage");
+                    + (int)(totalDamage / totalTickNumber) + " damage");
             tickNumber++;
         }
 
         if (oneMoreTick) {
             oneMoreTick = false;
             System.out.println(getName() + " tick(" + totalTickNumber + "/" + totalTickNumber + "): "
-                    + totalDamage / totalTickNumber + " damage");
+                    + (int)(totalDamage / totalTickNumber) + " damage");
         }
 
         if (duration == 0) {
