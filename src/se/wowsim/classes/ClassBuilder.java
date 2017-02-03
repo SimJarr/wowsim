@@ -48,13 +48,15 @@ public class ClassBuilder {
     }
 
     private void importSpells() {
-    	// WARLOCK
+        // WARLOCK
         importSpellsHelper("Corruption", Corruption.levelUps);
-        importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
-        importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
-        importSpellsHelper("Immolate", Immolate.levelUps);
-        importSpellsHelper("SearingPain", SearingPain.levelUps);
-        
+        //importSpellsHelper("CurseOfAgony", CurseOfAgony.levelUps);
+        //importSpellsHelper("Shadowbolt", Shadowbolt.levelUps);
+        //importSpellsHelper("Immolate", Immolate.levelUps);
+        //importSpellsHelper("SearingPain", SearingPain.levelUps);
+        //importSpellsHelper("SiphonLife", SiphonLife.levelUps);
+        importSpellsHelper("DrainLife", DrainLife.levelUps);
+
         // PRIEST
         importSpellsHelper("MindBlast", MindBlast.levelUps);
         importSpellsHelper("MindFlay", MindFlay.levelUps);
@@ -70,7 +72,8 @@ public class ClassBuilder {
                 allSpells.add((Spell) mySpell.newInstance(rank));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);        }
+            throw new RuntimeException(e);
+        }
 
     }
 

@@ -78,4 +78,23 @@ public abstract class Spell {
         return 0.0;
     }
 
+    public double calculateDamageDealt(Target target, int timeLeft, int channelDuration) {
+        if (!(this instanceof Channeling)){
+            return calculateDamageDealt(target, timeLeft);
+        }
+
+        if (cooldown > 0) {
+            return 0.0;
+        }
+        if (this.getCastTime() > timeLeft) {
+            return 0.0;
+        }
+        if (this instanceof Channeling) {
+            if (target.notAffected((DamageOverTime) this)) {
+                return ((Channeling) this).calculateChannelingDamage(timeLeft, channelDuration);
+            }
+        }
+        return 0.0;
+    }
+
 }

@@ -7,6 +7,8 @@ import java.util.List;
 
 public abstract class Simulator {
 
+    //TODO gui simulation
+
     public static double totalDamageDone = 0.0;
     public static double dps = 0.0;
 
