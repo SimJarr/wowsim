@@ -288,9 +288,13 @@ public abstract class ClassTemplate {
     private int worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
 
         DamageOverTime dot = target.getNextDotTimeOut();
+        Spell shortCooldownSpell = getShortestCooldownSpell();
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
 
+            //TODO create a method that will return how much downtime we would have if we decided to cast nextCalculatedSpell
+
+            //TODO create a method that will return how much a Spell would do during a downtime
 
             int timeSpentOnNextSpell = nextCalculatedSpell.getTimeTakenFromCaster();
             int dotDurationIfWeCastNext = dot.getDuration() - timeSpentOnNextSpell;
@@ -323,6 +327,24 @@ public abstract class ClassTemplate {
 
         }
         return 0;
+    }
+
+    private Spell getShortestCooldownSpell(){
+        Spell spell = null;
+        int lowestCooldown = Integer.MAX_VALUE;
+
+        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
+            Spell currentSpell = entry.getValue();
+            if (spell == null && currentSpell.getCooldown() > 0){
+                spell = currentSpell;
+                lowestCooldown = currentSpell.getCooldown();
+            } else if (currentSpell.getCooldown() > 0 && currentSpell.getCooldown() < lowestCooldown) {
+                spell = currentSpell;
+                lowestCooldown = currentSpell.getCooldown();
+            }
+        }
+
+        return spell;
     }
 }
 
