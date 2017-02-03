@@ -1,15 +1,14 @@
 package se.wowsim.classes;
 
+import se.wowsim.SpellAndValue;
 import se.wowsim.Target;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Constructor;
+import java.util.*;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
@@ -87,7 +86,7 @@ public abstract class ClassTemplate {
 
             castProgress = nextSpell.getCastTime();
             if (nextSpell instanceof Channeling) {
-                downTime = ((Channeling) nextSpell).getMaxDuration();
+                downTime = ((Channeling) nextSpell).getTimeTakenFromCaster();
             } else {
                 downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown;
             }
@@ -114,7 +113,7 @@ public abstract class ClassTemplate {
 
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
-        Map<Spell, Double> spellCandidates = insertSpellsWithValues(target, timeLeft, highestDamageDot);
+        List<SpellAndValue> spellCandidates = insertSpellsWithValues(target, timeLeft, highestDamageDot);
 
         return selectSpell(target, timeLeft, spellCandidates);
     }
@@ -155,9 +154,9 @@ public abstract class ClassTemplate {
         return highestDamageDot;
     }
 
-    private Map<Spell, Double> insertSpellsWithValues(Target target, int timeLeft, DamageOverTime highestDamageDot){
+    private List<SpellAndValue> insertSpellsWithValues(Target target, int timeLeft, DamageOverTime highestDamageDot) {
 
-        Map<Spell, Double> result = new HashMap<>();
+        List<SpellAndValue> result = new ArrayList<>();
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
@@ -167,9 +166,47 @@ public abstract class ClassTemplate {
                 ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
             }
 
-            if (currentSpell instanceof DirectDamage || currentSpell instanceof Channeling || currentSpell == highestDamageDot) {
+            if (currentSpell instanceof Channeling) {
 
-                result.put(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
+                int tickInterval = ((Channeling) currentSpell).getTickInterval();
+                int rank = currentSpell.getRank();
+                int loopCounter = 0;
+                Integer timeChanneled;
+                List<Channeling> temporaryList = new ArrayList<>();
+
+                for (int i = ((Channeling) currentSpell).getTotalTickNumber(); i >= 1; i--) {
+
+
+                    timeChanneled = (i * tickInterval < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : i * tickInterval;
+
+
+                    try {
+                        Constructor constructor = Class.forName(currentSpell.getClass().getName()).getConstructor(int.class);
+                        temporaryList.add((Channeling) constructor.newInstance(rank));
+                        Channeling currentSpellNewInstance = temporaryList.get(loopCounter);
+                        currentSpellNewInstance.init();
+                        currentSpellNewInstance.setTemporaryChannelTime(timeChanneled);
+
+                        SpellAndValue spellAndValue = new SpellAndValue(currentSpellNewInstance, (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled);
+                        result.add(spellAndValue);
+                        //System.out.println(currentSpellNewInstance.getName() + " value: " + (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled + " channelDuration: " + currentSpellNewInstance.getTimeTakenFromCaster());
+
+
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    loopCounter++;
+
+                }
+
+
+            }
+
+            if (currentSpell instanceof DirectDamage || currentSpell == highestDamageDot) {
+
+                SpellAndValue spellAndValue = new SpellAndValue(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
+                result.add(spellAndValue);
                 //System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
             }
 
@@ -178,44 +215,84 @@ public abstract class ClassTemplate {
         return result;
     }
 
-    private Spell selectSpell(Target target, int timeLeft, Map<Spell, Double> candidates){
+    private Spell selectSpell(Target target, int timeLeft, List<SpellAndValue> candidates) {
 
-        Spell selectedSpell = null;
-        double highestSoFar = 0.0;
+        SpellAndValue selectedSpellWithValue = pickHighestValueSpell(candidates);
 
-        for (Map.Entry<Spell, Double> entry : candidates.entrySet()) {
-
-            if (selectedSpell == null) {
-                selectedSpell = entry.getKey();
-                highestSoFar = entry.getValue();
-            } else {
-                if (entry.getValue() > highestSoFar) {
-                    selectedSpell = entry.getKey();
-                    highestSoFar = entry.getValue();
-                }
+        if (selectedSpellWithValue != null) {
+            int waitTime = (worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft));
+            if (waitTime > 0) {
+                System.out.println("Finding another spell with at most: " + waitTime + " castTime");
+                selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
             }
         }
 
-        if (selectedSpell != null && highestSoFar == 0.0 || (worthDoingNothing(target, selectedSpell, timeLeft))) {
-            selectedSpell = null;
+        if (selectedSpellWithValue != null) {
+            totalDamageDone += selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster();
+            usedSpells.add(selectedSpellWithValue.getSpell().getName() + " " + (int) (selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster()));
         }
 
-        if (selectedSpell != null) {
-            totalDamageDone += highestSoFar * selectedSpell.getTimeTakenFromCaster();
-            usedSpells.add(selectedSpell.getName() + " " + (int) (highestSoFar * selectedSpell.getTimeTakenFromCaster()));
+        if (selectedSpellWithValue == null) {
+            return null;
         }
 
-        return selectedSpell;
+        return selectedSpellWithValue.getSpell();
     }
 
-    private boolean worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
+    private SpellAndValue pickHighestValueSpell(List<SpellAndValue> candidates) {
+        return pickHighestValueSpell(candidates, 0);
+    }
+
+    private SpellAndValue pickHighestValueSpell(List<SpellAndValue> candidates, int maximumTimeAllowed) {
+
+        SpellAndValue selectedSpellWithValue = null;
+
+        if (maximumTimeAllowed == 0) {
+
+            for (SpellAndValue spellAndValue : candidates) {
+
+                if (selectedSpellWithValue == null) {
+                    selectedSpellWithValue = new SpellAndValue(spellAndValue.getSpell(), spellAndValue.getValue());
+
+                } else {
+                    if (spellAndValue.getValue() > selectedSpellWithValue.getValue()) {
+                        selectedSpellWithValue.setSpell(spellAndValue.getSpell());
+                        selectedSpellWithValue.setValue(spellAndValue.getValue());
+                    }
+                }
+
+            }
+        } else {
+            for (SpellAndValue spellAndValue : candidates) {
+
+                if (selectedSpellWithValue == null && spellAndValue.getSpell().getTimeTakenFromCaster() <= maximumTimeAllowed) {
+                    selectedSpellWithValue = new SpellAndValue(spellAndValue.getSpell(), spellAndValue.getValue());
+
+                } else {
+                    if (selectedSpellWithValue != null && spellAndValue.getValue() > selectedSpellWithValue.getValue() && spellAndValue.getSpell().getTimeTakenFromCaster() <= maximumTimeAllowed) {
+                        selectedSpellWithValue.setSpell(spellAndValue.getSpell());
+                        selectedSpellWithValue.setValue(spellAndValue.getValue());
+                    }
+                }
+
+            }
+        }
+
+        if (selectedSpellWithValue != null && selectedSpellWithValue.getValue() == 0.0) {
+            selectedSpellWithValue = null;
+        }
+
+        return selectedSpellWithValue;
+    }
+
+    private int worthDoingNothing(Target target, Spell nextCalculatedSpell, int timeLeft) {
 
         DamageOverTime dot = target.getNextDotTimeOut();
 
         if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
 
 
-            int timeSpentOnNextSpell = (nextCalculatedSpell.getCastTime() < globalCooldown) ? globalCooldown : nextCalculatedSpell.getCastTime();
+            int timeSpentOnNextSpell = nextCalculatedSpell.getTimeTakenFromCaster();
             int dotDurationIfWeCastNext = dot.getDuration() - timeSpentOnNextSpell;
 
             if (dotDurationIfWeCastNext < dot.getCastTime()) {
@@ -239,13 +316,13 @@ public abstract class ClassTemplate {
 
                 if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
                     System.out.println("HAAAAAAAAAAAAAAALTAR for: " + (dot.getDuration() - dot.getCastTime()) + " decisec, so we can put up: " + dot.getName());
-                    return true;
+                    return (dot.getDuration() - dot.getCastTime());
                 }
 
             }
 
         }
-        return false;
+        return 0;
     }
 }
 

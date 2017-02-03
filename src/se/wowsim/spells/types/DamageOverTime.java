@@ -9,6 +9,7 @@ public abstract class DamageOverTime extends Spell implements Observer {
     protected int tickInterval;
     protected int tickNumber;
     protected int totalTickNumber;
+    protected int temporaryChannelTime;
     protected boolean oneMoreTick;
 
     public DamageOverTime(int rank) {
@@ -25,6 +26,10 @@ public abstract class DamageOverTime extends Spell implements Observer {
 
     public int getTickInterval() {
         return tickInterval;
+    }
+
+    public int getTotalTickNumber() {
+        return totalTickNumber;
     }
 
     public double calculateDotDamage(int timeLeft) {

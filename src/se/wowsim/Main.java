@@ -4,6 +4,10 @@ import se.wowsim.classes.ClassBuilder;
 import se.wowsim.classes.Classes;
 import se.wowsim.classes.Priest;
 import se.wowsim.classes.Warlock;
+import se.wowsim.spells.Corruption;
+import se.wowsim.spells.CurseOfAgony;
+import se.wowsim.spells.DrainLife;
+import se.wowsim.spells.SiphonLife;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,6 +18,6 @@ public class Main {
         Target target = new Target();
 
         //Simulator.simulate(snarre, target, 240);
-        Simulator.simulate(warlock, target, 400);
+        Simulator.simulate(warlock, target, 320);
     }
 }

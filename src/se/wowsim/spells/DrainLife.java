@@ -49,7 +49,6 @@ public final class DrainLife extends Channeling {
         this.tickInterval = 10;
         this.tickNumber = 1;
         this.totalTickNumber = duration / tickInterval;
-        this.castTime = 0;
     }
 
 }
