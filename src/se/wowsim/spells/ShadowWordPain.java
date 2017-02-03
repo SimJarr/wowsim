@@ -22,7 +22,6 @@ public final class ShadowWordPain extends DamageOverTime {
 
     @Override
     public void init() {
-        this.maxDuration = 180;
         switch (rank) {
             case 1:
                 this.totalDamage = 30;
@@ -51,6 +50,7 @@ public final class ShadowWordPain extends DamageOverTime {
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.maxDuration = 180;
         this.duration = this.maxDuration;
         this.tickInterval = 30;
         this.tickNumber = 1;
