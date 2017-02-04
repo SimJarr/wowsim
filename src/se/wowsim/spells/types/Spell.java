@@ -18,14 +18,14 @@ public abstract class Spell {
     public Spell(int rank) {
         this.rank = rank;
     }
-    
+
     public int getMaxCooldown() {
-		return maxCooldown;
-	}
-    
+        return maxCooldown;
+    }
+
     public void setMaxCooldown(int maxCooldown) {
-		this.maxCooldown = maxCooldown;
-	}
+        this.maxCooldown = maxCooldown;
+    }
 
     public int getCooldown() {
         return cooldown;
@@ -66,7 +66,9 @@ public abstract class Spell {
     public abstract String getName();
 
     public void decrementCooldown() {
-        if (cooldown > 0) { cooldown--; }
+        if (cooldown > 0) {
+            cooldown--;
+        }
     }
 
     public double calculateDamageDealt(Target target, int timeLeft) {
@@ -87,7 +89,7 @@ public abstract class Spell {
     }
 
     public double calculateDamageDealt(Target target, int timeLeft, int channelDuration) {
-        if (!(this instanceof Channeling)){
+        if (!(this instanceof Channeling)) {
             return calculateDamageDealt(target, timeLeft);
         }
 
@@ -103,6 +105,16 @@ public abstract class Spell {
             }
         }
         return 0.0;
+    }
+
+    public double calculateDamageDealt(int cooldown, Target target, int timeLeft) {
+        if ((this.cooldown - cooldown) > 0) {
+            return 0.0;
+        }
+        if (this.getCastTime() > timeLeft) {
+            return 0.0;
+        }
+        return this.getTotalDamage();
     }
 
 }

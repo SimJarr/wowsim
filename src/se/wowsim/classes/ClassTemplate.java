@@ -86,7 +86,7 @@ public abstract class ClassTemplate {
 
             castProgress = nextSpell.getCastTime();
             if (nextSpell instanceof Channeling) {
-                downTime = ((Channeling) nextSpell).getTimeTakenFromCaster();
+                downTime = nextSpell.getTimeTakenFromCaster();
             } else {
                 downTime = (nextSpell.getCastTime() > globalCooldown) ? nextSpell.getCastTime() : globalCooldown;
             }
@@ -289,53 +289,84 @@ public abstract class ClassTemplate {
 
         DamageOverTime dot = target.getNextDotTimeOut();
         Spell shortCooldownSpell = getShortestCooldownSpell();
+        boolean haveDot = false;
+        boolean haveCooldownSpell = false;
+        if (dot != null && dot != nextCalculatedSpell) haveDot = true;
+        if (shortCooldownSpell != null && shortCooldownSpell != nextCalculatedSpell) haveCooldownSpell = true;
+        double damageDotWouldHaveDone = 0;
+        double damageShortCooldownWouldHaveDone = 0;
+        double damageNextSpellWouldHaveDone = 0;
+        int downTimeNextSpell = 0;
+        double lossFromSkippingDot = 0;
+        double lossFromSKippingShortCooldownSpell = 0;
 
-        if (dot != null && nextCalculatedSpell != null && dot != nextCalculatedSpell) {
+        if (haveDot) {
 
-            //TODO create a method that will return how much downtime we would have if we decided to cast nextCalculatedSpell
+            int downTimeDoT = downTimeIfCastNext(dot, nextCalculatedSpell);
+            downTimeNextSpell = downTimeIfCastNext(nextCalculatedSpell, dot);
 
-            //TODO create a method that will return how much a Spell would do during a downtime
+            if (downTimeDoT > 0) {
 
-            int timeSpentOnNextSpell = nextCalculatedSpell.getTimeTakenFromCaster();
-            int dotDurationIfWeCastNext = dot.getDuration() - timeSpentOnNextSpell;
+                damageDotWouldHaveDone = damageSpellWouldHaveDone(dot, target, downTimeDoT, timeLeft);
+                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, target, downTimeNextSpell, timeLeft);
 
-            if (dotDurationIfWeCastNext < dot.getCastTime()) {
-                int timeTheDotWouldBeGone = dot.getCastTime() - dotDurationIfWeCastNext;
-
-                int timeTheDotCouldBeUp = (dot.getMaxDuration() < timeLeft) ? dot.getMaxDuration() : timeLeft;
-                double damageDotWouldHaveDone = (dot.calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * timeTheDotWouldBeGone;
-                damageDotWouldHaveDone = (damageDotWouldHaveDone < 0) ? 0 : damageDotWouldHaveDone;
-
-                int timeTheNextSpellWouldMiss = (dot.getDuration() - dot.getCastTime());
-                double damageNextSpellWouldHaveDone = ((nextCalculatedSpell.calculateDamageDealt(target, timeLeft)) / timeSpentOnNextSpell) * timeTheNextSpellWouldMiss;
-                damageNextSpellWouldHaveDone = (damageNextSpellWouldHaveDone < 0) ? 0 : damageNextSpellWouldHaveDone;
+                lossFromSkippingDot = damageDotWouldHaveDone - damageNextSpellWouldHaveDone;
 
                 if (false) {
                     System.out.println(dot.getName() + " har lägst tid: " + dot.getDuration() + " decisec");
-                    System.out.println("om vi castar: " + nextCalculatedSpell.getName() + " så har vi bara: " + dotDurationIfWeCastNext + " decisec");
-                    System.out.println("då skulle " + dot.getName() + " vara nere i: " + timeTheDotWouldBeGone + " decisec");
-                    System.out.println("på " + timeTheDotWouldBeGone + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
-                    System.out.println("på " + timeTheNextSpellWouldMiss + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
+                    System.out.println("om vi castar: " + nextCalculatedSpell.getName());
+                    System.out.println("då skulle " + dot.getName() + " vara nere i: " + downTimeDoT + " decisec");
+                    System.out.println("på " + downTimeDoT + " decisec skulle " + dot.getName() + " hinna göra: " + damageDotWouldHaveDone + " damage");
+                    System.out.println("på " + downTimeNextSpell + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
                 }
-
-                if ((damageDotWouldHaveDone > damageNextSpellWouldHaveDone) && timeTheNextSpellWouldMiss > 0) {
-                    System.out.println("HAAAAAAAAAAAAAAALTAR for: " + (dot.getDuration() - dot.getCastTime()) + " decisec, so we can put up: " + dot.getName());
-                    return (dot.getDuration() - dot.getCastTime());
-                }
-
             }
 
         }
+
+        if (haveCooldownSpell) {
+
+            int downTimeCooldownSpell = downTimeIfCastNext(shortCooldownSpell, nextCalculatedSpell);
+            downTimeNextSpell = downTimeIfCastNext(nextCalculatedSpell, shortCooldownSpell);
+
+            if (downTimeCooldownSpell > 0) {
+
+                damageShortCooldownWouldHaveDone = damageSpellWouldHaveDone(shortCooldownSpell, target, downTimeCooldownSpell, timeLeft);
+                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, target, downTimeNextSpell, timeLeft);
+
+                lossFromSKippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
+
+                if (false) {
+                    System.out.println();
+                    System.out.println(shortCooldownSpell.getName() + " har lägst tid: " + shortCooldownSpell.getCooldown() + " decisec");
+                    System.out.println("om vi castar: " + nextCalculatedSpell.getName());
+                    System.out.println("då skulle " + shortCooldownSpell.getName() + " vara nere i: " + downTimeCooldownSpell + " decisec");
+                    System.out.println("på " + downTimeCooldownSpell + " decisec skulle " + shortCooldownSpell.getName() + " hinna göra: " + damageShortCooldownWouldHaveDone + " damage");
+                    System.out.println("på " + downTimeNextSpell + " decisec skulle " + nextCalculatedSpell.getName() + " hinna göra: " + damageNextSpellWouldHaveDone + " damage");
+                }
+            }
+        }
+
+        if (lossFromSkippingDot > 0 || lossFromSKippingShortCooldownSpell > 0) {
+
+            if ((haveDot) && (lossFromSkippingDot > lossFromSKippingShortCooldownSpell) && (dot.getDuration() - dot.getCastTime()) > 0) {
+                System.out.println("HAAAAAAAAAAAAAAALTAR for: " + (dot.getDuration() - dot.getCastTime()) + " decisec, so we can put up: " + dot.getName());
+                return (dot.getDuration() - dot.getCastTime());
+            } else if (haveCooldownSpell && shortCooldownSpell.getCooldown() > 0) {
+                System.out.println("HAAAAAAAAAAAAAAALTAR for: " + shortCooldownSpell.getCooldown() + " decisec, so we can put up: " + shortCooldownSpell.getName());
+                return shortCooldownSpell.getCooldown();
+            }
+        }
+
         return 0;
     }
 
-    private Spell getShortestCooldownSpell(){
+    private Spell getShortestCooldownSpell() {
         Spell spell = null;
         int lowestCooldown = Integer.MAX_VALUE;
 
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
             Spell currentSpell = entry.getValue();
-            if (spell == null && currentSpell.getCooldown() > 0){
+            if (spell == null && currentSpell.getCooldown() > 0) {
                 spell = currentSpell;
                 lowestCooldown = currentSpell.getCooldown();
             } else if (currentSpell.getCooldown() > 0 && currentSpell.getCooldown() < lowestCooldown) {
@@ -345,6 +376,36 @@ public abstract class ClassTemplate {
         }
 
         return spell;
+    }
+
+    /**
+     * @param firstSpell  can be spell or dot
+     * @param secondSpell can be spell or dot
+     * @return will return how much time firstSpell would be down if we cast secondSpell
+     */
+    private int downTimeIfCastNext(Spell firstSpell, Spell secondSpell) {
+        if (firstSpell instanceof DamageOverTime) {
+            return firstSpell.getCastTime() - ((DamageOverTime) firstSpell).getDuration() + secondSpell.getTimeTakenFromCaster();
+        } else if (secondSpell instanceof DamageOverTime && firstSpell.getCooldown() == 0) {
+            return ((DamageOverTime) secondSpell).getDuration() - secondSpell.getCastTime();
+        } else {
+            return secondSpell.getTimeTakenFromCaster() - firstSpell.getCooldown();
+        }
+    }
+
+    private double damageSpellWouldHaveDone(Spell spell, Target target, int downTime, int timeLeft) {
+        double result;
+
+        if (spell instanceof DamageOverTime) {
+            int timeTheDotCouldBeUp = (((DamageOverTime) spell).getMaxDuration() < timeLeft) ? ((DamageOverTime) spell).getMaxDuration() : timeLeft;
+            result = (((DamageOverTime) spell).calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * downTime;
+            result = (result < 0) ? 0 : result;
+        } else {
+            result = ((spell.calculateDamageDealt(downTime, target, timeLeft)) / spell.getTimeTakenFromCaster()) * downTime;
+            result = (result < 0) ? 0 : result;
+        }
+
+        return result;
     }
 }
 
