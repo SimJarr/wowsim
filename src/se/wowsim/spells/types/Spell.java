@@ -107,14 +107,4 @@ public abstract class Spell {
         return 0.0;
     }
 
-    public double calculateDamageDealt(int cooldown, Target target, int timeLeft) {
-        if ((this.cooldown - cooldown) > 0) {
-            return 0.0;
-        }
-        if (this.getCastTime() > timeLeft) {
-            return 0.0;
-        }
-        return this.getTotalDamage();
-    }
-
 }

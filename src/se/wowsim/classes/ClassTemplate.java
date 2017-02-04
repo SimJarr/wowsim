@@ -19,6 +19,7 @@ public abstract class ClassTemplate {
     private int intellect;
     private int stamina;
     private int spirit;
+    private boolean recentlyHalted;
     private List<String> usedSpells = new ArrayList<>();
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
@@ -37,6 +38,7 @@ public abstract class ClassTemplate {
         this.spells = new HashMap<>();
         this.intellect = intellect;
         this.level = level;
+        this.recentlyHalted = false;
     }
 
     public double getTotalDamageDone() {
@@ -93,6 +95,7 @@ public abstract class ClassTemplate {
 
             busyCasting = true;
             System.out.println("Casting " + nextSpell.getName());
+            recentlyHalted = false;
             if (castProgress == 0) {
                 nextSpell.applySpell();
                 nextSpell = null;
@@ -224,6 +227,10 @@ public abstract class ClassTemplate {
             if (waitTime > 0) {
                 System.out.println("Finding another spell with at most: " + waitTime + " castTime");
                 selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
+                if (selectedSpellWithValue == null && !recentlyHalted) {
+                    recentlyHalted = true;
+                    usedSpells.add("Halting " + waitTime + " decisec");
+                }
             }
         }
 
@@ -293,10 +300,10 @@ public abstract class ClassTemplate {
         boolean haveCooldownSpell = false;
         if (dot != null && dot != nextCalculatedSpell) haveDot = true;
         if (shortCooldownSpell != null && shortCooldownSpell != nextCalculatedSpell) haveCooldownSpell = true;
-        double damageDotWouldHaveDone = 0;
-        double damageShortCooldownWouldHaveDone = 0;
-        double damageNextSpellWouldHaveDone = 0;
-        int downTimeNextSpell = 0;
+        double damageDotWouldHaveDone;
+        double damageShortCooldownWouldHaveDone;
+        double damageNextSpellWouldHaveDone;
+        int downTimeNextSpell;
         double lossFromSkippingDot = 0;
         double lossFromSKippingShortCooldownSpell = 0;
 
@@ -307,8 +314,8 @@ public abstract class ClassTemplate {
 
             if (downTimeDoT > 0) {
 
-                damageDotWouldHaveDone = damageSpellWouldHaveDone(dot, target, downTimeDoT, timeLeft);
-                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, target, downTimeNextSpell, timeLeft);
+                damageDotWouldHaveDone = damageSpellWouldHaveDone(dot, downTimeDoT, timeLeft);
+                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, downTimeNextSpell, timeLeft);
 
                 lossFromSkippingDot = damageDotWouldHaveDone - damageNextSpellWouldHaveDone;
 
@@ -330,8 +337,8 @@ public abstract class ClassTemplate {
 
             if (downTimeCooldownSpell > 0) {
 
-                damageShortCooldownWouldHaveDone = damageSpellWouldHaveDone(shortCooldownSpell, target, downTimeCooldownSpell, timeLeft);
-                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, target, downTimeNextSpell, timeLeft);
+                damageShortCooldownWouldHaveDone = damageSpellWouldHaveDone(shortCooldownSpell, downTimeCooldownSpell, timeLeft);
+                damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, downTimeNextSpell, timeLeft);
 
                 lossFromSKippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
 
@@ -384,7 +391,11 @@ public abstract class ClassTemplate {
      * @return will return how much time firstSpell would be down if we cast secondSpell
      */
     private int downTimeIfCastNext(Spell firstSpell, Spell secondSpell) {
-        if (firstSpell instanceof DamageOverTime) {
+        if (firstSpell instanceof Channeling && secondSpell instanceof DamageOverTime) {
+            return (((DamageOverTime) secondSpell).getDuration() - secondSpell.getCastTime());
+        } else if (firstSpell instanceof Channeling) {
+            return secondSpell.getCooldown();
+        } else if (firstSpell instanceof DamageOverTime) {
             return firstSpell.getCastTime() - ((DamageOverTime) firstSpell).getDuration() + secondSpell.getTimeTakenFromCaster();
         } else if (secondSpell instanceof DamageOverTime && firstSpell.getCooldown() == 0) {
             return ((DamageOverTime) secondSpell).getDuration() - secondSpell.getCastTime();
@@ -393,17 +404,18 @@ public abstract class ClassTemplate {
         }
     }
 
-    private double damageSpellWouldHaveDone(Spell spell, Target target, int downTime, int timeLeft) {
-        double result;
+    private double damageSpellWouldHaveDone(Spell spell, int downTime, int timeLeft) {
+        double result = 0;
 
         if (spell instanceof DamageOverTime) {
             int timeTheDotCouldBeUp = (((DamageOverTime) spell).getMaxDuration() < timeLeft) ? ((DamageOverTime) spell).getMaxDuration() : timeLeft;
             result = (((DamageOverTime) spell).calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * downTime;
-            result = (result < 0) ? 0 : result;
         } else {
-            result = ((spell.calculateDamageDealt(downTime, target, timeLeft)) / spell.getTimeTakenFromCaster()) * downTime;
-            result = (result < 0) ? 0 : result;
+            if (spell.getCastTime() <= timeLeft)
+                result = ((spell.getTotalDamage()) / spell.getTimeTakenFromCaster()) * downTime;
         }
+        result = (result < 0) ? 0 : result;
+        result = (result > spell.getTotalDamage()) ? spell.getTotalDamage() : result;
 
         return result;
     }
