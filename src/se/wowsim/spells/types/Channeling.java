@@ -18,7 +18,7 @@ public abstract class Channeling extends DamageOverTime {
     }
 
     public void setTemporaryChannelTime(int temporaryChannelTime) {
-        int smallChange = (temporaryChannelTime == 15)? 10 : temporaryChannelTime;
+        int smallChange = (temporaryChannelTime == 15) ? 10 : temporaryChannelTime;
         this.totalDamage = (this.totalDamage / this.maxDuration) * smallChange;
         this.temporaryChannelTime = smallChange;
         this.maxDuration = smallChange;
