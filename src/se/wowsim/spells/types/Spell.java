@@ -1,11 +1,12 @@
 package se.wowsim.spells.types;
 
+import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
-public abstract class Spell {
+public abstract class Spell implements Observer{
 
     protected int castTime;
     protected int rank;

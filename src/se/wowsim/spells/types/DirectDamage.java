@@ -6,7 +6,7 @@ import se.wowsim.Observer;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public abstract class DirectDamage extends Spell implements Observer {
+public abstract class DirectDamage extends Spell {
 
     protected double critChance;
     protected double critMulti = 1.5;

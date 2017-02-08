@@ -2,7 +2,7 @@ package se.wowsim.spells.types;
 
 import se.wowsim.Observer;
 
-public abstract class DamageOverTime extends Spell implements Observer {
+public abstract class DamageOverTime extends Spell {
 
     protected int duration;
     protected int maxDuration;
