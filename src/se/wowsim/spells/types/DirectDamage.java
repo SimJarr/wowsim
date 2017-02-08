@@ -1,8 +1,6 @@
 package se.wowsim.spells.types;
 
 
-import se.wowsim.Observer;
-
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 

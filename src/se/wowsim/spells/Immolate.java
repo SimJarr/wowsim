@@ -1,13 +1,12 @@
 package se.wowsim.spells;
 
-import java.util.Arrays;
-import java.util.List;
-
-import se.wowsim.Observer;
 import se.wowsim.Target;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class Immolate extends DirectDamage {
 
@@ -127,7 +126,7 @@ public final class Immolate extends DirectDamage {
             this.castTime = castTime;
         }
 
-        public int getTotalTickNumber(){
+        public int getTotalTickNumber() {
             return this.totalTickNumber;
         }
 

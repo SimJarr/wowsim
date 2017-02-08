@@ -11,12 +11,12 @@ public enum Classes {
     private final double critConst;
     private final double intPerOneCrit;
 
-	Classes(double critConst, double intPerOneCrit){
+    Classes(double critConst, double intPerOneCrit) {
         this.critConst = critConst;
         this.intPerOneCrit = intPerOneCrit;
     }
 
     public double calculateCritChance(int level, int intellect) {
-        return (intellect / (((this.intPerOneCrit)/60)*level) + this.critConst)/100;
+        return (intellect / (((this.intPerOneCrit) / 60) * level) + this.critConst) / 100;
     }
 }

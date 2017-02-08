@@ -6,7 +6,7 @@ import se.wowsim.classes.Classes;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
-public abstract class Spell implements Observer{
+public abstract class Spell implements Observer {
 
     protected int castTime;
     protected int rank;

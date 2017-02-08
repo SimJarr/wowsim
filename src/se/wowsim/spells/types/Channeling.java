@@ -1,18 +1,18 @@
 package se.wowsim.spells.types;
 
-import static se.wowsim.classes.GeneralRules.*;
+import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class Channeling extends DamageOverTime {
 
     private int temporaryChannelTime;
 
-	public Channeling(int rank) {
-		super(rank);
-		castTime = 0;
+    public Channeling(int rank) {
+        super(rank);
+        castTime = 0;
         temporaryChannelTime = this.getMaxDuration();
-	}
+    }
 
-	@Override
+    @Override
     public int getTimeTakenFromCaster() {
         return (this.temporaryChannelTime < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : this.temporaryChannelTime;
     }
@@ -43,6 +43,6 @@ public abstract class Channeling extends DamageOverTime {
         }
         return damage;
     }
-	
-	
+
+
 }

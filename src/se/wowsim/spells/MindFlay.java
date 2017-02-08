@@ -1,10 +1,10 @@
 package se.wowsim.spells;
 
-import java.util.Arrays;
-import java.util.List;
-
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.Channeling;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class MindFlay extends Channeling {
 

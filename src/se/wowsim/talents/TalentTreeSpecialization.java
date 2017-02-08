@@ -12,22 +12,22 @@ public class TalentTreeSpecialization {
 
     }
 
-    void reduceCooldown(Spell spell, int amount){
+    void reduceCooldown(Spell spell, int amount) {
         spell.setMaxCooldown(spell.getMaxCooldown() - amount);
     }
 
-    void increaseDuration(DamageOverTime dot, int amount){
+    void increaseDuration(DamageOverTime dot, int amount) {
         double newTotalDamage = dot.getTotalDamage() + ((dot.getTotalDamage() / dot.getTotalTickNumber()) * (amount / dot.getTickInterval()));
         dot.setTotalDamage(newTotalDamage);
         dot.setMaxDuration(dot.getMaxDuration() + amount);
         dot.setTotalTickNumber(dot.getMaxDuration() / dot.getTickInterval());
     }
 
-    void addSpell(Spell spell){
+    void addSpell(Spell spell) {
         //TODO figure out a way to add a spell
     }
 
-    void increaseSchoolDamage(String school, double amount){
+    void increaseSchoolDamage(String school, double amount) {
         //TODO
     }
 }

@@ -1,14 +1,13 @@
 package se.wowsim.classes;
 
+import se.wowsim.spells.*;
+import se.wowsim.spells.types.Spell;
+import se.wowsim.talents.Shadow;
+
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import se.wowsim.spells.*;
-import se.wowsim.spells.types.Channeling;
-import se.wowsim.spells.types.Spell;
-import se.wowsim.talents.Shadow;
 
 public class ClassBuilder {
 

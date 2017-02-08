@@ -1,11 +1,10 @@
 package se.wowsim.spells;
 
-import java.util.Arrays;
-import java.util.List;
-
-import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class Shadowbolt extends DirectDamage {
 

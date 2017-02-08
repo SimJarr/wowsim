@@ -8,7 +8,10 @@ import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
 
 import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 

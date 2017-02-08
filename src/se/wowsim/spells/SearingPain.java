@@ -1,7 +1,6 @@
 package se.wowsim.spells;
 
 
-import se.wowsim.Observer;
 import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DirectDamage;
 
