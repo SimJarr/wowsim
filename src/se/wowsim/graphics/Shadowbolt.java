@@ -3,7 +3,7 @@ package se.wowsim.graphics;
 
 import java.awt.*;
 
-public class Shadowbolt extends AnimatedEntity{
+public class Shadowbolt extends AnimatedEntity {
 
     private int x;
     private int y;
@@ -19,21 +19,21 @@ public class Shadowbolt extends AnimatedEntity{
     }
 
     @Override
-    public void draw(Graphics g){
-            g.setColor(Color.MAGENTA);
-            g.fillRect(x, y, 40, 10);
-            g.setColor(Color.BLACK);
-            g.fillRoundRect(x + 35, y, 10, 10, 10, 10);
-            g.setColor(new Color(0, 77, 0));
-            g.fillRoundRect(x + 35, y - 10, 7, 7, 10, 10);
-            g.setColor(new Color(0, 77, 0));
-            g.fillRoundRect(x + 35, y + 12, 7, 7, 10, 10);
+    public void draw(Graphics g) {
+        g.setColor(Color.MAGENTA);
+        g.fillRect(x, y, 40, 10);
+        g.setColor(Color.BLACK);
+        g.fillRoundRect(x + 35, y, 10, 10, 10, 10);
+        g.setColor(new Color(0, 77, 0));
+        g.fillRoundRect(x + 35, y - 10, 7, 7, 10, 10);
+        g.setColor(new Color(0, 77, 0));
+        g.fillRoundRect(x + 35, y + 12, 7, 7, 10, 10);
     }
 
     @Override
     public void update() {
         this.x += speed;
-        if (duration == 0){
+        if (duration == 0) {
             subject.unregister(this);
             this.animationDone = true;
             return;

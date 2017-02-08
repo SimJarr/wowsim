@@ -1,7 +1,7 @@
 package se.wowsim.graphics;
+
 import se.wowsim.spells.types.Spell;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
 
@@ -20,7 +20,7 @@ public class MyTimerTask extends TimerTask {
 
         Map<Integer, Spell> usedSpellsWithTime = animation.getUsedSpellsWithTime();
 
-        for (Map.Entry entry : usedSpellsWithTime.entrySet()){
+        for (Map.Entry entry : usedSpellsWithTime.entrySet()) {
             if (entry.getKey().equals(animation.getDecisecond())) {
                 animation.addAnimation(new Shadowbolt(subject, 0, 50));
             }

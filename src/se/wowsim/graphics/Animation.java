@@ -21,11 +21,11 @@ public class Animation extends JFrame {
 
     private Set<AnimatedEntity> animatedEntities = new CopyOnWriteArraySet<>();
 
-    public Animation(Map<Integer, Spell> map){
+    public Animation(Map<Integer, Spell> map) {
 
         this.usedSpellsWithTime = map;
 
-        for (Map.Entry entry : map.entrySet()){
+        for (Map.Entry entry : map.entrySet()) {
             //addAnimation(new Shadowbolt(subject, 0, 50), entry.getKey());
         }
 
@@ -56,7 +56,7 @@ public class Animation extends JFrame {
         return usedSpellsWithTime;
     }
 
-    public void addAnimation(AnimatedEntity entity){
+    public void addAnimation(AnimatedEntity entity) {
         subject.register(entity);
         animatedEntities.add(entity);
     }
@@ -66,7 +66,7 @@ public class Animation extends JFrame {
         timer.schedule(myTimerTask, 0, 100);
     }
 
-    public void rePaint(){
+    public void rePaint() {
         drawPanel.repaint();
     }
 
@@ -85,7 +85,7 @@ public class Animation extends JFrame {
                     animatedEntities.remove(ae);
                 }
                 ae.draw(g);
-                if (animatedEntities.size() == 0){
+                if (animatedEntities.size() == 0) {
                     timer.cancel();
                     drawPanel.repaint();
                 }
