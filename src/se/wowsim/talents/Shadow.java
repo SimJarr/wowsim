@@ -28,16 +28,22 @@ public class Shadow extends TalentTreeSpecialization {
         return spells;
     }
 
-    public ClassTemplate getMyClass(){
+    public ClassTemplate getMyClass() {
         return classTemplate;
     }
 
     private void improvedMindBlast(int pointsSpent) {
+        if (pointsSpent <= 0) {
+            return;
+        }
         Spell affectedSpell = spells.get("Mind Blast");
         reduceCooldown(affectedSpell, pointsSpent * 5);
     }
 
     private void improvedShadowWordPain(int pointsSpent) {
+        if (pointsSpent <= 0) {
+            return;
+        }
         Spell affectedSpell = spells.get("Shadow Word: Pain");
         increaseDuration((DamageOverTime) affectedSpell, pointsSpent * 30);
     }

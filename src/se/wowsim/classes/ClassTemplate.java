@@ -393,7 +393,7 @@ public abstract class ClassTemplate {
     private int downTimeIfCastNext(Spell firstSpell, Spell secondSpell) {
         if (firstSpell instanceof Channeling && secondSpell instanceof DamageOverTime) {
             return (((DamageOverTime) secondSpell).getDuration() - secondSpell.getCastTime());
-        } else if (firstSpell instanceof Channeling) {
+        } else if (firstSpell instanceof Channeling || (firstSpell instanceof DamageOverTime && secondSpell.getCooldown() > 0)) {
             return secondSpell.getCooldown();
         } else if (firstSpell instanceof DamageOverTime) {
             return firstSpell.getCastTime() - ((DamageOverTime) firstSpell).getDuration() + secondSpell.getTimeTakenFromCaster();

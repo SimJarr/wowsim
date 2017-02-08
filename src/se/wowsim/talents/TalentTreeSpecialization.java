@@ -18,8 +18,9 @@ public class TalentTreeSpecialization {
 
     void increaseDuration(DamageOverTime dot, int amount){
         double newTotalDamage = dot.getTotalDamage() + ((dot.getTotalDamage() / dot.getTotalTickNumber()) * (amount / dot.getTickInterval()));
-        dot.setMaxDuration(dot.getMaxDuration() + amount);
         dot.setTotalDamage(newTotalDamage);
+        dot.setMaxDuration(dot.getMaxDuration() + amount);
+        dot.setTotalTickNumber(dot.getMaxDuration() / dot.getTickInterval());
     }
 
     void addSpell(Spell spell){

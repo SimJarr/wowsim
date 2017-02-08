@@ -31,6 +31,10 @@ public abstract class DamageOverTime extends Spell implements Observer {
         return totalTickNumber;
     }
 
+    public void setTotalTickNumber(int totalTickNumber) {
+        this.totalTickNumber = totalTickNumber;
+    }
+
     public void setMaxDuration(int maxDuration) {
         this.maxDuration = maxDuration;
     }
