@@ -22,8 +22,10 @@ public abstract class ClassTemplate {
     private int intellect;
     private int stamina;
     private int spirit;
+    private int currentDecisecond;
     private boolean recentlyHalted;
     private List<String> usedSpells = new ArrayList<>();
+    private Map<Integer, Spell> usedSpellsWithTime = new HashMap<>();
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
     protected double critChance;
@@ -52,6 +54,10 @@ public abstract class ClassTemplate {
         return usedSpells;
     }
 
+    public Map<Integer, Spell> getUsedSpellsWithTime() {
+        return usedSpellsWithTime;
+    }
+
     public double resetTotalDamageDone() {
         this.totalDamageDone = 0.0;
         return 0.0;
@@ -69,6 +75,7 @@ public abstract class ClassTemplate {
 
         //TODO pre-casta en spell innan decisekund 0
 
+        currentDecisecond++;
         castProgress--;
         downTime--;
         decrementEverySpellsCooldown();
@@ -240,6 +247,7 @@ public abstract class ClassTemplate {
         if (selectedSpellWithValue != null) {
             totalDamageDone += selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster();
             usedSpells.add(selectedSpellWithValue.getSpell().getName() + " " + (int) (selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster()));
+            usedSpellsWithTime.put(currentDecisecond, selectedSpellWithValue.getSpell());
         }
 
         if (selectedSpellWithValue == null) {

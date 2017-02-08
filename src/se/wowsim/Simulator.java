@@ -1,9 +1,15 @@
 package se.wowsim;
 
 import se.wowsim.classes.ClassTemplate;
+import se.wowsim.graphics.Animation;
+import se.wowsim.spells.Shadowbolt;
+import se.wowsim.spells.types.Spell;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Simulator {
 
@@ -11,6 +17,7 @@ public abstract class Simulator {
 
     public static double totalDamageDone = 0.0;
     public static double dps = 0.0;
+    private static Map<Integer, Spell> usedSpellsWithTime = new HashMap<>();
 
     private Simulator() {
     }
@@ -35,6 +42,24 @@ public abstract class Simulator {
         System.out.println("Dps: " + getDps());
 
         System.out.println(formatSpellList(classTemplate.getUsedSpells()));
+
+        usedSpellsWithTime = classTemplate.getUsedSpellsWithTime();
+
+    }
+
+    public static void animate() {
+
+        //TODO recieve a list in animate()^^ and use it when calling new Animation(); below
+
+        Map<Integer, Spell> usedSpel = new HashMap<>();
+        usedSpel.put(15, new Shadowbolt(5));
+        usedSpel.put(40, new Shadowbolt(5));
+
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Animation(usedSpel);
+            }
+        });
 
     }
 
