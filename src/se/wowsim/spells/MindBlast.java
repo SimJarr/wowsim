@@ -13,6 +13,7 @@ public final class MindBlast extends DirectDamage {
     public MindBlast(int rank) {
         super(rank);
         this.spellClass = Classes.PRIEST;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -24,35 +25,36 @@ public final class MindBlast extends DirectDamage {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = calculateDamage(39, 44);
+                this.baseDamage = calculateDamage(39, 44);
                 break;
             case 2:
-                this.totalDamage = calculateDamage(72, 79);
+                this.baseDamage = calculateDamage(72, 79);
                 break;
             case 3:
-                this.totalDamage = calculateDamage(112, 121);
+                this.baseDamage = calculateDamage(112, 121);
                 break;
             case 4:
-                this.totalDamage = calculateDamage(167, 178);
+                this.baseDamage = calculateDamage(167, 178);
                 break;
             case 5:
-                this.totalDamage = calculateDamage(217, 232);
+                this.baseDamage = calculateDamage(217, 232);
                 break;
             case 6:
-                this.totalDamage = calculateDamage(279, 298);
+                this.baseDamage = calculateDamage(279, 298);
                 break;
             case 7:
-                this.totalDamage = calculateDamage(346, 367);
+                this.baseDamage = calculateDamage(346, 367);
                 break;
             case 8:
-                this.totalDamage = calculateDamage(425, 450);
+                this.baseDamage = calculateDamage(425, 450);
                 break;
             case 9:
-                this.totalDamage = calculateDamage(503, 532);
+                this.baseDamage = calculateDamage(503, 532);
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.castTime = 15;
         this.maxCooldown = 80;
         this.cooldown = 0;

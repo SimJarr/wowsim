@@ -12,20 +12,12 @@ import java.util.Map;
 public class Shadow extends TalentTreeSpecialization {
 
     private int[][] talentTree;
-    private Map<String, Spell> spells;
-    private ClassTemplate classTemplate;
 
     public Shadow(ClassTemplate classTemplate, String talentFile) {
         this.classTemplate = classTemplate;
-        this.spells = classTemplate.getSpells();
         this.spellClass = Classes.PRIEST;
         this.talentTree = new TalentParser("talents", talentFile).getTalents();
         runMethods();
-    }
-
-    //for testing
-    public Map<String, Spell> getSpells() {
-        return spells;
     }
 
     public ClassTemplate getMyClass() {
@@ -36,7 +28,7 @@ public class Shadow extends TalentTreeSpecialization {
         if (pointsSpent <= 0) {
             return;
         }
-        Spell affectedSpell = spells.get("Mind Blast");
+        Spell affectedSpell = getSpell("Mind Blast");
         reduceCooldown(affectedSpell, pointsSpent * 5);
     }
 
@@ -44,15 +36,13 @@ public class Shadow extends TalentTreeSpecialization {
         if (pointsSpent <= 0) {
             return;
         }
-        Spell affectedSpell = spells.get("Shadow Word: Pain");
+        Spell affectedSpell = getSpell("Shadow Word: Pain");
         increaseDuration((DamageOverTime) affectedSpell, pointsSpent * 30);
     }
 
     private void mindFlay(int pointsSpent) {
-        if (pointsSpent == 1) {
-            //TODO figure out a way to add a spell
-            Spell affectedSpell = spells.get("Mind Flay");
-            addSpell(affectedSpell);
+        if (pointsSpent == 0) {
+            unlearnSpell("Mind Flay");
         }
     }
 
@@ -62,18 +52,15 @@ public class Shadow extends TalentTreeSpecialization {
     }
 
     private void darkness(int pointsSpent) {
-        increaseSchoolDamage("Shadow", pointsSpent * 0.02);
+        increaseSchoolDamage(Spell.School.SHADOW, pointsSpent * 0.02);
     }
 
     private void shadowForm(int pointsSpent) {
-        increaseSchoolDamage("Shadow", pointsSpent * 0.15);
+        increaseSchoolDamage(Spell.School.SHADOW, pointsSpent * 0.15);
     }
 
-    private Map<String, Spell> getSpellsFromCaster() {
-        // TEST
-        Priest snarre = (Priest) new ClassBuilder(Classes.PRIEST, 31, 100).getClassInstance();
-
-        return snarre.getSpells();
+    private Spell getSpell(String spellName) {
+        return classTemplate.getSpells().get(spellName);
     }
 
     private void runMethods() {

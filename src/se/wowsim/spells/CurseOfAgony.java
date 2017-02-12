@@ -13,6 +13,7 @@ public final class CurseOfAgony extends DamageOverTime {
     public CurseOfAgony(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -77,26 +78,27 @@ public final class CurseOfAgony extends DamageOverTime {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 84;
+                this.baseDamage = 84;
                 break;
             case 2:
-                this.totalDamage = 180;
+                this.baseDamage = 180;
                 break;
             case 3:
-                this.totalDamage = 324;
+                this.baseDamage = 324;
                 break;
             case 4:
-                this.totalDamage = 504;
+                this.baseDamage = 504;
                 break;
             case 5:
-                this.totalDamage = 780;
+                this.baseDamage = 780;
                 break;
             case 6:
-                this.totalDamage = 1044;
+                this.baseDamage = 1044;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.maxDuration = 240;
         this.duration = this.maxDuration;
         this.tickInterval = 20;

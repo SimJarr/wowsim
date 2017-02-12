@@ -17,6 +17,7 @@ public final class Immolate extends DirectDamage {
         super(rank);
         this.immolateDot = new ImmolateDot(rank);
         this.spellClass = Classes.WARLOCK;
+        this.school = School.FIRE;
     }
 
     public ImmolateDot getImmolateDot() {
@@ -46,29 +47,30 @@ public final class Immolate extends DirectDamage {
         immolateDot.setCastTime(this.castTime);
         switch (rank) {
             case 1:
-                this.totalDamage = calculateDamage(8);
+                this.baseDamage = calculateDamage(8);
                 break;
             case 2:
-                this.totalDamage = calculateDamage(19);
+                this.baseDamage = calculateDamage(19);
                 break;
             case 3:
-                this.totalDamage = calculateDamage(45);
+                this.baseDamage = calculateDamage(45);
                 break;
             case 4:
-                this.totalDamage = calculateDamage(90);
+                this.baseDamage = calculateDamage(90);
                 break;
             case 5:
-                this.totalDamage = calculateDamage(134);
+                this.baseDamage = calculateDamage(134);
                 break;
             case 6:
-                this.totalDamage = calculateDamage(192);
+                this.baseDamage = calculateDamage(192);
                 break;
             case 7:
-                this.totalDamage = calculateDamage(258);
+                this.baseDamage = calculateDamage(258);
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
     }
 
     private double calculateDamage(double damage) {
@@ -114,6 +116,7 @@ public final class Immolate extends DirectDamage {
 
         public ImmolateDot(int rank) {
             super(rank);
+            this.school = School.FIRE;
             init();
         }
 
@@ -134,29 +137,30 @@ public final class Immolate extends DirectDamage {
         public void init() {
             switch (rank) {
                 case 1:
-                    this.totalDamage = 20;
+                    this.baseDamage = 20;
                     break;
                 case 2:
-                    this.totalDamage = 40;
+                    this.baseDamage = 40;
                     break;
                 case 3:
-                    this.totalDamage = 90;
+                    this.baseDamage = 90;
                     break;
                 case 4:
-                    this.totalDamage = 165;
+                    this.baseDamage = 165;
                     break;
                 case 5:
-                    this.totalDamage = 255;
+                    this.baseDamage = 255;
                     break;
                 case 6:
-                    this.totalDamage = 365;
+                    this.baseDamage = 365;
                     break;
                 case 7:
-                    this.totalDamage = 485;
+                    this.baseDamage = 485;
                     break;
                 default:
                     throw new IllegalArgumentException("Given rank does not exist");
             }
+            this.totalDamage = baseDamage;
             this.maxDuration = 150;
             this.duration = this.maxDuration;
             this.tickInterval = 30;

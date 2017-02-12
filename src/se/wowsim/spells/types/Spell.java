@@ -14,7 +14,9 @@ public abstract class Spell implements Observer {
     protected int maxCooldown;
     protected Classes spellClass;
     protected double totalDamage;
+    protected double baseDamage;
     protected Target target;
+    protected School school;
 
     public Spell(int rank) {
         this.rank = rank;
@@ -22,6 +24,10 @@ public abstract class Spell implements Observer {
 
     public int getMaxCooldown() {
         return maxCooldown;
+    }
+
+    public School getSchool() {
+        return school;
     }
 
     public void setMaxCooldown(int maxCooldown) {
@@ -38,6 +44,14 @@ public abstract class Spell implements Observer {
 
     public double getTotalDamage() {
         return totalDamage;
+    }
+
+    public double getBaseDamage() {
+        return baseDamage;
+    }
+
+    public void setBaseDamage(double baseDamage) {
+        this.baseDamage = baseDamage;
     }
 
     public void setTotalDamage(double totalDamage) {
@@ -108,4 +122,12 @@ public abstract class Spell implements Observer {
         return 0.0;
     }
 
+    public enum School {
+        ARCANE,
+        FIRE,
+        FROST,
+        HOLY,
+        NATURE,
+        SHADOW
+    }
 }

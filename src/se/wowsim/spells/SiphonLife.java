@@ -13,6 +13,7 @@ public final class SiphonLife extends DamageOverTime {
     public SiphonLife(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -24,20 +25,21 @@ public final class SiphonLife extends DamageOverTime {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 150;
+                this.baseDamage = 150;
                 break;
             case 2:
-                this.totalDamage = 220;
+                this.baseDamage = 220;
                 break;
             case 3:
-                this.totalDamage = 330;
+                this.baseDamage = 330;
                 break;
             case 4:
-                this.totalDamage = 450;
+                this.baseDamage = 450;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.maxDuration = 300;
         this.duration = this.maxDuration;
         this.tickInterval = 30;
