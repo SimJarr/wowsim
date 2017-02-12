@@ -1,6 +1,4 @@
-package se.wowsim.graphics;
-
-import se.wowsim.spells.types.Spell;
+package se.wowsim.animation;
 
 import java.util.Map;
 import java.util.TimerTask;
@@ -9,20 +7,20 @@ public class MyTimerTask extends TimerTask {
 
     private Subject subject;
     private Animation animation;
+    private Map<Integer, AnimatedEntity> usedSpellsWithTime;
 
-    public MyTimerTask(Subject subject, Animation animation) {
+    public MyTimerTask(Subject subject, Animation animation, Map<Integer, AnimatedEntity> map) {
         this.subject = subject;
         this.animation = animation;
+        this.usedSpellsWithTime = map;
     }
 
     public void run() {
         System.out.println("decisecond: " + animation.getDecisecond());
 
-        Map<Integer, Spell> usedSpellsWithTime = animation.getUsedSpellsWithTime();
-
         for (Map.Entry entry : usedSpellsWithTime.entrySet()) {
             if (entry.getKey().equals(animation.getDecisecond())) {
-                animation.addAnimation(new Shadowbolt(subject, 0, 50));
+                animation.addAnimation((AnimatedEntity) entry.getValue());
             }
         }
 

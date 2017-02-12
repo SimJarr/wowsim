@@ -1,4 +1,4 @@
-package se.wowsim.graphics;
+package se.wowsim.animation;
 
 import se.wowsim.Observer;
 
