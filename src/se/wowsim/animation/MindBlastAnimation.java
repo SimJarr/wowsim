@@ -7,29 +7,30 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WarlockAnimation extends AnimatedEntity {
+public class MindBlastAnimation extends AnimatedEntity {
 
     private int x;
     private int y;
     private int duration;
     private BufferedImage image;
 
-    public WarlockAnimation(Subject subject, int x, int y, int duration) {
+    //ignore unusedConstructor
+    public MindBlastAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
-        this.x = x;
-        this.y = y + 100;
+        this.x = x + 275;
+        this.y = y + 20;
         this.duration = duration;
         this.animationDone = false;
         try {
-            this.image = ImageIO.read(new File("src/images/warlock.png"));
-        } catch (IOException e){
+            this.image = ImageIO.read(new File("src/images/mindBlast.png"));
+        } catch (IOException e) {
             throw new RuntimeException("Cannot find file");
         }
     }
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(image, x, y, image.getWidth(), image.getHeight(), null);
+        g.drawImage(image, x, y, image.getWidth() / 3, image.getHeight() / 3, null);
     }
 
     @Override

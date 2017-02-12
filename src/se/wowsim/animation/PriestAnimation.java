@@ -7,21 +7,21 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class WarlockAnimation extends AnimatedEntity {
+public class PriestAnimation extends AnimatedEntity {
 
     private int x;
     private int y;
     private int duration;
     private BufferedImage image;
 
-    public WarlockAnimation(Subject subject, int x, int y, int duration) {
+    public PriestAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
         this.x = x;
         this.y = y + 100;
         this.duration = duration;
         this.animationDone = false;
         try {
-            this.image = ImageIO.read(new File("src/images/warlock.png"));
+            this.image = ImageIO.read(new File("src/images/priest.png"));
         } catch (IOException e){
             throw new RuntimeException("Cannot find file");
         }

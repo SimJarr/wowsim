@@ -13,8 +13,8 @@ import java.util.Timer;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class Animation extends JFrame {
-    private int width = 400;
-    private int height = 200;
+    private int width = 450;
+    private int height = 300;
     private int decisecond = 0;
     private int completedAnimations = 0;
     private int totalTime = 0;
@@ -30,7 +30,8 @@ public class Animation extends JFrame {
         this.usedSpellsWithTime = formatMapWithSpells(map);
         this.totalTime = totalTime + 20;
 
-        addAnimation(new WarlockAnimation(subject, 5, 0, this.totalTime));
+        addAnimation(new PriestAnimation(subject, 0, 0, this.totalTime));
+        addAnimation(new TargetDummyAnimation(subject, 0, 0, this.totalTime));
 
         add(drawPanel);
 
@@ -81,7 +82,7 @@ public class Animation extends JFrame {
                 if (currentSpell instanceof DamageOverTime) {
                     animationDuration = ((DamageOverTime) currentSpell).getMaxDuration();
                 }
-                result.put((int) entry.getKey(), (AnimatedEntity) mySpell.newInstance(subject, 0, 50, animationDuration));
+                result.put((int) entry.getKey(), (AnimatedEntity) mySpell.newInstance(subject, 0, 0, animationDuration));
             } catch (Exception e) {
                 throw new RuntimeException("Animation for: " + entry.getValue().getClass().getSimpleName() + " doesn't exist");
             }

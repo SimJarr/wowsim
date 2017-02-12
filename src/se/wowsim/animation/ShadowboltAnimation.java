@@ -19,7 +19,7 @@ public class ShadowboltAnimation extends AnimatedEntity {
     public ShadowboltAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
         this.x = x;
-        this.y = y;
+        this.y = y + 120;
         this.speed = 20;
         this.duration = duration;
         this.animationDone = false;

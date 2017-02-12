@@ -6,6 +6,7 @@ import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
+
 import java.util.*;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
@@ -33,7 +34,7 @@ public abstract class ClassTemplate {
 
     protected ClassTemplate(int level, int intellect) {
         schoolAmp = new HashMap<>();
-        for(Spell.School school : Spell.School.values()) {
+        for (Spell.School school : Spell.School.values()) {
             schoolAmp.put(school, 1.0);
         }
 
@@ -252,11 +253,9 @@ public abstract class ClassTemplate {
         if (selectedSpellWithValue != null) {
             totalDamageDone += selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster();
             usedSpells.add(selectedSpellWithValue.getSpell().getName() + " " + (int) (selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster()));
-            int animationStart = 0;
-            if (selectedSpellWithValue.getSpell() instanceof DamageOverTime){
-                animationStart = ((DamageOverTime) selectedSpellWithValue.getSpell()).getMaxDuration();
-            } else if (selectedSpellWithValue.getSpell() instanceof DirectDamage){
-                animationStart = selectedSpellWithValue.getSpell().getCastTime();
+            int animationStart = selectedSpellWithValue.getSpell().getCastTime();
+            if (usedSpellsWithTime.get(currentDecisecond - 1 + animationStart) != null) {
+                animationStart++;
             }
             usedSpellsWithTime.put(currentDecisecond - 1 + animationStart, selectedSpellWithValue.getSpell());
         }
