@@ -29,8 +29,14 @@ public abstract class ClassTemplate {
     protected int downTime;
     protected Spell nextSpell;
     protected Classes myClass;
+    protected Map<Spell.School, Double> schoolAmp;
 
     protected ClassTemplate(int level, int intellect) {
+        schoolAmp = new HashMap<>();
+        for(Spell.School school : Spell.School.values()) {
+            schoolAmp.put(school, 1.0);
+        }
+
         this.busyCasting = false;
         this.globalCooldown = GLOBAL_COOLDOWN;
         this.totalDamageDone = 0.0;
@@ -39,6 +45,10 @@ public abstract class ClassTemplate {
         this.intellect = intellect;
         this.level = level;
         this.recentlyHalted = false;
+    }
+
+    public Map<Spell.School, Double> getSchoolAmp() {
+        return schoolAmp;
     }
 
     public double getTotalDamageDone() {
@@ -119,11 +129,25 @@ public abstract class ClassTemplate {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
 
+        updateDamageValues();
+
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
         List<SpellAndValue> spellCandidates = insertSpellsWithValues(target, timeLeft, highestDamageDot);
 
         return selectSpell(target, timeLeft, spellCandidates);
+    }
+
+    private void updateDamageValues() {
+        for (Map.Entry<String, Spell> entry : spells.entrySet()) {
+            Spell currentSpell = entry.getValue();
+            if (currentSpell instanceof DirectDamage) {
+                ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
+            }
+            double baseDamage = currentSpell.getBaseDamage();
+            double currentAmp = schoolAmp.get(currentSpell.getSchool());
+            currentSpell.setTotalDamage(baseDamage * currentAmp);
+        }
     }
 
     private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
@@ -169,10 +193,6 @@ public abstract class ClassTemplate {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
 
             Spell currentSpell = entry.getValue();
-
-            if (currentSpell instanceof DirectDamage) {
-                ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
-            }
 
             if (currentSpell instanceof Channeling) {
 

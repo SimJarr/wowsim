@@ -13,6 +13,7 @@ public final class DrainSoul extends Channeling {
     public DrainSoul(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -24,20 +25,21 @@ public final class DrainSoul extends Channeling {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 55;
+                this.baseDamage = 55;
                 break;
             case 2:
-                this.totalDamage = 155;
+                this.baseDamage = 155;
                 break;
             case 3:
-                this.totalDamage = 295;
+                this.baseDamage = 295;
                 break;
             case 4:
-                this.totalDamage = 455;
+                this.baseDamage = 455;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.maxDuration = 150;
         this.duration = this.maxDuration;
         this.tickInterval = 30;

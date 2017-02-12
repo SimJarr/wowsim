@@ -13,6 +13,7 @@ public final class ShadowWordPain extends DamageOverTime {
     public ShadowWordPain(int rank) {
         super(rank);
         this.spellClass = Classes.PRIEST;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -24,32 +25,33 @@ public final class ShadowWordPain extends DamageOverTime {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 30;
+                this.baseDamage = 30;
                 break;
             case 2:
-                this.totalDamage = 66;
+                this.baseDamage = 66;
                 break;
             case 3:
-                this.totalDamage = 132;
+                this.baseDamage = 132;
                 break;
             case 4:
-                this.totalDamage = 234;
+                this.baseDamage = 234;
                 break;
             case 5:
-                this.totalDamage = 366;
+                this.baseDamage = 366;
                 break;
             case 6:
-                this.totalDamage = 510;
+                this.baseDamage = 510;
                 break;
             case 7:
-                this.totalDamage = 672;
+                this.baseDamage = 672;
                 break;
             case 8:
-                this.totalDamage = 852;
+                this.baseDamage = 852;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.maxDuration = 180;
         this.duration = this.maxDuration;
         this.tickInterval = 30;

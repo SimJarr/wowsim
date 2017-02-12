@@ -13,6 +13,7 @@ public final class MindFlay extends Channeling {
     public MindFlay(int rank) {
         super(rank);
         this.spellClass = Classes.PRIEST;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -24,26 +25,27 @@ public final class MindFlay extends Channeling {
     public void init() {
         switch (rank) {
             case 1:
-                this.totalDamage = 75;
+                this.baseDamage = 75;
                 break;
             case 2:
-                this.totalDamage = 126;
+                this.baseDamage = 126;
                 break;
             case 3:
-                this.totalDamage = 186;
+                this.baseDamage = 186;
                 break;
             case 4:
-                this.totalDamage = 261;
+                this.baseDamage = 261;
                 break;
             case 5:
-                this.totalDamage = 330;
+                this.baseDamage = 330;
                 break;
             case 6:
-                this.totalDamage = 426;
+                this.baseDamage = 426;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.maxDuration = 30;
         this.duration = this.maxDuration;
         this.tickInterval = 10;

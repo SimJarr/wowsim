@@ -13,6 +13,7 @@ public final class Corruption extends DamageOverTime {
     public Corruption(int rank) {
         super(rank);
         this.spellClass = Classes.WARLOCK;
+        this.school = School.SHADOW;
     }
 
     @Override
@@ -26,27 +27,28 @@ public final class Corruption extends DamageOverTime {
         switch (rank) {
             case 1:
                 this.maxDuration = 120;
-                this.totalDamage = 40;
+                this.baseDamage = 40;
                 break;
             case 2:
                 this.maxDuration = 150;
-                this.totalDamage = 90;
+                this.baseDamage = 90;
                 break;
             case 3:
-                this.totalDamage = 222;
+                this.baseDamage = 222;
                 break;
             case 4:
-                this.totalDamage = 324;
+                this.baseDamage = 324;
                 break;
             case 5:
-                this.totalDamage = 486;
+                this.baseDamage = 486;
                 break;
             case 6:
-                this.totalDamage = 666;
+                this.baseDamage = 666;
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
+        this.totalDamage = baseDamage;
         this.duration = this.maxDuration;
         this.tickInterval = 30;
         this.tickNumber = 1;
