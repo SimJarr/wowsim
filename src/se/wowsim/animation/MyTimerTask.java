@@ -16,7 +16,6 @@ public class MyTimerTask extends TimerTask {
     }
 
     public void run() {
-        System.out.println("decisecond: " + animation.getDecisecond());
 
         for (Map.Entry entry : usedSpellsWithTime.entrySet()) {
             if (entry.getKey().equals(animation.getDecisecond())) {
