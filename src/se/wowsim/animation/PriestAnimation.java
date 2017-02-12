@@ -17,11 +17,11 @@ public class PriestAnimation extends AnimatedEntity {
     public PriestAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
         this.x = x;
-        this.y = y + 100;
+        this.y = y + 85;
         this.duration = duration;
         this.animationDone = false;
         try {
-            this.image = ImageIO.read(new File("src/images/priest.png"));
+            this.image = ImageIO.read(new File("src/images/priest2.png"));
         } catch (IOException e){
             throw new RuntimeException("Cannot find file");
         }
