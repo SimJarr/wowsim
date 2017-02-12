@@ -1,4 +1,4 @@
-package se.wowsim.graphics;
+package se.wowsim.animation;
 
 import se.wowsim.Observer;
 
@@ -11,10 +11,6 @@ public class Subject implements se.wowsim.Subject {
 
     public Subject() {
         this.observers = new CopyOnWriteArraySet<>();
-    }
-
-    public Set<Observer> getObservers() {
-        return observers;
     }
 
     @Override

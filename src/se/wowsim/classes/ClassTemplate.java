@@ -6,12 +6,7 @@ import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.DirectDamage;
 import se.wowsim.spells.types.Spell;
-
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
@@ -202,34 +197,24 @@ public abstract class ClassTemplate {
             if (currentSpell instanceof Channeling) {
 
                 int tickInterval = ((Channeling) currentSpell).getTickInterval();
-                int rank = currentSpell.getRank();
-                int loopCounter = 0;
                 Integer timeChanneled;
-                List<Channeling> temporaryList = new ArrayList<>();
 
                 for (int i = ((Channeling) currentSpell).getTotalTickNumber(); i >= 1; i--) {
 
-
                     timeChanneled = (i * tickInterval < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : i * tickInterval;
 
-
                     try {
-                        Constructor constructor = Class.forName(currentSpell.getClass().getName()).getConstructor(int.class);
-                        temporaryList.add((Channeling) constructor.newInstance(rank));
-                        Channeling currentSpellNewInstance = temporaryList.get(loopCounter);
-                        currentSpellNewInstance.init();
+
+                        Channeling currentSpellNewInstance = (Channeling) currentSpell.clone();
                         currentSpellNewInstance.setTemporaryChannelTime(timeChanneled);
 
                         SpellAndValue spellAndValue = new SpellAndValue(currentSpellNewInstance, (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled);
                         result.add(spellAndValue);
                         //System.out.println(currentSpellNewInstance.getName() + " value: " + (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled + " channelDuration: " + currentSpellNewInstance.getTimeTakenFromCaster());
 
-
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
-
-                    loopCounter++;
 
                 }
 
@@ -267,7 +252,13 @@ public abstract class ClassTemplate {
         if (selectedSpellWithValue != null) {
             totalDamageDone += selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster();
             usedSpells.add(selectedSpellWithValue.getSpell().getName() + " " + (int) (selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster()));
-            usedSpellsWithTime.put(currentDecisecond, selectedSpellWithValue.getSpell());
+            int animationStart = 0;
+            if (selectedSpellWithValue.getSpell() instanceof DamageOverTime){
+                animationStart = ((DamageOverTime) selectedSpellWithValue.getSpell()).getMaxDuration();
+            } else if (selectedSpellWithValue.getSpell() instanceof DirectDamage){
+                animationStart = selectedSpellWithValue.getSpell().getCastTime();
+            }
+            usedSpellsWithTime.put(currentDecisecond - 1 + animationStart, selectedSpellWithValue.getSpell());
         }
 
         if (selectedSpellWithValue == null) {

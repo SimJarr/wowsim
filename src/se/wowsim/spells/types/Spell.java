@@ -6,7 +6,7 @@ import se.wowsim.classes.Classes;
 
 import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
-public abstract class Spell implements Observer {
+public abstract class Spell implements Observer, Cloneable {
 
     protected int castTime;
     protected int rank;
@@ -79,6 +79,10 @@ public abstract class Spell implements Observer {
     }
 
     public abstract String getName();
+
+    public Spell clone() throws CloneNotSupportedException{
+        return (Spell) super.clone();
+    }
 
     public void decrementCooldown() {
         if (cooldown > 0) {
