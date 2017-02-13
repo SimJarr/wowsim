@@ -13,6 +13,7 @@ public class WarlockAnimation extends AnimatedEntity {
     private int y;
     private int duration;
     private BufferedImage image;
+    private BufferedImage currentImage;
 
     public WarlockAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
@@ -22,6 +23,7 @@ public class WarlockAnimation extends AnimatedEntity {
         this.animationDone = false;
         try {
             this.image = ImageIO.read(new File("src/images/warlock.png"));
+            this.currentImage = image;
         } catch (IOException e){
             throw new RuntimeException("Cannot find file");
         }
@@ -29,7 +31,7 @@ public class WarlockAnimation extends AnimatedEntity {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(image, x, y, image.getWidth(), image.getHeight(), null);
+        g.drawImage(currentImage, x, y, image.getWidth(), image.getHeight(), null);
     }
 
     @Override

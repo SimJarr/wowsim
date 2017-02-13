@@ -39,7 +39,6 @@ public class MindFlayAnimation extends AnimatedEntity {
         } else {
             g.drawImage(image2, x, y, image.getWidth() / 3, image.getHeight() / 6, null);
         }
-        flipImage = !flipImage;
     }
 
     @Override
@@ -50,6 +49,7 @@ public class MindFlayAnimation extends AnimatedEntity {
             return;
         }
         this.duration--;
+        flipImage = !flipImage;
     }
 
     @Override

@@ -6,9 +6,7 @@ import se.wowsim.spells.types.Spell;
 import javax.swing.*;
 import java.awt.*;
 import java.lang.reflect.Constructor;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.Timer;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -27,10 +25,12 @@ public class Animation extends JFrame {
 
     public Animation(Map<Integer, Spell> map, int totalTime) {
 
+        Map<Integer, Spell> actualSpellsUsed = new TreeMap<>(map);
+
         this.usedSpellsWithTime = formatMapWithSpells(map);
         this.totalTime = totalTime + 20;
 
-        addAnimation(new PriestAnimation(subject, 0, 0, this.totalTime));
+        addAnimation(new PriestAnimation(subject, 0, 0, this.totalTime, actualSpellsUsed));
         addAnimation(new TargetDummyAnimation(subject, 0, 0, this.totalTime));
 
         add(drawPanel);
@@ -78,7 +78,7 @@ public class Animation extends JFrame {
 
             try {
                 Constructor mySpell = Class.forName("se.wowsim.animation." + currentSpell.getClass().getSimpleName() + "Animation").getConstructor(Subject.class, int.class, int.class, int.class);
-                int animationDuration = 15;
+                int animationDuration = 5;
                 if (currentSpell instanceof DamageOverTime) {
                     animationDuration = ((DamageOverTime) currentSpell).getMaxDuration();
                 }

@@ -17,8 +17,8 @@ public class MindBlastAnimation extends AnimatedEntity {
     //ignore unusedConstructor
     public MindBlastAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
-        this.x = x + 275;
-        this.y = y + 20;
+        this.x = x + 325;
+        this.y = y + 100;
         this.duration = duration;
         this.animationDone = false;
         try {
@@ -30,7 +30,7 @@ public class MindBlastAnimation extends AnimatedEntity {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(image, x, y, image.getWidth() / 3, image.getHeight() / 3, null);
+        g.drawImage(image, x, y, image.getWidth() / 20, image.getHeight() / 20, null);
     }
 
     @Override

@@ -13,6 +13,7 @@ public class ShadowWordPainAnimation extends AnimatedEntity {
     private int y;
     private int duration;
     private BufferedImage image;
+    private static final Font FONT = new Font(Font.MONOSPACED, Font.BOLD, 32);
 
     //ignore unusedConstructor
     public ShadowWordPainAnimation(Subject subject, int x, int y, int duration) {
@@ -30,7 +31,14 @@ public class ShadowWordPainAnimation extends AnimatedEntity {
 
     @Override
     public void draw(Graphics g) {
-        g.drawImage(image, x, y, image.getWidth() / 7, image.getHeight() / 7, null);
+        g.drawImage(image, x, y, image.getWidth() / 10, image.getHeight() / 10, null);
+        g.setFont(FONT);
+        FontMetrics fontMetrics = g.getFontMetrics();
+        String text = String.valueOf(duration / 10);
+        int textX = x + 35 - fontMetrics.stringWidth(text) / 2;
+        int textY = y + 35 + fontMetrics.getHeight();
+        g.setColor(Color.BLACK);
+        g.drawString(text, textX, textY);
     }
 
     @Override

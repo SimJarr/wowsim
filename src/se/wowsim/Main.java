@@ -16,6 +16,6 @@ public class Main {
         Simulator.simulate(snarre, target, 300);
         //Simulator.simulate(warlock, target, 335);
 
-        Simulator.animate();
+        //Simulator.animate();
     }
 }
