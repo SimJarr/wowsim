@@ -51,18 +51,12 @@ public class ClassBuilder {
     }
 
     private ClassTemplate applyTalentsToPriest(ClassTemplate classTemplate) {
-
+        //TODO more talent trees
         return new Shadow(classTemplate, "shadow").getMyClass();
-
-        //TODO figure out a way to add a spell
-        //classTemplate.getSpells().get("Mind Flay").activateTalent();
     }
 
     private ClassTemplate applyTalentsToWarlock(ClassTemplate classTemplate) {
-
-        //TODO
-        //Shadow shadow = new Shadow(classTemplate, "shadow");
-        //return shadow.getMyClass();
+        //TODO talent trees
         return classTemplate;
     }
 
