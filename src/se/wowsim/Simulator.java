@@ -14,8 +14,6 @@ import java.util.Map;
 
 public abstract class Simulator {
 
-    //TODO gui simulation
-
     public static double totalDamageDone = 0.0;
     public static double dps = 0.0;
     private static Map<Integer, Spell> usedSpellsWithTime = new HashMap<>();
