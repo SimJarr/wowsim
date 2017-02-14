@@ -48,6 +48,8 @@ public abstract class ClassTemplate {
         this.recentlyHalted = false;
     }
 
+    public abstract void applyDamageIncrease(Spell spell, Target target);
+
     public Map<Spell.School, Double> getSchoolAmp() {
         return schoolAmp;
     }
@@ -88,6 +90,7 @@ public abstract class ClassTemplate {
 
         if (nextSpell != null && castProgress <= 0) {
             nextSpell.applySpell();
+            applyDamageIncrease(nextSpell, target);
             nextSpell = null;
         }
         if (downTime == 0) {
@@ -114,6 +117,7 @@ public abstract class ClassTemplate {
             recentlyHalted = false;
             if (castProgress == 0) {
                 nextSpell.applySpell();
+                applyDamageIncrease(nextSpell, target);
                 nextSpell = null;
             }
         }
@@ -130,7 +134,7 @@ public abstract class ClassTemplate {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
 
-        updateDamageValues();
+        updateDamageValues(target);
 
         DamageOverTime highestDamageDot = calculateHighestDamageDot(target, timeLeft);
 
@@ -139,15 +143,20 @@ public abstract class ClassTemplate {
         return selectSpell(target, timeLeft, spellCandidates);
     }
 
-    private void updateDamageValues() {
+    private void updateDamageValues(Target target) {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
             Spell currentSpell = entry.getValue();
             if (currentSpell instanceof DirectDamage) {
                 ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
             }
+            System.out.println(currentSpell.getName());
+            System.out.println(currentSpell.getBaseDamage() + " : damage before amp");
             double baseDamage = currentSpell.getBaseDamage();
             double currentAmp = schoolAmp.get(currentSpell.getSchool());
+            currentAmp *= target.getSchoolAmp(currentSpell.getSchool());
             currentSpell.setTotalDamage(baseDamage * currentAmp);
+            System.out.println(currentSpell.getTotalDamage() + " : damage after amp");
+            System.out.println(currentAmp + " : amp");
         }
     }
 

@@ -47,8 +47,7 @@ public class Shadow extends TalentTreeSpecialization {
     }
 
     private void shadowWeaving(int pointsSpent) {
-        //TODO implement debuffs
-        //learnDebuff(spell, pointsSpent * 0.2);
+        ((Priest) classTemplate).setShadowWeaving(pointsSpent);
     }
 
     private void darkness(int pointsSpent) {
@@ -70,5 +69,6 @@ public class Shadow extends TalentTreeSpecialization {
         shadowWeaving(talentTree[3][3]);
         darkness(talentTree[5][2]);
         shadowForm(talentTree[6][1]);
+        shadowWeaving(talentTree[3][3]);
     }
 }
