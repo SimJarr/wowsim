@@ -91,6 +91,7 @@ public abstract class ClassTemplate {
         if (nextSpell != null && castProgress <= 0) {
             nextSpell.applySpell();
             applyDamageIncrease(nextSpell, target);
+            updateDamageValues(target);
             nextSpell = null;
         }
         if (downTime == 0) {
@@ -118,6 +119,7 @@ public abstract class ClassTemplate {
             if (castProgress == 0) {
                 nextSpell.applySpell();
                 applyDamageIncrease(nextSpell, target);
+                updateDamageValues(target);
                 nextSpell = null;
             }
         }
@@ -211,12 +213,12 @@ public abstract class ClassTemplate {
 
                 for (int i = ((Channeling) currentSpell).getTotalTickNumber(); i >= 1; i--) {
 
-                    timeChanneled = (i * tickInterval < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : i * tickInterval;
+                    timeChanneled = i * tickInterval;
 
                     try {
 
                         Channeling currentSpellNewInstance = (Channeling) currentSpell.clone();
-                        currentSpellNewInstance.setTemporaryChannelTime(timeChanneled);
+                        currentSpellNewInstance.setChannelTime(timeChanneled);
 
                         SpellAndValue spellAndValue = new SpellAndValue(currentSpellNewInstance, (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled);
                         result.add(spellAndValue);

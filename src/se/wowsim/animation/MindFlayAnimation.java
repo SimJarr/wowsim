@@ -19,8 +19,8 @@ public class MindFlayAnimation extends AnimatedEntity {
     //ignore unusedConstructor
     public MindFlayAnimation(Subject subject, int x, int y, int duration) {
         super(subject);
-        this.x = x + 90;
-        this.y = y + 120;
+        this.x = x + 75;
+        this.y = y + 90;
         this.duration = duration;
         this.animationDone = false;
         this.flipImage = false;
@@ -35,9 +35,9 @@ public class MindFlayAnimation extends AnimatedEntity {
     @Override
     public void draw(Graphics g) {
         if(flipImage){
-            g.drawImage(image, x, y, image.getWidth() / 3, image.getHeight() / 6, null);
+            g.drawImage(image, x, y, image.getWidth() / 3, image.getHeight() / 4, null);
         } else {
-            g.drawImage(image2, x, y, image.getWidth() / 3, image.getHeight() / 6, null);
+            g.drawImage(image2, x, y, image.getWidth() / 3, image.getHeight() / 4, null);
         }
     }
 

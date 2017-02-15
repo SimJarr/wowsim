@@ -15,7 +15,6 @@ public abstract class DamageIncrease {
         this.stacks = stacks;
         this.duration = duration;
         this.damageIncreasePerStack = damageIncreasePerStack;
-        this.currentStacks = 1;
     }
 
     public double getCurrentAmp() {
@@ -23,7 +22,7 @@ public abstract class DamageIncrease {
     }
 
     public void decrementDuration(Target target) {
-        currentDuration --;
+        currentDuration--;
         if(currentDuration == 0) {
             target.unregister(this);
         }
@@ -32,8 +31,8 @@ public abstract class DamageIncrease {
     public void incrementStacks() {
         if(currentStacks < stacks) {
             currentStacks++;
-            currentDuration = duration;
         }
+        currentDuration = duration;
     }
 
     public int getCurrentStacks() {

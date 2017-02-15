@@ -20,9 +20,11 @@ public final class Priest extends ClassTemplate {
 
     @Override
     public void applyDamageIncrease(Spell spell, Target target) {
-        if(shadowWeaving != null && shadowWeaving.getPoints() > 0) {
-            if(shadowWeaving.getChanceToApply() >= Math.random())
-                target.register(shadowWeaving);
+        if (spell.getSchool() == Spell.School.SHADOW) {
+            if (shadowWeaving != null && shadowWeaving.getPoints() > 0) {
+                if (shadowWeaving.getChanceToApply() >= Math.random())
+                    target.register(shadowWeaving);
+            }
         }
     }
 }

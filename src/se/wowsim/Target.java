@@ -24,6 +24,7 @@ public class Target implements Subject {
             System.out.println(n.getName() + " reapplied to target, current stacks: " + n.getCurrentStacks());
         } else {
             damageIncreases.add(n);
+            n.incrementStacks();
             System.out.println(n.getName() + " applied to target");
         }
     }
