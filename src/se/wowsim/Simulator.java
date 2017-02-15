@@ -14,8 +14,6 @@ import java.util.Map;
 
 public abstract class Simulator {
 
-    public static double totalDamageDone = 0.0;
-    public static double dps = 0.0;
     private static Map<Integer, Spell> usedSpellsWithTime = new HashMap<>();
     private static int totalTime;
 
@@ -24,8 +22,8 @@ public abstract class Simulator {
 
     public static void simulate(ClassTemplate classTemplate, Target target, int simDuration) {
 
-        totalDamageDone = classTemplate.resetTotalDamageDone();
-        dps = 0.0;
+        double totalDamageDone;
+        double dps;
         totalTime = simDuration;
 
         for (int i = 0; i <= simDuration; i++) {
@@ -33,12 +31,12 @@ public abstract class Simulator {
             classTemplate.currentActivity(target, simDuration - i);
         }
 
-        totalDamageDone = classTemplate.getTotalDamageDone();
+        totalDamageDone = gatherEverySpellsDamageDone(classTemplate);
 
         dps = (totalDamageDone / simDuration) * 10;
 
-        System.out.println("Total Damage Done: " + getTotalDamageDone());
-        System.out.println("Dps: " + getDps());
+        System.out.println("Total Damage Done: " + totalDamageDone);
+        System.out.println("Dps: " + dps);
 
         System.out.println(formatSpellList(classTemplate.getUsedSpells()));
 
@@ -56,12 +54,16 @@ public abstract class Simulator {
 
     }
 
-    public static double getTotalDamageDone() {
-        return totalDamageDone;
-    }
+    private static double gatherEverySpellsDamageDone(ClassTemplate classTemplate){
+        Map<String, Spell> spell = classTemplate.getSpells();
+        double result = 0.0;
 
-    public static double getDps() {
-        return dps;
+        for (Map.Entry<String, Spell> entry : spell.entrySet()){
+            Spell currentSpell = entry.getValue();
+            result += currentSpell.getDamageDoneDuringSim();
+        }
+
+        return result;
     }
 
     private static List<String> formatSpellList(List<String> spellList) {

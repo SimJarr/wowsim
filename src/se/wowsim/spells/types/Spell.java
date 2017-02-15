@@ -47,6 +47,10 @@ public abstract class Spell implements Observer, Cloneable {
         return totalDamage;
     }
 
+    public double getDamageDoneDuringSim() {
+        return damageDoneDuringSim;
+    }
+
     public double getBaseDamage() {
         return baseDamage;
     }

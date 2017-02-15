@@ -13,7 +13,6 @@ import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class ClassTemplate {
 
-    private double totalDamageDone;
     private int level;
     private int intellect;
     private int stamina;
@@ -41,7 +40,6 @@ public abstract class ClassTemplate {
 
         this.busyCasting = false;
         this.globalCooldown = GLOBAL_COOLDOWN;
-        this.totalDamageDone = 0.0;
         this.nextSpell = null;
         this.intellect = intellect;
         this.level = level;
@@ -57,21 +55,12 @@ public abstract class ClassTemplate {
         return schoolAmp;
     }
 
-    public double getTotalDamageDone() {
-        return totalDamageDone;
-    }
-
     public List<String> getUsedSpells() {
         return usedSpells;
     }
 
     public Map<Integer, Spell> getUsedSpellsWithTime() {
         return usedSpellsWithTime;
-    }
-
-    public double resetTotalDamageDone() {
-        this.totalDamageDone = 0.0;
-        return 0.0;
     }
 
     public Map<String, Spell> getSpells() {
@@ -121,6 +110,13 @@ public abstract class ClassTemplate {
 
             target.notifyObservers();
             System.out.println("Casting " + nextSpell.getName());
+            usedSpells.add(nextSpell.getName());
+            if (nextSpell instanceof Channeling){
+                String lastEntry = usedSpells.get(usedSpells.size() - 1);
+                lastEntry += " " + ((Channeling)nextSpell).getChannelTime() / 10;
+                usedSpells.remove(usedSpells.size() - 1);
+                usedSpells.add(lastEntry);
+            }
             recentlyHalted = false;
             if (castProgress == 0) {
                 nextSpell.applySpell();
@@ -240,16 +236,15 @@ public abstract class ClassTemplate {
                     System.out.println("Finding another spell with at most: " + waitTime + " castTime");
                 }
                 selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
-                if (selectedSpellWithValue == null && !recentlyHalted) {
-                    recentlyHalted = true;
-                    usedSpells.add("Halting " + waitTime + " decisec");
+                if (selectedSpellWithValue == null) {
+                    if(!recentlyHalted){
+                        recentlyHalted = true;
+                        usedSpells.add("Halting " + waitTime + " decisec");
+                    }
+                    return null;
                 }
             }
-        }
 
-        if (selectedSpellWithValue != null) {
-            totalDamageDone += selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster();
-            usedSpells.add(selectedSpellWithValue.getSpell().getName() + " " + (int) (selectedSpellWithValue.getValue() * selectedSpellWithValue.getSpell().getTimeTakenFromCaster()));
             int animationStart = selectedSpellWithValue.getSpell().getCastTime();
             if (usedSpellsWithTime.get(currentDecisecond - 1 + animationStart) != null) {
                 animationStart++;
@@ -257,7 +252,7 @@ public abstract class ClassTemplate {
             usedSpellsWithTime.put(currentDecisecond - 1 + animationStart, selectedSpellWithValue.getSpell());
         }
 
-        if (selectedSpellWithValue == null) {
+        if (selectedSpellWithValue == null){
             return null;
         }
 
