@@ -69,6 +69,5 @@ public class Shadow extends TalentTreeSpecialization {
         shadowWeaving(talentTree[3][3]);
         darkness(talentTree[5][2]);
         shadowForm(talentTree[6][1]);
-        shadowWeaving(talentTree[3][3]);
     }
 }

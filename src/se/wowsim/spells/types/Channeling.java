@@ -4,26 +4,25 @@ import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class Channeling extends DamageOverTime {
 
-    private int temporaryChannelTime;
+    private int channelTime;
 
     public Channeling(int rank) {
         super(rank);
         castTime = 0;
-        temporaryChannelTime = this.getMaxDuration();
+        channelTime = this.getMaxDuration();
     }
 
     @Override
     public int getTimeTakenFromCaster() {
-        return (this.temporaryChannelTime < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : this.temporaryChannelTime;
+        return (this.channelTime < GLOBAL_COOLDOWN) ? GLOBAL_COOLDOWN : this.channelTime;
     }
 
-    public void setTemporaryChannelTime(int temporaryChannelTime) {
-        temporaryChannelTime = (temporaryChannelTime == 15) ? 10 : temporaryChannelTime;
-        this.totalDamage = (this.totalDamage / this.maxDuration) * temporaryChannelTime;
-        this.temporaryChannelTime = temporaryChannelTime;
-        this.maxDuration = temporaryChannelTime;
-        this.duration = temporaryChannelTime;
-        this.totalTickNumber = temporaryChannelTime / tickInterval;
+    public void setChannelTime(int channelTime) {
+        this.totalDamage = (this.totalDamage / this.maxDuration) * channelTime;
+        this.channelTime = channelTime;
+        this.maxDuration = channelTime;
+        this.duration = channelTime;
+        this.totalTickNumber = channelTime / tickInterval;
 
     }
 

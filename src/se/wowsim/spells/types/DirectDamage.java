@@ -24,11 +24,11 @@ public abstract class DirectDamage extends Spell {
 
     public void applySpell() {
         this.cooldown = this.maxCooldown;
+        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
         target.register(this);
     }
 
     public void update() {
-        System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
         target.unregister(this);
     }
 }
