@@ -25,6 +25,7 @@ public abstract class DirectDamage extends Spell {
     public void applySpell() {
         this.cooldown = this.maxCooldown;
         System.out.println(getName() + " dealt " + (int) totalDamage + " damage");
+        damageDoneDuringSim += totalDamage;
         target.register(this);
     }
 

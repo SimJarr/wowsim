@@ -4,12 +4,11 @@ import static se.wowsim.classes.GeneralRules.GLOBAL_COOLDOWN;
 
 public abstract class Channeling extends DamageOverTime {
 
-    private int channelTime;
+    protected int channelTime;
 
     public Channeling(int rank) {
         super(rank);
         castTime = 0;
-        channelTime = this.getMaxDuration();
     }
 
     @Override
@@ -18,26 +17,30 @@ public abstract class Channeling extends DamageOverTime {
     }
 
     public void setChannelTime(int channelTime) {
-        this.totalDamage = (this.totalDamage / this.maxDuration) * channelTime;
         this.channelTime = channelTime;
-        this.maxDuration = channelTime;
-        this.duration = channelTime;
-        this.totalTickNumber = channelTime / tickInterval;
-
     }
 
-    public double calculateChannelingDamage(int timeLeft, int channelDuration) {
+    public int getChannelTime() {
+        return channelTime;
+    }
+
+    @Override
+    public void setTotalDamage(double totalDamage) {
+        this.totalDamage = ((totalDamage / (maxDuration / tickInterval)) * (channelTime / 10));
+    }
+
+
+    public double calculateChannelingDamage(int timeLeft) {
 
         if (cooldown > 0) return 0.0;
 
         double damage = 0;
 
-        int timeAfterCast = timeLeft > this.getMaxDuration() ? this.getMaxDuration() : timeLeft;
-        int stopLoop = timeAfterCast > channelDuration ? channelDuration : timeAfterCast;
+        int timeAfterCast = timeLeft > channelTime ? channelTime : timeLeft;
 
-        for (int i = 1; i <= stopLoop; i++) {
+        for (int i = 1; i <= timeAfterCast; i++) {
             if (i % this.getTickInterval() == 0) {
-                damage += this.getTotalDamage() / (this.getMaxDuration() / this.getTickInterval());
+                damage += this.getTotalDamage() / this.getTotalTickNumber();
             }
         }
         return damage;

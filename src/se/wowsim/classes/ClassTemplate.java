@@ -20,8 +20,9 @@ public abstract class ClassTemplate {
     private int spirit;
     private int currentDecisecond;
     private boolean recentlyHalted;
-    private List<String> usedSpells = new ArrayList<>();
-    private Map<Integer, Spell> usedSpellsWithTime = new HashMap<>();
+    private String nameWaitSpell;
+    private List<String> usedSpells;
+    private Map<Integer, Spell> usedSpellsWithTime;
     protected Map<String, Spell> spells;
     protected boolean busyCasting;
     protected double critChance;
@@ -42,10 +43,12 @@ public abstract class ClassTemplate {
         this.globalCooldown = GLOBAL_COOLDOWN;
         this.totalDamageDone = 0.0;
         this.nextSpell = null;
-        this.spells = new HashMap<>();
         this.intellect = intellect;
         this.level = level;
         this.recentlyHalted = false;
+        this.usedSpells = new ArrayList<>();
+        this.usedSpellsWithTime = new HashMap<>();
+        this.spells = new TreeMap<>(Comparator.reverseOrder());
     }
 
     public abstract void applyDamageIncrease(Spell spell, Target target);
@@ -98,6 +101,7 @@ public abstract class ClassTemplate {
             busyCasting = false;
         }
         if (busyCasting) {
+            target.notifyObservers();
             return;
         }
 
@@ -114,15 +118,20 @@ public abstract class ClassTemplate {
             }
 
             busyCasting = true;
+
+            target.notifyObservers();
             System.out.println("Casting " + nextSpell.getName());
             recentlyHalted = false;
             if (castProgress == 0) {
                 nextSpell.applySpell();
+                nextSpell.update();
                 applyDamageIncrease(nextSpell, target);
                 updateDamageValues(target);
                 nextSpell = null;
             }
+            return;
         }
+        target.notifyObservers();
     }
 
     private void decrementEverySpellsCooldown() {
@@ -151,14 +160,14 @@ public abstract class ClassTemplate {
             if (currentSpell instanceof DirectDamage) {
                 ((DirectDamage) currentSpell).setCritChance(this.myClass.calculateCritChance(level, intellect));
             }
-            System.out.println(currentSpell.getName());
-            System.out.println(currentSpell.getBaseDamage() + " : damage before amp");
+//            System.out.println(currentSpell.getName());
+//            System.out.println(currentSpell.getBaseDamage() + " : damage before amp");
             double baseDamage = currentSpell.getBaseDamage();
             double currentAmp = schoolAmp.get(currentSpell.getSchool());
             currentAmp *= target.getSchoolAmp(currentSpell.getSchool());
             currentSpell.setTotalDamage(baseDamage * currentAmp);
-            System.out.println(currentSpell.getTotalDamage() + " : damage after amp");
-            System.out.println(currentAmp + " : amp");
+//            System.out.println(currentSpell.getTotalDamage() + " : damage after amp");
+//            System.out.println(currentAmp + " : amp");
         }
     }
 
@@ -206,38 +215,12 @@ public abstract class ClassTemplate {
 
             Spell currentSpell = entry.getValue();
 
-            if (currentSpell instanceof Channeling) {
-
-                int tickInterval = ((Channeling) currentSpell).getTickInterval();
-                Integer timeChanneled;
-
-                for (int i = ((Channeling) currentSpell).getTotalTickNumber(); i >= 1; i--) {
-
-                    timeChanneled = i * tickInterval;
-
-                    try {
-
-                        Channeling currentSpellNewInstance = (Channeling) currentSpell.clone();
-                        currentSpellNewInstance.setChannelTime(timeChanneled);
-
-                        SpellAndValue spellAndValue = new SpellAndValue(currentSpellNewInstance, (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled);
-                        result.add(spellAndValue);
-                        //System.out.println(currentSpellNewInstance.getName() + " value: " + (currentSpellNewInstance.calculateDamageDealt(target, timeLeft, i * tickInterval)) / timeChanneled + " channelDuration: " + currentSpellNewInstance.getTimeTakenFromCaster());
-
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-
-                }
-
-
-            }
-
-            if (currentSpell instanceof DirectDamage || currentSpell == highestDamageDot) {
+            if (!(currentSpell instanceof DamageOverTime) || (currentSpell instanceof Channeling) || currentSpell == highestDamageDot) {
 
                 SpellAndValue spellAndValue = new SpellAndValue(currentSpell, (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
                 result.add(spellAndValue);
                 //System.out.println(currentSpell.getName() + " value: " + (currentSpell.calculateDamageDealt(target, timeLeft)) / currentSpell.getTimeTakenFromCaster());
+
             }
 
         }
@@ -252,7 +235,10 @@ public abstract class ClassTemplate {
         if (selectedSpellWithValue != null) {
             int waitTime = (worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft));
             if (waitTime > 0) {
-                System.out.println("Finding another spell with at most: " + waitTime + " castTime");
+                if (!recentlyHalted) {
+                    System.out.println("HAAAAAAAAAAAAAAALTING for: " + waitTime + " decisec, so we can put up: " + nameWaitSpell);
+                    System.out.println("Finding another spell with at most: " + waitTime + " castTime");
+                }
                 selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
                 if (selectedSpellWithValue == null && !recentlyHalted) {
                     recentlyHalted = true;
@@ -388,10 +374,10 @@ public abstract class ClassTemplate {
         if (lossFromSkippingDot > 0 || lossFromSKippingShortCooldownSpell > 0) {
 
             if ((haveDot) && (lossFromSkippingDot > lossFromSKippingShortCooldownSpell) && (dot.getDuration() - dot.getCastTime()) > 0) {
-                System.out.println("HAAAAAAAAAAAAAAALTAR for: " + (dot.getDuration() - dot.getCastTime()) + " decisec, so we can put up: " + dot.getName());
+                nameWaitSpell = dot.getName();
                 return (dot.getDuration() - dot.getCastTime());
             } else if (haveCooldownSpell && shortCooldownSpell.getCooldown() > 0) {
-                System.out.println("HAAAAAAAAAAAAAAALTAR for: " + shortCooldownSpell.getCooldown() + " decisec, so we can put up: " + shortCooldownSpell.getName());
+                nameWaitSpell = shortCooldownSpell.getName();
                 return shortCooldownSpell.getCooldown();
             }
         }

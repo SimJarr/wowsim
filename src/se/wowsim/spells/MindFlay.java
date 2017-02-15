@@ -14,7 +14,9 @@ public final class MindFlay extends Channeling {
         super(rank);
         this.spellClass = Classes.PRIEST;
         this.school = School.SHADOW;
-    }
+        this.channelTime = 30;
+        this.tickInterval = 10;
+}
 
     @Override
     public String getName() {
@@ -45,10 +47,9 @@ public final class MindFlay extends Channeling {
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
         }
-        this.totalDamage = baseDamage;
         this.maxDuration = 30;
-        this.duration = this.maxDuration;
-        this.tickInterval = 10;
+        this.duration = this.channelTime;
+        this.totalDamage = ((baseDamage / (maxDuration / tickInterval)) * (channelTime / 10));
         this.tickNumber = 1;
         this.totalTickNumber = duration / tickInterval;
     }

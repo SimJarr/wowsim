@@ -15,6 +15,7 @@ public abstract class Spell implements Observer, Cloneable {
     protected Classes spellClass;
     protected double totalDamage;
     protected double baseDamage;
+    protected double damageDoneDuringSim;
     protected Target target;
     protected School school;
 
@@ -97,30 +98,15 @@ public abstract class Spell implements Observer, Cloneable {
         if (this.getCastTime() > timeLeft) {
             return 0.0;
         }
-        if (this instanceof DamageOverTime) {
+        if (this instanceof DirectDamage) {
+            return this.getTotalDamage();
+        } else if (this instanceof Channeling) {
+            if (target.notAffected((DamageOverTime) this)) {
+                return ((Channeling) this).calculateChannelingDamage(timeLeft);
+            }
+        } else if (this instanceof DamageOverTime) {
             if (target.notAffected((DamageOverTime) this)) {
                 return ((DamageOverTime) this).calculateDotDamage(timeLeft);
-            }
-        } else if (this instanceof DirectDamage) {
-            return this.getTotalDamage();
-        }
-        return 0.0;
-    }
-
-    public double calculateDamageDealt(Target target, int timeLeft, int channelDuration) {
-        if (!(this instanceof Channeling)) {
-            return calculateDamageDealt(target, timeLeft);
-        }
-
-        if (cooldown > 0) {
-            return 0.0;
-        }
-        if (this.getCastTime() > timeLeft) {
-            return 0.0;
-        }
-        if (this instanceof Channeling) {
-            if (target.notAffected((DamageOverTime) this)) {
-                return ((Channeling) this).calculateChannelingDamage(timeLeft, channelDuration);
             }
         }
         return 0.0;

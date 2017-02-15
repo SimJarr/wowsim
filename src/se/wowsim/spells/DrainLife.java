@@ -14,6 +14,8 @@ public final class DrainLife extends Channeling {
         super(rank);
         this.spellClass = Classes.WARLOCK;
         this.school = School.SHADOW;
+        this.maxDuration = 50;
+        init();
     }
 
     @Override
@@ -46,7 +48,6 @@ public final class DrainLife extends Channeling {
                 throw new IllegalArgumentException("Given rank does not exist");
         }
         this.totalDamage = baseDamage;
-        this.maxDuration = 50;
         this.duration = this.maxDuration;
         this.tickInterval = 10;
         this.tickNumber = 1;

@@ -66,12 +66,14 @@ public abstract class DamageOverTime extends Spell {
             System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): "
                     + (int) (totalDamage / totalTickNumber) + " damage");
             tickNumber++;
+            damageDoneDuringSim += (totalDamage / totalTickNumber);
         }
 
         if (oneMoreTick) {
             oneMoreTick = false;
             System.out.println(getName() + " tick(" + totalTickNumber + "/" + totalTickNumber + "): "
                     + (int) (totalDamage / totalTickNumber) + " damage");
+            damageDoneDuringSim += (totalDamage / totalTickNumber);
         }
 
         if (duration == 0) {

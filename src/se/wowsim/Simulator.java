@@ -31,7 +31,6 @@ public abstract class Simulator {
         for (int i = 0; i <= simDuration; i++) {
             System.out.println("decisecond: " + i);
             classTemplate.currentActivity(target, simDuration - i);
-            target.notifyObservers();
         }
 
         totalDamageDone = classTemplate.getTotalDamageDone();
