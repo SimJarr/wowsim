@@ -9,13 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class TalentTreeSpecialization {
+abstract class TalentTreeSpecialization {
 
     protected Classes spellClass;
-    protected ClassTemplate classTemplate;
+    int[][] talentTree;
+    ClassTemplate classTemplate;
 
-    public TalentTreeSpecialization() {
+    TalentTreeSpecialization(ClassTemplate classTemplate, String talentFile) {
+        this.classTemplate = classTemplate;
+        this.talentTree = new TalentParser("talents", talentFile).getTalents();
+    }
 
+    abstract void applyTalents();
+
+    public ClassTemplate getMyClass() {
+        return classTemplate;
+    }
+
+    Spell getSpell(String spellName) {
+        return classTemplate.getSpells().get(spellName);
     }
 
     void reduceCooldown(Spell spell, int amount) {

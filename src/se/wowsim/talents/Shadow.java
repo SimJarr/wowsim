@@ -8,17 +8,20 @@ import se.wowsim.spells.types.Spell;
 
 public class Shadow extends TalentTreeSpecialization {
 
-    private int[][] talentTree;
-
     public Shadow(ClassTemplate classTemplate, String talentFile) {
-        this.classTemplate = classTemplate;
+        super(classTemplate, talentFile);
         this.spellClass = Classes.PRIEST;
-        this.talentTree = new TalentParser("talents", talentFile).getTalents();
-        runMethods();
+        applyTalents();
     }
 
-    public ClassTemplate getMyClass() {
-        return classTemplate;
+    @Override
+    void applyTalents() {
+        improvedShadowWordPain(talentTree[1][1]);
+        improvedMindBlast(talentTree[2][1]);
+        mindFlay(talentTree[2][2]);
+        shadowWeaving(talentTree[3][3]);
+        darkness(talentTree[5][2]);
+        shadowForm(talentTree[6][1]);
     }
 
     private void improvedMindBlast(int pointsSpent) {
@@ -53,18 +56,5 @@ public class Shadow extends TalentTreeSpecialization {
 
     private void shadowForm(int pointsSpent) {
         increaseSchoolDamage(Spell.School.SHADOW, pointsSpent * 0.15);
-    }
-
-    private Spell getSpell(String spellName) {
-        return classTemplate.getSpells().get(spellName);
-    }
-
-    private void runMethods() {
-        improvedShadowWordPain(talentTree[1][1]);
-        improvedMindBlast(talentTree[2][1]);
-        mindFlay(talentTree[2][2]);
-        shadowWeaving(talentTree[3][3]);
-        darkness(talentTree[5][2]);
-        shadowForm(talentTree[6][1]);
     }
 }
