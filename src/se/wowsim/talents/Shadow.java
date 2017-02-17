@@ -1,13 +1,10 @@
 package se.wowsim.talents;
 
-import se.wowsim.classes.ClassBuilder;
 import se.wowsim.classes.ClassTemplate;
 import se.wowsim.classes.Classes;
 import se.wowsim.classes.Priest;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.Spell;
-
-import java.util.Map;
 
 public class Shadow extends TalentTreeSpecialization {
 
@@ -41,7 +38,7 @@ public class Shadow extends TalentTreeSpecialization {
     }
 
     private void mindFlay(int pointsSpent) {
-        if (pointsSpent == 0) {
+        if (pointsSpent != 1) {
             unlearnSpell("Mind Flay");
         }
     }

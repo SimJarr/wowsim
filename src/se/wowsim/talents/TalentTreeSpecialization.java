@@ -5,6 +5,8 @@ import se.wowsim.classes.Classes;
 import se.wowsim.spells.types.DamageOverTime;
 import se.wowsim.spells.types.Spell;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class TalentTreeSpecialization {
@@ -29,7 +31,15 @@ public class TalentTreeSpecialization {
     }
 
     void unlearnSpell(String spell) {
-        classTemplate.getSpells().remove(spell);
+        List<String> keysToRemove = new ArrayList<>();
+        for (Map.Entry<String, Spell> entry : classTemplate.getSpells().entrySet()){
+            if (entry.getValue().getName().equals(spell)){
+                keysToRemove.add(entry.getKey());
+            }
+        }
+        for (String s : keysToRemove){
+            classTemplate.getSpells().remove(s);
+        }
     }
 
     void increaseSchoolDamage(Spell.School school, double amount) {
