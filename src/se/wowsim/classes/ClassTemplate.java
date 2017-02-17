@@ -111,9 +111,9 @@ public abstract class ClassTemplate {
             target.notifyObservers();
             System.out.println("Casting " + nextSpell.getName());
             usedSpells.add(nextSpell.getName());
-            if (nextSpell instanceof Channeling){
+            if (nextSpell instanceof Channeling) {
                 String lastEntry = usedSpells.get(usedSpells.size() - 1);
-                lastEntry += " " + ((Channeling)nextSpell).getChannelTime() / 10;
+                lastEntry += " " + ((Channeling) nextSpell).getChannelTime() / 10;
                 usedSpells.remove(usedSpells.size() - 1);
                 usedSpells.add(lastEntry);
             }
@@ -229,7 +229,29 @@ public abstract class ClassTemplate {
         SpellAndValue selectedSpellWithValue = pickHighestValueSpell(candidates);
 
         if (selectedSpellWithValue != null) {
-            int waitTime = (worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft));
+            int waitTime = worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft);
+
+            DamageOverTime dot = target.getNextDotTimeOut();
+            Spell shortCooldownSpell = getShortestCooldownSpell();
+            int downTimeDoT = 0;
+            int downTimeCooldownSpell = 0;
+
+            if (dot != null) {
+                downTimeDoT = downTimeIfCastNext(dot, selectedSpellWithValue.getSpell());
+            }
+            if (shortCooldownSpell != null) {
+                downTimeCooldownSpell = downTimeIfCastNext(shortCooldownSpell, selectedSpellWithValue.getSpell());
+            }
+
+            if (selectedSpellWithValue.getSpell() instanceof Channeling && (downTimeDoT > 0 || downTimeCooldownSpell > 0)){
+                System.out.println(selectedSpellWithValue.getSpell().getName() + " is a Channeling spell, trying to cast it for a shorter time");
+                int shortestDurationOrCooldown = (target.getNextDotTimeOut().getDuration() < getShortestCooldownSpell().getCooldown()) ? target.getNextDotTimeOut().getDuration() : getShortestCooldownSpell().getCooldown();
+                selectedSpellWithValue = pickHighestValueSpell(candidates, shortestDurationOrCooldown);
+                if(selectedSpellWithValue != null){
+                    waitTime = worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft);
+                    System.out.println(waitTime);
+                }
+            }
             if (waitTime > 0) {
                 if (!recentlyHalted) {
                     System.out.println("HAAAAAAAAAAAAAAALTING for: " + waitTime + " decisec, so we can put up: " + nameWaitSpell);
@@ -237,7 +259,7 @@ public abstract class ClassTemplate {
                 }
                 selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
                 if (selectedSpellWithValue == null) {
-                    if(!recentlyHalted){
+                    if (!recentlyHalted) {
                         recentlyHalted = true;
                         usedSpells.add("Halting " + waitTime + " decisec");
                     }
@@ -245,6 +267,7 @@ public abstract class ClassTemplate {
                 }
             }
 
+            assert selectedSpellWithValue != null;
             int animationStart = selectedSpellWithValue.getSpell().getCastTime();
             if (usedSpellsWithTime.get(currentDecisecond - 1 + animationStart) != null) {
                 animationStart++;
@@ -252,7 +275,7 @@ public abstract class ClassTemplate {
             usedSpellsWithTime.put(currentDecisecond - 1 + animationStart, selectedSpellWithValue.getSpell());
         }
 
-        if (selectedSpellWithValue == null){
+        if (selectedSpellWithValue == null) {
             return null;
         }
 
@@ -318,7 +341,7 @@ public abstract class ClassTemplate {
         double damageNextSpellWouldHaveDone;
         int downTimeNextSpell;
         double lossFromSkippingDot = 0;
-        double lossFromSKippingShortCooldownSpell = 0;
+        double lossFromSkippingShortCooldownSpell = 0;
 
         if (haveDot) {
 
@@ -353,10 +376,9 @@ public abstract class ClassTemplate {
                 damageShortCooldownWouldHaveDone = damageSpellWouldHaveDone(shortCooldownSpell, downTimeCooldownSpell, timeLeft);
                 damageNextSpellWouldHaveDone = damageSpellWouldHaveDone(nextCalculatedSpell, downTimeNextSpell, timeLeft);
 
-                lossFromSKippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
+                lossFromSkippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
 
                 if (false) {
-                    System.out.println();
                     System.out.println(shortCooldownSpell.getName() + " har lägst tid: " + shortCooldownSpell.getCooldown() + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + shortCooldownSpell.getName() + " vara nere i: " + downTimeCooldownSpell + " decisec");
@@ -366,9 +388,9 @@ public abstract class ClassTemplate {
             }
         }
 
-        if (lossFromSkippingDot > 0 || lossFromSKippingShortCooldownSpell > 0) {
+        if (lossFromSkippingDot > 0 || lossFromSkippingShortCooldownSpell > 0) {
 
-            if ((haveDot) && (lossFromSkippingDot > lossFromSKippingShortCooldownSpell) && (dot.getDuration() - dot.getCastTime()) > 0) {
+            if ((haveDot) && (lossFromSkippingDot > lossFromSkippingShortCooldownSpell) && (dot.getDuration() - dot.getCastTime()) > 0) {
                 nameWaitSpell = dot.getName();
                 return (dot.getDuration() - dot.getCastTime());
             } else if (haveCooldownSpell && shortCooldownSpell.getCooldown() > 0) {
@@ -424,11 +446,11 @@ public abstract class ClassTemplate {
             int timeTheDotCouldBeUp = (((DamageOverTime) spell).getMaxDuration() < timeLeft) ? ((DamageOverTime) spell).getMaxDuration() : timeLeft;
             result = (((DamageOverTime) spell).calculateDotDamage(timeLeft) / timeTheDotCouldBeUp) * downTime;
         } else {
-            if (spell.getCastTime() <= timeLeft)
-                result = ((spell.getTotalDamage()) / spell.getTimeTakenFromCaster()) * downTime;
+            if (spell.getCastTime() <= timeLeft) {
+                result = ((double)downTime / (spell.getMaxCooldown() + spell.getCastTime())) * spell.getTotalDamage();
+            }
         }
         result = (result < 0) ? 0 : result;
-        result = (result > spell.getTotalDamage()) ? spell.getTotalDamage() : result;
 
         return result;
     }

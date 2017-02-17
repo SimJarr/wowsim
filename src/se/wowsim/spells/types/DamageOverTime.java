@@ -56,13 +56,18 @@ public abstract class DamageOverTime extends Spell {
         if (duration == 0 && target.getObservers().contains(this)) {
             oneMoreTick = true;
         }
-        this.duration = this.maxDuration;
+        this.duration = this instanceof Channeling ? ((Channeling) this).channelTime : this.maxDuration;
         this.tickNumber = 1;
         target.register(this);
     }
 
     public void update() {
-        if ((duration % tickInterval == 0) && duration != maxDuration) {
+        boolean letFirstTickOfChannel = true;
+        if (this instanceof Channeling && duration == ((Channeling)this).channelTime){
+            letFirstTickOfChannel = false;
+        }
+
+        if (duration % tickInterval == 0 && duration != maxDuration && letFirstTickOfChannel) {
             System.out.println(getName() + " tick(" + tickNumber + "/" + totalTickNumber + "): "
                     + (int) (totalDamage / totalTickNumber) + " damage");
             tickNumber++;
