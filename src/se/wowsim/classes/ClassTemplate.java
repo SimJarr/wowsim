@@ -249,7 +249,6 @@ public abstract class ClassTemplate {
                 selectedSpellWithValue = pickHighestValueSpell(candidates, shortestDurationOrCooldown);
                 if(selectedSpellWithValue != null){
                     waitTime = worthDoingNothing(target, selectedSpellWithValue.getSpell(), timeLeft);
-                    System.out.println(waitTime);
                 }
             }
             if (waitTime > 0) {
