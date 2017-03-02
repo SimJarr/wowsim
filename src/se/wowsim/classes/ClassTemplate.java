@@ -243,9 +243,6 @@ public abstract class ClassTemplate {
                     double secondDamageDifference = secondWaitTimeAndDamageDiff.getDamageDiff();
                     String secondNameWaitSpell = secondWaitTimeAndDamageDiff.getSpellName();
 
-                    System.out.println("DAMAGEDIFF1: " + damageDifference);
-                    System.out.println("DAMAGEDIFF2: " + secondDamageDifference);
-
                     if (secondDamageDifference < damageDifference) {
                         waitTime = secondWaitTime;
                         nameWaitSpell = secondNameWaitSpell;
@@ -255,13 +252,13 @@ public abstract class ClassTemplate {
             }
             if (waitTime > 0 && damageDifference > 0) {
                 if (!recentlyHalted) {
-                    System.out.println("HAAAAAAAAAAAAAAALTING for: " + waitTime + " decisec, so we can put up: " + nameWaitSpell);
                     System.out.println("Finding another spell with at most: " + waitTime + " castTime");
                 }
                 selectedSpellWithValue = pickHighestValueSpell(candidates, waitTime);
                 if (selectedSpellWithValue == null) {
                     if (!recentlyHalted) {
                         recentlyHalted = true;
+                        System.out.println("HAAAAAAAAAAAAAAALTING for: " + waitTime + " decisec, so we can put up: " + nameWaitSpell);
                         usedSpells.add("Halting " + waitTime + " decisec");
                     }
                     return null;
@@ -401,7 +398,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingDot = damageDotWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (true) {
+                if (false) {
                     System.out.println(dot.getName() + " har lägst tid: " + (dot.getDuration() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + dot.getName() + " vara nere i: " + downTimeDoT + " decisec");
@@ -443,7 +440,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (true) {
+                if (false) {
                     System.out.println(shortCooldownSpell.getName() + " har lägst tid: " + (shortCooldownSpell.getCooldown() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + shortCooldownSpell.getName() + " vara nere i: " + downTimeCooldownSpell + " decisec");
