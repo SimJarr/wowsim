@@ -283,6 +283,7 @@ public abstract class ClassTemplate {
 
         SpellAndValue selectedSpellWithValue = null;
         List<SpellAndValue> cooldownSpells = new ArrayList<>();
+        List<SpellAndValue> dotSpells = new ArrayList<>();
 
         for (SpellAndValue spellAndValue : candidates) {
 
@@ -300,6 +301,10 @@ public abstract class ClassTemplate {
                 cooldownSpells.add(spellAndValue);
             }
 
+            if (spellAndValue.getSpell() instanceof DamageOverTime && !(spellAndValue.getSpell() instanceof Channeling)){
+                dotSpells.add(spellAndValue);
+            }
+
         }
 
         if (selectedSpellWithValue != null) {
@@ -313,7 +318,28 @@ public abstract class ClassTemplate {
                     affectedSpellAndValue.setValue(affectedSpellAndValue.getValue()*2);
                     if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()){
                         selectedSpellWithValue = affectedSpellAndValue;
-                        System.out.println(affectedSpellAndValue.getSpell().getName() + " NEW value: " + affectedSpellAndValue.getValue());
+                        //System.out.println(affectedSpellAndValue.getSpell().getName() + " NEW value: " + affectedSpellAndValue.getValue());
+                    }
+                }
+            }
+        }
+
+        if (selectedSpellWithValue != null) {
+            for (SpellAndValue spellAndValue : dotSpells) {
+                Spell currentSpell = spellAndValue.getSpell();
+                int currentSpellTimeTaken = currentSpell.getTimeTakenFromCaster();
+                int possibleTicksBefore = (timeLeft - currentSpellTimeTaken) / ((DamageOverTime)currentSpell).getTickInterval();
+                int possibleTicksAfter = (timeLeft - currentSpellTimeTaken - selectedSpellWithValue.getSpell().getTimeTakenFromCaster()) / ((DamageOverTime)currentSpell).getTickInterval();
+                if (possibleTicksAfter < possibleTicksBefore){
+                    int lessNumberOfTicks = possibleTicksBefore - possibleTicksAfter;
+                    SpellAndValue affectedSpellAndValue = candidates.get(candidates.indexOf(spellAndValue));
+                    double damagePerTick = affectedSpellAndValue.getSpell().getTotalDamage() / ((DamageOverTime)affectedSpellAndValue.getSpell()).getTotalTickNumber();
+                    double openedValue = affectedSpellAndValue.getValue()*affectedSpellAndValue.getSpell().getTimeTakenFromCaster();
+                    double newValue = (openedValue + (damagePerTick * lessNumberOfTicks)) / affectedSpellAndValue.getSpell().getTimeTakenFromCaster();
+                    affectedSpellAndValue.setValue(newValue);
+                    if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()){
+                        selectedSpellWithValue = affectedSpellAndValue;
+                        //System.out.println(affectedSpellAndValue.getSpell().getName() + " NEW value: " + affectedSpellAndValue.getValue());
                     }
                 }
             }
@@ -399,7 +425,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingDot = damageDotWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (false) {
+                if (true) {
                     System.out.println(dot.getName() + " har lägst tid: " + (dot.getDuration() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + dot.getName() + " vara nere i: " + downTimeDoT + " decisec");
@@ -411,7 +437,7 @@ public abstract class ClassTemplate {
                 if (nextCalculatedSpell instanceof Channeling) {
                     halfTickInterval = ((Channeling) nextCalculatedSpell).getTickInterval() / 2;
                 }
-                if (downTimeDoT < 0 && ((downTimeDoT > (dot.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeDoT == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
+                if (downTimeDoT < 0 && ((downTimeDoT >= (nextCalculatedSpell.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeDoT == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
                     System.out.println("looking into the future for: " + (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture) + " decisec");
                     WaitTimeAndDamageDiff waitTimeAndDamageDiff = worthDoingNothing(target, nextCalculatedSpell, candidates, timeLeft, (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture));
                     if (waitTimeAndDamageDiff.getDamageDiff() > 0){
@@ -444,7 +470,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (false) {
+                if (true) {
                     System.out.println(shortCooldownSpell.getName() + " har lägst tid: " + (shortCooldownSpell.getCooldown() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + shortCooldownSpell.getName() + " vara nere i: " + downTimeCooldownSpell + " decisec");
@@ -457,7 +483,7 @@ public abstract class ClassTemplate {
                     halfTickInterval = ((Channeling) nextCalculatedSpell).getTickInterval() / 2;
                 }
 
-                if (downTimeCooldownSpell < 0 && ((downTimeCooldownSpell > (shortCooldownSpell.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeCooldownSpell == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
+                if (downTimeCooldownSpell < 0 && ((downTimeCooldownSpell >= (nextCalculatedSpell.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeCooldownSpell == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
                     System.out.println("looking into the future for: " + (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture) + " decisec");
                     WaitTimeAndDamageDiff waitTimeAndDamageDiff = worthDoingNothing(target, nextCalculatedSpell, candidates, timeLeft, (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture));
                     if (waitTimeAndDamageDiff.getDamageDiff() > 0){
