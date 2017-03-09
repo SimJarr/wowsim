@@ -24,7 +24,6 @@ public final class Warlock extends ClassTemplate {
     @Override
     public void applyDamageIncrease(Spell spell, Target target) {
         //TODO damage increases for warlock
-        System.out.println("warlock");
     }
 
 }
