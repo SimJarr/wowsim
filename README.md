@@ -1,4 +1,4 @@
-# wowsim
+# Wowsim
 A sparetime project for simulating our implementation of players with some spells of the Classic World of Warcraft
 
 Example of a typical spell (Corruption):
@@ -7,7 +7,7 @@ Example of a typical spell (Corruption):
 
 And another spell (Shadowbolt):
 
-![alt tag](http://i.imgur.com/gIiTpT2.png)
+![alt tag](http://i.imgur.com/rFkPlpo.png)
 
 
 Example printout of a simulation with these two Spells done by a level 36 Warlock over 100 deciseconds (10 seconds).
