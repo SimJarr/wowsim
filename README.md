@@ -10,7 +10,7 @@ And another spell (Shadowbolt):
 ![alt tag](http://i.imgur.com/gIiTpT2.png)
 
 
-Example printout of a simulation with these two Spells over 100 deciseconds (10 seconds)
+Example printout of a simulation with these two Spells done by a level 36 Warlock over 100 deciseconds (10 seconds).
 ```
 decisecond: 0
 Casting Corruption
