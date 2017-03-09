@@ -30,10 +30,20 @@ abstract class TalentTreeSpecialization {
         return classTemplate.getSpells().get(spellName);
     }
 
+    /**
+     * reduces the maxCooldown of a Spell
+     * @param spell the Spell to be affected
+     * @param amount how much to reduce the maxCooldown in deciseconds
+     */
     void reduceCooldown(Spell spell, int amount) {
         spell.setMaxCooldown(spell.getMaxCooldown() - amount);
     }
 
+    /**
+     * increases the duration of a DamageOverTime
+     * @param dot the DamageOverTime
+     * @param amount how much to increase the duration in deciseconds
+     */
     void increaseDuration(DamageOverTime dot, int amount) {
         double newBaseDamage = dot.getBaseDamage() + ((dot.getBaseDamage() / dot.getTotalTickNumber()) * (amount / dot.getTickInterval()));
         dot.setBaseDamage(newBaseDamage);
@@ -42,6 +52,11 @@ abstract class TalentTreeSpecialization {
         dot.setTotalTickNumber(dot.getMaxDuration() / dot.getTickInterval());
     }
 
+    /**
+     * some spells are only acquired through talent points,
+     * this method will unlearn a Spell from a Class if you dont have the talent point required
+     * @param spell the Spell to unlearn
+     */
     void unlearnSpell(String spell) {
         List<String> keysToRemove = new ArrayList<>();
         for (Map.Entry<String, Spell> entry : classTemplate.getSpells().entrySet()) {
@@ -54,6 +69,11 @@ abstract class TalentTreeSpecialization {
         }
     }
 
+    /**
+     * increases damage in a Spell School
+     * @param school the School to be increased
+     * @param amount how much to increase the damage, in the form of a double multiplier
+     */
     void increaseSchoolDamage(Spell.School school, double amount) {
         for (Map.Entry<Spell.School, Double> entry : classTemplate.getSchoolAmp().entrySet()) {
             if (entry.getKey() == school) {

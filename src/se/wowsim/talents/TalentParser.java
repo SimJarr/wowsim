@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * reads a file of a talent tree and saves them into an array
+ */
 public final class TalentParser {
 
     private int[][] talents;
