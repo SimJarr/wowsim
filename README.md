@@ -3,11 +3,11 @@ A sparetime project for simulating our implementation of players with some spell
 
 Example of a typical spell (Corruption):
 
-![alt tag](http://imgur.com/OxgcELt.png)
+![alt tag](http://i.imgur.com/OxgcELt.png)
 
 And another spell (Shadowbolt):
 
-![alt tag](http://imgur.com/a/gIiTpT2.png)
+![alt tag](http://i.imgur.com/gIiTpT2.png)
 
 
 Example printout of a simulation with these two Spells over 100 deciseconds (10 seconds)
