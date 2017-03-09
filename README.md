@@ -2,10 +2,12 @@
 A sparetime project for simulating our implementation of players with some spells of the Classic World of Warcraft
 
 Example of a typical spell (Corruption):
+
 ![alt tag](http://imgur.com/OxgcELt.png)
 
 And another spell (Shadowbolt):
-![alt tag](http://imgur.com/a/J1TCI.png)
+
+![alt tag](http://imgur.com/a/gIiTpT2.png)
 
 
 Example printout of a simulation with these two Spells over 100 deciseconds (10 seconds)
