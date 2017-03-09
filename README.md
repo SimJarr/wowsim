@@ -10,7 +10,7 @@ And another spell (Shadowbolt):
 ![alt tag](http://i.imgur.com/rFkPlpo.png)
 
 
-Example printout of a simulation with these two Spells done by a level 36 Warlock over 100 deciseconds (10 seconds).
+Example printout of a simulation with these two Spells done by a level 36 Warlock over 200 deciseconds (20 seconds).
 ```
 decisecond: 0
 Casting Corruption
@@ -19,15 +19,7 @@ decisecond: 2
 decisecond: 3
 decisecond: 4
 decisecond: 5
-decisecond: 6
-decisecond: 7
-decisecond: 8
-decisecond: 9
-decisecond: 10
-decisecond: 11
-decisecond: 12
-decisecond: 13
-decisecond: 14
+..
 decisecond: 15
 decisecond: 16
 decisecond: 17
@@ -42,6 +34,7 @@ decisecond: 23
 decisecond: 24
 decisecond: 25
 ..
+decisecond: 45
 decisecond: 46
 decisecond: 47
 decisecond: 48
@@ -56,7 +49,6 @@ decisecond: 53
 decisecond: 54
 decisecond: 55
 ..
-decisecond: 74
 decisecond: 75
 decisecond: 76
 decisecond: 77
@@ -65,30 +57,72 @@ decisecond: 79
 decisecond: 80
 Shadowbolt dealt 217 damage
 Corruption tick(2/6): 54 damage
+Casting Shadowbolt
 decisecond: 81
 decisecond: 82
 decisecond: 83
 decisecond: 84
 decisecond: 85
-decisecond: 86
-decisecond: 87
-decisecond: 88
-decisecond: 89
-decisecond: 90
-decisecond: 91
-decisecond: 92
-decisecond: 93
-decisecond: 94
-decisecond: 95
-decisecond: 96
-decisecond: 97
-decisecond: 98
-decisecond: 99
-decisecond: 100
-Total Damage Done: 543.0
-Dps: 54.3
-[Corruption, Shadowbolt*2]
+..
+decisecond: 105
+decisecond: 106
+decisecond: 107
+decisecond: 108
+decisecond: 109
+decisecond: 110
+Shadowbolt dealt 217 damage
+Corruption tick(3/6): 54 damage
+Casting Shadowbolt
+decisecond: 111
+decisecond: 112
+decisecond: 113
+decisecond: 114
+decisecond: 115
+..
+decisecond: 135
+decisecond: 136
+decisecond: 137
+decisecond: 138
+decisecond: 139
+decisecond: 140
+Shadowbolt dealt 217 damage
+Corruption tick(4/6): 54 damage
+Casting Shadowbolt
+decisecond: 141
+decisecond: 142
+decisecond: 143
+decisecond: 144
+decisecond: 145
+..
+decisecond: 165
+decisecond: 166
+decisecond: 167
+decisecond: 168
+decisecond: 169
+decisecond: 170
+Shadowbolt dealt 217 damage
+Corruption tick(5/6): 54 damage
+Casting Shadowbolt
+decisecond: 171
+decisecond: 172
+decisecond: 173
+decisecond: 174
+decisecond: 175
+..
+decisecond: 195
+decisecond: 196
+decisecond: 197
+decisecond: 198
+decisecond: 199
+decisecond: 200
+Shadowbolt dealt 217 damage
+Corruption tick(6/6): 54 damage
+Corruption faded
+Total Damage Done: 1629.0
+Dps: 81.44999999999999
+[Corruption, Shadowbolt*6]
 ```
 
-With this you can figure out what the best way to use your abilities are.
-The example shows that you should do one Corruption and then Shadowbolt twice.
+This program can figure out the best way to use your abilities.
+
+The example shows that you should do one Corruption and then Shadowbolt six times.
