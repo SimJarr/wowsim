@@ -44,19 +44,19 @@ abstract class TalentTreeSpecialization {
 
     void unlearnSpell(String spell) {
         List<String> keysToRemove = new ArrayList<>();
-        for (Map.Entry<String, Spell> entry : classTemplate.getSpells().entrySet()){
-            if (entry.getValue().getName().equals(spell)){
+        for (Map.Entry<String, Spell> entry : classTemplate.getSpells().entrySet()) {
+            if (entry.getValue().getName().equals(spell)) {
                 keysToRemove.add(entry.getKey());
             }
         }
-        for (String s : keysToRemove){
+        for (String s : keysToRemove) {
             classTemplate.getSpells().remove(s);
         }
     }
 
     void increaseSchoolDamage(Spell.School school, double amount) {
-        for(Map.Entry<Spell.School, Double> entry : classTemplate.getSchoolAmp().entrySet()) {
-            if(entry.getKey() == school) {
+        for (Map.Entry<Spell.School, Double> entry : classTemplate.getSchoolAmp().entrySet()) {
+            if (entry.getKey() == school) {
                 classTemplate.getSchoolAmp().put(entry.getKey(), entry.getValue() + amount);
             }
         }

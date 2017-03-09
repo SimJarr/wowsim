@@ -63,7 +63,7 @@ public abstract class DamageOverTime extends Spell {
 
     public void update() {
         boolean letFirstTickOfChannel = true;
-        if (this instanceof Channeling && duration == ((Channeling)this).channelTime){
+        if (this instanceof Channeling && duration == ((Channeling) this).channelTime) {
             letFirstTickOfChannel = false;
         }
 

@@ -85,7 +85,7 @@ public abstract class Spell implements Observer, Cloneable {
 
     public abstract String getName();
 
-    public Spell clone() throws CloneNotSupportedException{
+    public Spell clone() throws CloneNotSupportedException {
         return (Spell) super.clone();
     }
 

@@ -19,7 +19,7 @@ public class Target implements Subject {
     }
 
     public void register(DamageIncrease n) {
-        if(damageIncreases.contains(n)) {
+        if (damageIncreases.contains(n)) {
             n.incrementStacks();
             System.out.println(n.getName() + " reapplied to target, current stacks: " + n.getCurrentStacks());
         } else {
@@ -36,8 +36,8 @@ public class Target implements Subject {
 
     public double getSchoolAmp(Spell.School school) {
         double amp = 1.0;
-        for(DamageIncrease d : damageIncreases) {
-            if(d.school == school)
+        for (DamageIncrease d : damageIncreases) {
+            if (d.school == school)
                 amp += d.getCurrentAmp();
         }
         return amp;
@@ -62,7 +62,7 @@ public class Target implements Subject {
         for (Observer o : observers) {
             o.update();
         }
-        for(DamageIncrease d : damageIncreases) {
+        for (DamageIncrease d : damageIncreases) {
             d.update(this);
         }
     }

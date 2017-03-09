@@ -23,13 +23,13 @@ public abstract class DamageIncrease {
 
     public void decrementDuration(Target target) {
         currentDuration--;
-        if(currentDuration == 0) {
+        if (currentDuration == 0) {
             target.unregister(this);
         }
     }
 
     public void incrementStacks() {
-        if(currentStacks < stacks) {
+        if (currentStacks < stacks) {
             currentStacks++;
         }
         currentDuration = duration;

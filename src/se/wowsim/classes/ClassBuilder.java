@@ -1,6 +1,5 @@
 package se.wowsim.classes;
 
-import se.wowsim.SpellAndValue;
 import se.wowsim.spells.*;
 import se.wowsim.spells.types.Channeling;
 import se.wowsim.spells.types.Spell;
@@ -9,7 +8,6 @@ import se.wowsim.talents.Shadow;
 import java.lang.reflect.Constructor;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class ClassBuilder {
@@ -47,7 +45,7 @@ public class ClassBuilder {
     private void addSpellsToMyClass(ClassTemplate classTemplate) {
         for (Spell spell : allSpells) {
             if (spell.getSpellClass() == myClass) {
-                if (spell instanceof Channeling){
+                if (spell instanceof Channeling) {
                     cloneChannelingSpell(classTemplate, spell);
                 } else {
                     classTemplate.addSpell(spell.getName(), spell);
@@ -57,7 +55,7 @@ public class ClassBuilder {
         }
     }
 
-    private void cloneChannelingSpell(ClassTemplate classTemplate, Spell spell){
+    private void cloneChannelingSpell(ClassTemplate classTemplate, Spell spell) {
         int tickInterval = ((Channeling) spell).getTickInterval();
         int totalTickNumber = ((Channeling) spell).getChannelTime() / tickInterval;
         Integer timeChanneled;

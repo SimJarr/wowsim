@@ -297,11 +297,11 @@ public abstract class ClassTemplate {
                 }
             }
 
-            if (spellAndValue.getSpell().getMaxCooldown() > 0){
+            if (spellAndValue.getSpell().getMaxCooldown() > 0) {
                 cooldownSpells.add(spellAndValue);
             }
 
-            if (spellAndValue.getSpell() instanceof DamageOverTime && !(spellAndValue.getSpell() instanceof Channeling)){
+            if (spellAndValue.getSpell() instanceof DamageOverTime && !(spellAndValue.getSpell() instanceof Channeling)) {
                 dotSpells.add(spellAndValue);
             }
 
@@ -313,10 +313,10 @@ public abstract class ClassTemplate {
                 int currentSpellTimeTaken = currentSpell.getTimeTakenFromCaster();
                 int possibleUsesBefore = (timeLeft - currentSpellTimeTaken) / (currentSpellTimeTaken + currentSpell.getMaxCooldown());
                 int possibleUsesAfter = (timeLeft - currentSpellTimeTaken - selectedSpellWithValue.getSpell().getTimeTakenFromCaster()) / (currentSpellTimeTaken + currentSpell.getMaxCooldown());
-                if (possibleUsesAfter < possibleUsesBefore){
+                if (possibleUsesAfter < possibleUsesBefore) {
                     SpellAndValue affectedSpellAndValue = candidates.get(candidates.indexOf(spellAndValue));
-                    affectedSpellAndValue.setValue(affectedSpellAndValue.getValue()*2);
-                    if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()){
+                    affectedSpellAndValue.setValue(affectedSpellAndValue.getValue() * 2);
+                    if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()) {
                         selectedSpellWithValue = affectedSpellAndValue;
                         //System.out.println(affectedSpellAndValue.getSpell().getName() + " NEW value: " + affectedSpellAndValue.getValue());
                     }
@@ -328,16 +328,16 @@ public abstract class ClassTemplate {
             for (SpellAndValue spellAndValue : dotSpells) {
                 Spell currentSpell = spellAndValue.getSpell();
                 int currentSpellTimeTaken = currentSpell.getTimeTakenFromCaster();
-                int possibleTicksBefore = (timeLeft - currentSpellTimeTaken) / ((DamageOverTime)currentSpell).getTickInterval();
-                int possibleTicksAfter = (timeLeft - currentSpellTimeTaken - selectedSpellWithValue.getSpell().getTimeTakenFromCaster()) / ((DamageOverTime)currentSpell).getTickInterval();
-                if (possibleTicksAfter < possibleTicksBefore){
+                int possibleTicksBefore = (timeLeft - currentSpellTimeTaken) / ((DamageOverTime) currentSpell).getTickInterval();
+                int possibleTicksAfter = (timeLeft - currentSpellTimeTaken - selectedSpellWithValue.getSpell().getTimeTakenFromCaster()) / ((DamageOverTime) currentSpell).getTickInterval();
+                if (possibleTicksAfter < possibleTicksBefore) {
                     int lessNumberOfTicks = possibleTicksBefore - possibleTicksAfter;
                     SpellAndValue affectedSpellAndValue = candidates.get(candidates.indexOf(spellAndValue));
-                    double damagePerTick = affectedSpellAndValue.getSpell().getTotalDamage() / ((DamageOverTime)affectedSpellAndValue.getSpell()).getTotalTickNumber();
-                    double openedValue = affectedSpellAndValue.getValue()*affectedSpellAndValue.getSpell().getTimeTakenFromCaster();
+                    double damagePerTick = affectedSpellAndValue.getSpell().getTotalDamage() / ((DamageOverTime) affectedSpellAndValue.getSpell()).getTotalTickNumber();
+                    double openedValue = affectedSpellAndValue.getValue() * affectedSpellAndValue.getSpell().getTimeTakenFromCaster();
                     double newValue = (openedValue + (damagePerTick * lessNumberOfTicks)) / affectedSpellAndValue.getSpell().getTimeTakenFromCaster();
                     affectedSpellAndValue.setValue(newValue);
-                    if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()){
+                    if (affectedSpellAndValue.getValue() > selectedSpellWithValue.getValue()) {
                         selectedSpellWithValue = affectedSpellAndValue;
                         //System.out.println(affectedSpellAndValue.getSpell().getName() + " NEW value: " + affectedSpellAndValue.getValue());
                     }
@@ -440,7 +440,7 @@ public abstract class ClassTemplate {
                 if (downTimeDoT < 0 && ((downTimeDoT >= (nextCalculatedSpell.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeDoT == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
                     System.out.println("looking into the future for: " + (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture) + " decisec");
                     WaitTimeAndDamageDiff waitTimeAndDamageDiff = worthDoingNothing(target, nextCalculatedSpell, candidates, timeLeft, (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture));
-                    if (waitTimeAndDamageDiff.getDamageDiff() > 0){
+                    if (waitTimeAndDamageDiff.getDamageDiff() > 0) {
                         return new WaitTimeAndDamageDiff(dot.getDuration() - dot.getCastTime(), lossFromSkippingDot, dot.getName());
                     }
                     return new WaitTimeAndDamageDiff(dot.getDuration() - dot.getCastTime(), lossFromSkippingDot + waitTimeAndDamageDiff.getDamageDiff(), dot.getName());
@@ -486,7 +486,7 @@ public abstract class ClassTemplate {
                 if (downTimeCooldownSpell < 0 && ((downTimeCooldownSpell >= (nextCalculatedSpell.getTimeTakenFromCaster() - halfTickInterval) * -1) || (downTimeCooldownSpell == nextCalculatedSpell.getTimeTakenFromCaster() * -1))) {
                     System.out.println("looking into the future for: " + (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture) + " decisec");
                     WaitTimeAndDamageDiff waitTimeAndDamageDiff = worthDoingNothing(target, nextCalculatedSpell, candidates, timeLeft, (nextCalculatedSpell.getTimeTakenFromCaster() + timeIntoFuture));
-                    if (waitTimeAndDamageDiff.getDamageDiff() > 0){
+                    if (waitTimeAndDamageDiff.getDamageDiff() > 0) {
                         return new WaitTimeAndDamageDiff(shortCooldownSpell.getCooldown(), lossFromSkippingShortCooldownSpell, shortCooldownSpell.getName());
                     }
                     return new WaitTimeAndDamageDiff(shortCooldownSpell.getCooldown(), lossFromSkippingShortCooldownSpell + waitTimeAndDamageDiff.getDamageDiff(), shortCooldownSpell.getName());

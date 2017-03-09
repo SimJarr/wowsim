@@ -24,7 +24,7 @@ public class WarlockAnimation extends AnimatedEntity {
         try {
             this.image = ImageIO.read(new File("src/images/warlock.png"));
             this.currentImage = image;
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("Cannot find file");
         }
     }

@@ -22,7 +22,7 @@ public class TargetDummyAnimation extends AnimatedEntity {
         this.animationDone = false;
         try {
             this.image = ImageIO.read(new File("src/images/targetDummy.png"));
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("Cannot find file");
         }
     }

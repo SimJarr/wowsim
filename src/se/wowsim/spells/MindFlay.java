@@ -16,7 +16,7 @@ public final class MindFlay extends Channeling {
         this.school = School.SHADOW;
         this.channelTime = 30;
         this.tickInterval = 10;
-}
+    }
 
     @Override
     public String getName() {

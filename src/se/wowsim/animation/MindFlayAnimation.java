@@ -34,7 +34,7 @@ public class MindFlayAnimation extends AnimatedEntity {
 
     @Override
     public void draw(Graphics g) {
-        if(flipImage){
+        if (flipImage) {
             g.drawImage(image, x, y, image.getWidth() / 3, image.getHeight() / 4, null);
         } else {
             g.drawImage(image2, x, y, image.getWidth() / 3, image.getHeight() / 4, null);

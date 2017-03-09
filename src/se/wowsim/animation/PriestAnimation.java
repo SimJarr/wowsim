@@ -82,7 +82,7 @@ public class PriestAnimation extends AnimatedEntity {
             timeOfNextAnimation = calcTimeOfNextAnimation(currentDecisec);
         }
 
-        if (previousTimeOfAnimation == timeOfNextAnimation - 1){
+        if (previousTimeOfAnimation == timeOfNextAnimation - 1) {
             offsetByOne = true;
         }
         previousTimeOfAnimation = timeOfNextAnimation;
@@ -91,7 +91,7 @@ public class PriestAnimation extends AnimatedEntity {
             state = States.CHANNELING;
             busyCasting = true;
             if (offsetByOne) {
-                waitTime = actualSpellsUsed.get(timeOfNextAnimation).getTimeTakenFromCaster()-1;
+                waitTime = actualSpellsUsed.get(timeOfNextAnimation).getTimeTakenFromCaster() - 1;
                 offsetByOne = false;
             } else {
                 waitTime = actualSpellsUsed.get(timeOfNextAnimation).getTimeTakenFromCaster();
@@ -143,7 +143,7 @@ public class PriestAnimation extends AnimatedEntity {
         return "";
     }
 
-    private enum States{
+    private enum States {
         IDLE,
         ENDCAST,
         CHANNELING,

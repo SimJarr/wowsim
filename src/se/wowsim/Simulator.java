@@ -1,9 +1,7 @@
 package se.wowsim;
 
-import se.wowsim.classes.ClassTemplate;
 import se.wowsim.animation.Animation;
-import se.wowsim.spells.Corruption;
-import se.wowsim.spells.Shadowbolt;
+import se.wowsim.classes.ClassTemplate;
 import se.wowsim.spells.types.Spell;
 
 import java.awt.*;
@@ -54,11 +52,11 @@ public abstract class Simulator {
 
     }
 
-    private static double gatherEverySpellsDamageDone(ClassTemplate classTemplate){
+    private static double gatherEverySpellsDamageDone(ClassTemplate classTemplate) {
         Map<String, Spell> spell = classTemplate.getSpells();
         double result = 0.0;
 
-        for (Map.Entry<String, Spell> entry : spell.entrySet()){
+        for (Map.Entry<String, Spell> entry : spell.entrySet()) {
             Spell currentSpell = entry.getValue();
             result += currentSpell.getDamageDoneDuringSim();
         }
