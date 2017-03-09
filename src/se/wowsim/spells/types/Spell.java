@@ -89,12 +89,22 @@ public abstract class Spell implements Observer, Cloneable {
         return (Spell) super.clone();
     }
 
+    /**
+     * reduce the cooldown of current Spell by one decisecond
+     */
     public void decrementCooldown() {
         if (cooldown > 0) {
             cooldown--;
         }
     }
 
+    /**
+     * calculates the damage a Spell will do given a target and a time
+     * will also keep in mind what type of Spell it is and address accordingly
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @return damage the Channeling Spell will do
+     */
     public double calculateDamageDealt(Target target, int timeLeft) {
         if (cooldown > 0) {
             return 0.0;

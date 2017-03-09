@@ -23,6 +23,10 @@ public final class MindFlay extends Channeling {
         return "Mind Flay";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         switch (rank) {

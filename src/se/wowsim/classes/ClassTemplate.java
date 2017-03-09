@@ -425,7 +425,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingDot = damageDotWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (true) {
+                if (false) {
                     System.out.println(dot.getName() + " har lägst tid: " + (dot.getDuration() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + dot.getName() + " vara nere i: " + downTimeDoT + " decisec");
@@ -470,7 +470,7 @@ public abstract class ClassTemplate {
 
                 lossFromSkippingShortCooldownSpell = damageShortCooldownWouldHaveDone - damageNextSpellWouldHaveDone;
 
-                if (true) {
+                if (false) {
                     System.out.println(shortCooldownSpell.getName() + " har lägst tid: " + (shortCooldownSpell.getCooldown() - timeIntoFuture) + " decisec");
                     System.out.println("om vi castar: " + nextCalculatedSpell.getName());
                     System.out.println("då skulle " + shortCooldownSpell.getName() + " vara nere i: " + downTimeCooldownSpell + " decisec");

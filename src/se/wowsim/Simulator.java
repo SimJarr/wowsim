@@ -18,6 +18,13 @@ public abstract class Simulator {
     private Simulator() {
     }
 
+    /**
+     * Simulates a class with a target over a given time
+     * Will print to the console.
+     * @param classTemplate the current class
+     * @param target the target
+     * @param simDuration the simulation duration
+     */
     public static void simulate(ClassTemplate classTemplate, Target target, int simDuration) {
 
         double totalDamageDone;
@@ -42,6 +49,9 @@ public abstract class Simulator {
 
     }
 
+    /**
+     * for a small animation after a simulation if you wish
+     */
     public static void animate() {
 
         EventQueue.invokeLater(new Runnable() {

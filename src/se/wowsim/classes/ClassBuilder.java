@@ -10,6 +10,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Class used to create a class instance.
+ * Example usage: Warlock warlock = (Warlock) new ClassBuilder(Classes.WARLOCK, 36, 127).getClassInstance();
+ */
 public class ClassBuilder {
 
     private Classes myClass;
@@ -25,6 +29,10 @@ public class ClassBuilder {
         importSpells();
     }
 
+    /**
+     * Will create an instance of the chosen Class enum, add correct spells and apply talents then return it.
+     * @return returns an instance of the chosen Class enum
+     */
     public ClassTemplate getClassInstance() {
         switch (myClass) {
             case PRIEST:
@@ -42,6 +50,11 @@ public class ClassBuilder {
         }
     }
 
+    /**
+     * getClassInstance will use this to add the correct Spells to the classTemplate's list of spells,
+     * will also create clones of Spells of the typ Channeling
+     * @param classTemplate the current Class
+     */
     private void addSpellsToMyClass(ClassTemplate classTemplate) {
         for (Spell spell : allSpells) {
             if (spell.getSpellClass() == myClass) {
@@ -55,6 +68,11 @@ public class ClassBuilder {
         }
     }
 
+    /**
+     * addSpellsToMyClass will use this to create clones of a Channeling spell with different Channeling times for later comparisons
+     * @param classTemplate the current class
+     * @param spell the Channeling Spell
+     */
     private void cloneChannelingSpell(ClassTemplate classTemplate, Spell spell) {
         int tickInterval = ((Channeling) spell).getTickInterval();
         int totalTickNumber = ((Channeling) spell).getChannelTime() / tickInterval;
@@ -78,16 +96,29 @@ public class ClassBuilder {
         }
     }
 
+    /**
+     * applies talents to the Priest class (only Shadow talents exist)
+     * @param classTemplate the current class
+     * @return the same classTemplate but now with talents applied
+     */
     private ClassTemplate applyTalentsToPriest(ClassTemplate classTemplate) {
         //TODO more talent trees
         return new Shadow(classTemplate, "shadow").getMyClass();
     }
 
+    /**
+     * not yet implemented, because there is no talent tree created for Warlock
+     * @param classTemplate the current class
+     * @return the same classTemplate
+     */
     private ClassTemplate applyTalentsToWarlock(ClassTemplate classTemplate) {
         //TODO talent trees
         return classTemplate;
     }
 
+    /**
+     * Will add all existing spells to the allSpells List
+     */
     private void importSpells() {
         // WARLOCK
         importSpellsHelper("Corruption", Corruption.levelUps);
@@ -107,10 +138,15 @@ public class ClassBuilder {
 
     }
 
+    /**
+     * Will add the given Spells name to the allSpells List
+     * @param spell name of the Spell
+     * @param integerList the Spell's list of what levels it will get another rank
+     */
     private void importSpellsHelper(String spell, List<Integer> integerList) {
 
         try {
-            int rank = determineSpellLevel(integerList);
+            int rank = determineSpellRank(integerList);
             if (rank > 0) {
                 Constructor mySpell = Class.forName("se.wowsim.spells." + spell).getConstructor(int.class);
                 allSpells.add((Spell) mySpell.newInstance(rank));
@@ -121,7 +157,12 @@ public class ClassBuilder {
 
     }
 
-    private int determineSpellLevel(List<Integer> levelups) {
+    /**
+     * Will set the correct rank of a Spell
+     * @param levelups the list of when the Spell
+     * @return an int which symbolizes the rank of a Spell
+     */
+    private int determineSpellRank(List<Integer> levelups) {
         int levelOfSpell = 0;
         for (int i : levelups) {
             if (this.level >= i) {

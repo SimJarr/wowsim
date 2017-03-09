@@ -21,6 +21,10 @@ public final class Corruption extends DamageOverTime {
         return "Corruption";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct maxDuration and baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         this.maxDuration = 180;

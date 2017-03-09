@@ -22,6 +22,10 @@ public final class SearingPain extends DirectDamage {
         return "Searing Pain";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         this.castTime = 15;

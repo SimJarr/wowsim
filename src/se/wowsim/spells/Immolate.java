@@ -41,31 +41,35 @@ public final class Immolate extends DirectDamage {
         return "Immolate";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables and the DamageOverTime part of Immolate
+     */
     @Override
     public void init() {
         this.castTime = 20;
         immolateDot.setCastTime(this.castTime);
         switch (rank) {
             case 1:
-                this.baseDamage = calculateDamage(8);
+                this.baseDamage = calculateDamage(8, 8);
                 break;
             case 2:
-                this.baseDamage = calculateDamage(19);
+                this.baseDamage = calculateDamage(19, 19);
                 break;
             case 3:
-                this.baseDamage = calculateDamage(45);
+                this.baseDamage = calculateDamage(45, 45);
                 break;
             case 4:
-                this.baseDamage = calculateDamage(90);
+                this.baseDamage = calculateDamage(90, 90);
                 break;
             case 5:
-                this.baseDamage = calculateDamage(134);
+                this.baseDamage = calculateDamage(134, 134);
                 break;
             case 6:
-                this.baseDamage = calculateDamage(192);
+                this.baseDamage = calculateDamage(192, 192);
                 break;
             case 7:
-                this.baseDamage = calculateDamage(258);
+                this.baseDamage = calculateDamage(258, 258);
                 break;
             default:
                 throw new IllegalArgumentException("Given rank does not exist");
@@ -73,19 +77,21 @@ public final class Immolate extends DirectDamage {
         this.totalDamage = baseDamage;
     }
 
-    private double calculateDamage(double damage) {
-        return damage * (1 - critChance) + (damage * critMulti) * critChance;
-    }
-
+    /**
+     * Immolate have a DamageOverTime component that applies at the same time
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @return damage the Spell will do
+     */
     @Override
-    public double calculateDamageDealt(Target target, int timeleft) {
+    public double calculateDamageDealt(Target target, int timeLeft) {
         double damageDealt = 0;
-        if (this.getCastTime() > timeleft) {
+        if (this.getCastTime() > timeLeft) {
             return 0.0;
         }
         if (target.notAffected(this.getImmolateDot())) {
             damageDealt += this.getTotalDamage();
-            damageDealt += this.getImmolateDot().calculateDotDamage(timeleft);
+            damageDealt += this.getImmolateDot().calculateDotDamage(timeLeft);
         }
 
         // Here we tried to implement being able to overwrite immolate.
@@ -112,6 +118,9 @@ public final class Immolate extends DirectDamage {
         return damageDealt;
     }
 
+    /**
+     * a class inside the Immolate class that explains the ImmolateDamageOverTime
+     */
     private final class ImmolateDot extends DamageOverTime {
 
         public ImmolateDot(int rank) {
@@ -133,6 +142,10 @@ public final class Immolate extends DirectDamage {
             return this.totalTickNumber;
         }
 
+        /**
+         * initializes the Spell by giving it the the correct baseDamage according to rank/level
+         * also sets the other necessary variables
+         */
         @Override
         public void init() {
             switch (rank) {

@@ -37,6 +37,11 @@ public abstract class DamageOverTime extends Spell {
         this.maxDuration = maxDuration;
     }
 
+    /**
+     * Calculates the damage a DamageOverTime Spell can do given a time
+     * @param timeLeft the time we have to work with
+     * @return damage the DamageOverTime Spell will do
+     */
     public double calculateDotDamage(int timeLeft) {
 
         if (cooldown > 0) return 0.0;
@@ -52,6 +57,9 @@ public abstract class DamageOverTime extends Spell {
         return damage;
     }
 
+    /**
+     * applies the DamageOverTime to the target, registers it
+     */
     public void applySpell() {
         if (duration == 0 && target.getObservers().contains(this)) {
             oneMoreTick = true;
@@ -61,6 +69,9 @@ public abstract class DamageOverTime extends Spell {
         target.register(this);
     }
 
+    /**
+     * each time this is called symbolizes that one more decisecond has passed
+     */
     public void update() {
         boolean letFirstTickOfChannel = true;
         if (this instanceof Channeling && duration == ((Channeling) this).channelTime) {

@@ -21,6 +21,10 @@ public abstract class DamageIncrease {
         return damageIncreasePerStack * currentStacks;
     }
 
+    /**
+     * reduce the duration of the DamageIncrease by one
+     * @param target the target that this DamageIncrease is applied to
+     */
     public void decrementDuration(Target target) {
         currentDuration--;
         if (currentDuration == 0) {
@@ -28,6 +32,10 @@ public abstract class DamageIncrease {
         }
     }
 
+    /**
+     * increasing the stacks of this DamageIncrease by one until maximum are reached
+     * also refreshes the duration to maximum
+     */
     public void incrementStacks() {
         if (currentStacks < stacks) {
             currentStacks++;

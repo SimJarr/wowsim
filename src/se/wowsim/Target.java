@@ -18,6 +18,10 @@ public class Target implements Subject {
         this.damageIncreases = new CopyOnWriteArraySet<>();
     }
 
+    /**
+     * applying a damageIncrease to this target
+     * @param n the damageIncrease
+     */
     public void register(DamageIncrease n) {
         if (damageIncreases.contains(n)) {
             n.incrementStacks();
@@ -29,11 +33,20 @@ public class Target implements Subject {
         }
     }
 
+    /**
+     * when a damageIncrease duration have reached 0
+     * @param n the damageIncrease
+     */
     public void unregister(DamageIncrease n) {
         damageIncreases.remove(n);
         System.out.println(n.getName() + " faded");
     }
 
+    /**
+     * calculates how much extra damage takes from a certain school of damage
+     * @param school the Spell School
+     * @return double, multiplier of how much extra damage this target takes
+     */
     public double getSchoolAmp(Spell.School school) {
         double amp = 1.0;
         for (DamageIncrease d : damageIncreases) {
@@ -43,6 +56,10 @@ public class Target implements Subject {
         return amp;
     }
 
+    /**
+     * when a Spell is applied to the target
+     * @param o the Spell
+     */
     @Override
     public void register(Observer o) {
         observers.add(o);
@@ -50,6 +67,10 @@ public class Target implements Subject {
             System.out.println(o.getName() + " applied to target");
     }
 
+    /**
+     * when a Spell fades from the target
+     * @param o the Spell
+     */
     @Override
     public void unregister(Observer o) {
         observers.remove(o);
@@ -57,6 +78,9 @@ public class Target implements Subject {
             System.out.println(o.getName() + " faded");
     }
 
+    /**
+     * update every Spell and DamageIncreases state
+     */
     @Override
     public void notifyObservers() {
         for (Observer o : observers) {
@@ -67,6 +91,10 @@ public class Target implements Subject {
         }
     }
 
+    /**
+     * finds the DamageOverTime with the lowest duration on this target
+     * @return DamageOverTime with the lowest duration
+     */
     public DamageOverTime getNextDotTimeOut() {
         DamageOverTime nextDot = null;
         for (Object dot : this.getObservers()) {
@@ -83,6 +111,11 @@ public class Target implements Subject {
         return nextDot;
     }
 
+    /**
+     * checks if this target is already affected by a given DamageOverTime
+     * @param dot the DamageOverTime
+     * @return true if it is affected, otherwise false
+     */
     public boolean notAffected(DamageOverTime dot) {
         for (Observer o : getObservers()) {
             if (o.getClass().equals(dot.getClass())) {

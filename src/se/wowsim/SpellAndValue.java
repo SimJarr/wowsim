@@ -2,6 +2,9 @@ package se.wowsim;
 
 import se.wowsim.spells.types.Spell;
 
+/**
+ * Object to send around more than one result from a calculation
+ */
 public class SpellAndValue {
 
     private Spell spell;

@@ -1,5 +1,8 @@
 package se.wowsim.classes;
 
+/**
+ * Object to send around more than one result from a calculation
+ */
 public class WaitTimeAndDamageDiff {
 
     private int waitTime;

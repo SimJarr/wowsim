@@ -16,6 +16,15 @@ public final class CurseOfAgony extends DamageOverTime {
         this.school = School.SHADOW;
     }
 
+    /**
+     * Curse of Agony have a special way of calculating it's damage.
+     * There is a total of 12 ticks, every 2 seconds for 24 seconds
+     * First 4 ticks deals 50% of the average tick damage
+     * Next 4 ticks deals 100% of the average tick damage
+     * The last 4 ticks deals 150% of the average tick damage
+     * @param timeLeft the time we have to work with
+     * @return damage the Spell will do
+     */
     @Override
     public double calculateDotDamage(int timeLeft) {
 
@@ -38,6 +47,14 @@ public final class CurseOfAgony extends DamageOverTime {
 
     }
 
+    /**
+     * Curse of Agony have a special way of calculating it's damage.
+     * There is a total of 12 ticks, every 2 seconds for 24 seconds
+     * First 4 ticks deals 50% of the average tick damage
+     * Next 4 ticks deals 100% of the average tick damage
+     * The last 4 ticks deals 150% of the average tick damage
+     * Also reduces the duration by one
+     */
     @Override
     public void update() {
 
@@ -74,6 +91,10 @@ public final class CurseOfAgony extends DamageOverTime {
         return "CurseOfAgony";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         switch (rank) {

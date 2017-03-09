@@ -21,6 +21,10 @@ public final class MindBlast extends DirectDamage {
         return "Mind Blast";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         switch (rank) {

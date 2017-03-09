@@ -21,6 +21,10 @@ public final class Shadowbolt extends DirectDamage {
         return "Shadowbolt";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct maxDuration and baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         this.castTime = 30;

@@ -21,6 +21,10 @@ public final class ShadowWordPain extends DamageOverTime {
         return "Shadow Word: Pain";
     }
 
+    /**
+     * initializes the Spell by giving it the the correct baseDamage according to rank/level
+     * also sets the other necessary variables
+     */
     @Override
     public void init() {
         switch (rank) {
