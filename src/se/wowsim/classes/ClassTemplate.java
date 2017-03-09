@@ -325,6 +325,8 @@ public abstract class ClassTemplate {
      */
     private SpellAndValue pickHighestValueSpell(List<SpellAndValue> candidates, int timeLeft) {
 
+        //TODO picks a dot when it shouldn't (try simulate with only corruption & shadowbolt for 100) (should only spam SBs)
+
         SpellAndValue selectedSpellWithValue = null;
         List<SpellAndValue> cooldownSpells = new ArrayList<>();
         List<SpellAndValue> dotSpells = new ArrayList<>();
