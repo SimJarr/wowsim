@@ -70,6 +70,11 @@ public abstract class ClassTemplate {
         spells.put(name, spell);
     }
 
+    /**
+     * find out what we should do this decisecond
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     */
     public void currentActivity(Target target, int timeLeft) {
 
         //TODO pre-casta en spell innan decisekund 0
@@ -129,6 +134,9 @@ public abstract class ClassTemplate {
         target.notifyObservers();
     }
 
+    /**
+     * reduce every Spells cooldown by one decisecond
+     */
     private void decrementEverySpellsCooldown() {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
             Spell currentSpell = entry.getValue();
@@ -136,6 +144,12 @@ public abstract class ClassTemplate {
         }
     }
 
+    /**
+     * figure out what spell to cast
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @return the Spell to cast
+     */
     private Spell determineSpell(Target target, int timeLeft) {
 
         //TODO future-sight, understand what order of spells yields the greatest ePeen
@@ -149,6 +163,10 @@ public abstract class ClassTemplate {
         return selectSpell(target, timeLeft, spellCandidates);
     }
 
+    /**
+     * updates the damage of every Spell according to increases from various places
+     * @param target the target, needed to see if our target takes extra damage from some Spell School
+     */
     private void updateDamageValues(Target target) {
         for (Map.Entry<String, Spell> entry : spells.entrySet()) {
             Spell currentSpell = entry.getValue();
@@ -166,6 +184,12 @@ public abstract class ClassTemplate {
         }
     }
 
+    /**
+     * find out which dot will do the most damage per spent time if we start casting it now
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @return a DamageOverTime that does the most damage
+     */
     private DamageOverTime calculateHighestDamageDot(Target target, int timeLeft) {
 
         DamageOverTime highestDamageDot = null;
@@ -202,6 +226,13 @@ public abstract class ClassTemplate {
         return highestDamageDot;
     }
 
+    /**
+     * creates a list of every spell with a calculated value
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @param highestDamageDot calculated highest damage dealing DamageOverTime
+     * @return an ArrayList containing SpellAndValue object
+     */
     private List<SpellAndValue> insertSpellsWithValues(Target target, int timeLeft, DamageOverTime highestDamageDot) {
 
         List<SpellAndValue> result = new ArrayList<>();
@@ -223,6 +254,13 @@ public abstract class ClassTemplate {
         return result;
     }
 
+    /**
+     * selects which spell to cast given the SpellAndValue ArrayList
+     * @param target the target
+     * @param timeLeft the time we have to work with
+     * @param candidates SpellAndValue ArrayList
+     * @return the Spell we should cast
+     */
     private Spell selectSpell(Target target, int timeLeft, List<SpellAndValue> candidates) {
 
         //TODO chose MB over Pain in case MB gets to do more casts
@@ -279,6 +317,12 @@ public abstract class ClassTemplate {
         return selectedSpellWithValue.getSpell();
     }
 
+    /**
+     * picks the Spell with the highest value from the ArrayList containing SpellAndValue objects
+     * @param candidates SpellAndValue ArrayList
+     * @param timeLeft the time we have to work with
+     * @return the SpellAndValue with the highest Value from the candidates list
+     */
     private SpellAndValue pickHighestValueSpell(List<SpellAndValue> candidates, int timeLeft) {
 
         SpellAndValue selectedSpellWithValue = null;
@@ -352,6 +396,13 @@ public abstract class ClassTemplate {
         return selectedSpellWithValue;
     }
 
+    /**
+     * selects the channel duration of a Channeling Spell which is closest to suggestedMaxTime but still smaller than the suggestedMaxTime
+     * @param spell the Channeling Spell
+     * @param candidates SpellAndValue ArrayList, needed to find the other Spells
+     * @param suggestedMaxTime the maximum time the result's channel duration can be
+     * @return highest value SpellAndValue but shorter than suggestedMaxTime
+     */
     private SpellAndValue pickShortestDurationChannel(Channeling spell, List<SpellAndValue> candidates, int suggestedMaxTime) {
 
         SpellAndValue selectedSpellWithValue = null;
@@ -379,10 +430,27 @@ public abstract class ClassTemplate {
         return selectedSpellWithValue;
     }
 
+    /**
+     * calculates if it is worth to wait for another Spell to either come off cooldown or a DamageOverTime to run out of duration
+     * @param target the target
+     * @param nextCalculatedSpell current calculated next Spell to use
+     * @param candidates SpellAndValue ArrayList
+     * @param timeLeft the time we have to work with
+     * @return a WaitTimeAndDamageDiff object that will tell how much damage would be lost and how much time to wait
+     */
     private WaitTimeAndDamageDiff worthDoingNothing(Target target, Spell nextCalculatedSpell, List<SpellAndValue> candidates, int timeLeft) {
         return worthDoingNothing(target, nextCalculatedSpell, candidates, timeLeft, 0);
     }
 
+    /**
+     * calculates if it is worth to wait for another Spell to either come off cooldown or a DamageOverTime to run out of duration
+     * @param target the target
+     * @param nextCalculatedSpell current calculated next Spell to use
+     * @param candidates SpellAndValue ArrayList
+     * @param timeLeft the time we have to work with
+     * @param timeIntoFuture time we try to look into the future to see what will happen if we do something first
+     * @return a WaitTimeAndDamageDiff object that will tell how much damage would be lost and how much time to wait
+     */
     private WaitTimeAndDamageDiff worthDoingNothing(Target target, Spell nextCalculatedSpell, List<SpellAndValue> candidates, int timeLeft, int timeIntoFuture) {
 
         DamageOverTime dot = target.getNextDotTimeOut();
@@ -499,6 +567,10 @@ public abstract class ClassTemplate {
         return new WaitTimeAndDamageDiff(0, 0, "NO SPELL");
     }
 
+    /**
+     * finds the Spell in our Spells list that will be the next to come off cooldown
+     * @return a Spell with a the shortest cooldown
+     */
     private Spell getShortestCooldownSpell() {
         Spell spell = null;
         int lowestCooldown = Integer.MAX_VALUE;
@@ -537,6 +609,13 @@ public abstract class ClassTemplate {
         }
     }
 
+    /**
+     * calculates how much damage a Spell would have done given a downtime for it and a timeLeft
+     * @param spell the Spell
+     * @param downTime time that the Spell would not be in use
+     * @param timeLeft the time we have to work with
+     * @return double how much damage that will be lost
+     */
     private double damageSpellWouldHaveDone(Spell spell, int downTime, int timeLeft) {
         double result = 0;
         downTime = (spell.getTimeTakenFromCaster() < downTime) ? spell.getTimeTakenFromCaster() : downTime;
